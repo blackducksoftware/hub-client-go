@@ -18,6 +18,7 @@ const (
 	HubClientDebugContent
 )
 
+// Client will need to support CSRF tokens for session-based auth for Hub 4.1.x (or was it 4.0?)
 type Client struct {
 	httpClient   *http.Client
 	baseURL      string
