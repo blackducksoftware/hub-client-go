@@ -5,7 +5,7 @@ import "fmt"
 
 func main() {
 
-	client, err := hubclient.New("https://localhost", hubclient.HubClientDebugTimings)
+	client, err := hubclient.NewWithSession("https://localhost", hubclient.HubClientDebugTimings)
 
 	if err != nil {
 		fmt.Printf("Error making hub client: %s\n", err)

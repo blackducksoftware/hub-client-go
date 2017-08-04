@@ -19,12 +19,14 @@ const (
 )
 
 type Client struct {
-	httpClient *http.Client
-	baseURL    string
-	debugFlags HubClientDebug
+	httpClient   *http.Client
+	baseURL      string
+	authToken    string
+	useAuthToken bool
+	debugFlags   HubClientDebug
 }
 
-func New(baseURL string, debugFlags HubClientDebug) (*Client, error) {
+func NewWithSession(baseURL string, debugFlags HubClientDebug) (*Client, error) {
 
 	jar, err := cookiejar.New(nil) // Look more at this function
 
@@ -42,9 +44,29 @@ func New(baseURL string, debugFlags HubClientDebug) (*Client, error) {
 	}
 
 	return &Client{
-		client,
-		baseURL,
-		debugFlags,
+		httpClient:   client,
+		baseURL:      baseURL,
+		useAuthToken: false,
+		debugFlags:   debugFlags,
+	}, nil
+}
+
+func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug) (*Client, error) {
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{
+		Transport: tr,
+	}
+
+	return &Client{
+		httpClient:   client,
+		baseURL:      baseURL,
+		authToken:    authToken,
+		useAuthToken: true,
+		debugFlags:   debugFlags,
 	}, nil
 }
 
@@ -117,7 +139,7 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 	var err error
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		fmt.Printf("DEBUG HTTP SRARTING REQUEST: %s\n", url)
+		fmt.Printf("DEBUG HTTP STARTING REQUEST: %s\n", url)
 	}
 
 	httpStart := time.Now()
@@ -127,6 +149,10 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 		fmt.Println("Error making http request:")
 		fmt.Println(err)
 		return err
+	}
+
+	if c.useAuthToken {
+		c.addAuthToken(req)
 	}
 
 	if resp, err = c.httpClient.Do(req); err != nil {
@@ -142,9 +168,13 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 	}
 
 	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
-		fmt.Printf("Got a %d reponse instead of a 200.\n", resp.StatusCode)
+		fmt.Printf("Got a %d response instead of a 200.\n", resp.StatusCode)
 		return fmt.Errorf("got a %d response instead of a 200", resp.StatusCode)
 	}
 
 	return c.processResponse(resp, result)
+}
+
+func (c *Client) addAuthToken(request *http.Request) {
+	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.authToken))
 }
