@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"time"
@@ -136,25 +137,25 @@ func (c *Client) processResponse(resp *http.Response, result interface{}) error 
 
 func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode int) error {
 
+	// TODO: Content type?
+
 	var resp *http.Response
 	var err error
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		fmt.Printf("DEBUG HTTP STARTING REQUEST: %s\n", url)
+		fmt.Printf("DEBUG HTTP STARTING GET REQUEST: %s\n", url)
 	}
 
 	httpStart := time.Now()
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 
 	if err != nil {
-		fmt.Println("Error making http request:")
+		fmt.Println("Error making http get request:")
 		fmt.Println(err)
 		return err
 	}
 
-	if c.useAuthToken {
-		c.addAuthToken(req)
-	}
+	c.doPreRequest(req)
 
 	if resp, err = c.httpClient.Do(req); err != nil {
 		fmt.Println("Error getting HTTP Response:")
@@ -165,17 +166,71 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 	httpElapsed := time.Since(httpStart)
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		fmt.Printf("DEBUG HTTP ELAPSED TIME: %d ms.   -- Request: %s\n", (httpElapsed / 1000 / 1000), url)
+		fmt.Printf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s\n", (httpElapsed / 1000 / 1000), url)
 	}
 
 	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
-		fmt.Printf("Got a %d response instead of a 200.\n", resp.StatusCode)
-		return fmt.Errorf("got a %d response instead of a 200", resp.StatusCode)
+		fmt.Printf("Got a %d response instead of a %d.\n", resp.StatusCode, expectedStatusCode)
+		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
 	}
 
 	return c.processResponse(resp, result)
 }
 
-func (c *Client) addAuthToken(request *http.Request) {
-	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.authToken))
+func (c *Client) httpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
+
+	var resp *http.Response
+	var err error
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		fmt.Printf("DEBUG HTTP STARTING PUT REQUEST: %s\n", url)
+	}
+
+	// Encode json
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+
+	if err := enc.Encode(&data); err != nil {
+		log.Printf("Error encoding json: %+v.\n", err)
+	}
+
+	httpStart := time.Now()
+	req, err := http.NewRequest(http.MethodPut, url, &buf)
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	if err != nil {
+		fmt.Println("Error making http put request:")
+		fmt.Println(err)
+		return err
+	}
+
+	c.doPreRequest(req)
+
+	if resp, err = c.httpClient.Do(req); err != nil {
+		fmt.Println("Error getting HTTP Response:")
+		fmt.Println(err)
+		return err
+	}
+
+	httpElapsed := time.Since(httpStart)
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		fmt.Printf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s\n", (httpElapsed / 1000 / 1000), url)
+	}
+
+	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
+		fmt.Printf("Got a %d response instead of a %d.\n", resp.StatusCode, expectedStatusCode)
+		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
+	}
+
+	return c.processResponse(resp, nil) // TODO: Maybe need a response too?
+}
+
+func (c *Client) doPreRequest(request *http.Request) {
+
+	if c.useAuthToken {
+		request.Header.Set(HeaderNameAuthorization, fmt.Sprintf("Bearer %s", c.authToken))
+	}
+
+	// TODO: Do something with CSRF too.
 }
