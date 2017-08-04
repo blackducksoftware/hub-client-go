@@ -1,6 +1,10 @@
 package hubclient
 
-import "fmt"
+import (
+	"fmt"
+
+	log "github.com/sirupsen/logrus"
+)
 
 func (c *Client) ListProjectVerionComponents(link ResourceLink) (*BomComponentList, error) {
 
@@ -11,7 +15,7 @@ func (c *Client) ListProjectVerionComponents(link ResourceLink) (*BomComponentLi
 	err := c.httpGetJSON(link.Href+"?limit=2", &bomList, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error while trying to get Project Version Component list: %+v.\n", err)
 		return nil, err
 	}
 

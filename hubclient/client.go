@@ -205,10 +205,12 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 	}
 
 	c.doPreRequest(req)
+	log.Printf("PUT Request: %+v.\n", req)
 
 	if resp, err = c.httpClient.Do(req); err != nil {
 		fmt.Println("Error getting HTTP Response:")
 		fmt.Println(err)
+		readResponseBody(resp)
 		return err
 	}
 
@@ -220,6 +222,7 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 
 	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
 		fmt.Printf("Got a %d response instead of a %d.\n", resp.StatusCode, expectedStatusCode)
+		readResponseBody(resp)
 		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
 	}
 
@@ -233,4 +236,17 @@ func (c *Client) doPreRequest(request *http.Request) {
 	}
 
 	// TODO: Do something with CSRF too.
+}
+
+func readResponseBody(resp *http.Response) {
+
+	var bodyBytes []byte
+	var err error
+
+	if bodyBytes, err = readBytes(resp.Body); err != nil {
+		fmt.Println("Error reading HTTP Response:")
+		fmt.Println(err)
+	}
+
+	fmt.Printf("TEXT OF RESPONSE: \n %s\n", string(bodyBytes[:]))
 }
