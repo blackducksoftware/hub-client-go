@@ -73,10 +73,10 @@ func (c *Client) CountProjectVerionVulnerableComponents(link ResourceLink) (uint
 
 func (c *Client) ListAllProjectVerionVulnerableComponents(link ResourceLink) ([]BomVulnerableComponent, error) {
 
-	log.Debugf("***** Getting total count.\n")
+	log.Debugf("***** Getting total count.")
 	//totalCount, err := c.CountProjectVerionVulnerableComponents(link)
 	totalCount := uint32(100)
-	log.Debugf("***** Got total count: %d\n", totalCount)
+	log.Debugf("***** Got total count: %d", totalCount)
 
 	// if err != nil {
 	// 	log.Debugf("ERROR GETTING COUNT: %s\n", err)
@@ -87,11 +87,11 @@ func (c *Client) ListAllProjectVerionVulnerableComponents(link ResourceLink) ([]
 
 	for offset := uint32(0); offset < totalCount; offset += pageSize {
 
-		log.Debugf("***** Going to get vulnerable components. Offset: %d, Limit: %d \n", offset, pageSize)
+		log.Debugf("***** Going to get vulnerable components. Offset: %d, Limit: %d ", offset, pageSize)
 		bomPage, err := c.PageProjectVersionVulnerableComponents(link, offset, pageSize)
 
 		if err != nil {
-			log.Errorf("Error trying to retrieve vulnerable components list: %+v.\n", err)
+			log.Errorf("Error trying to retrieve vulnerable components list: %+v.", err)
 		}
 
 		result = append(result, bomPage.Items...)

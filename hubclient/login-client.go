@@ -18,12 +18,12 @@ func (c *Client) Login(username string, password string) error {
 	resp, err := c.httpClient.PostForm(loginURL, formValues)
 
 	if err != nil {
-		log.Errorf("Error trying to login via form login: %+v.\n", err)
+		log.Errorf("Error trying to login via form login: %+v.", err)
 		return err
 	}
 
 	if resp.StatusCode != 204 {
-		log.Errorf("Login: Got a %d reponse instead of a 204.\n", resp.StatusCode)
+		log.Errorf("Login: Got a %d reponse instead of a 204.", resp.StatusCode)
 		return fmt.Errorf("got a %d response instead of a 204", resp.StatusCode)
 	}
 

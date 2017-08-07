@@ -23,7 +23,7 @@ func (c *Client) ListProjects() (*ProjectList, error) {
 	err := c.httpGetJSON(projectsURL, &projectList, 200)
 
 	if err != nil {
-		log.Errorf("Error trying to retrieve project list: %+v.\n", err)
+		log.Errorf("Error trying to retrieve project list: %+v.", err)
 		return nil, err
 	}
 
@@ -36,7 +36,7 @@ func (c *Client) GetProject(link ResourceLink) (*Project, error) {
 	err := c.httpGetJSON(link.Href, &project, 200)
 
 	if err != nil {
-		log.Errorf("Error trying to retrieve a project: %+v.\n", err)
+		log.Errorf("Error trying to retrieve a project: %+v.", err)
 		return nil, err
 	}
 
@@ -52,7 +52,7 @@ func (c *Client) ListProjectVersions(link ResourceLink) (*ProjectVersionList, er
 	err := c.httpGetJSON(link.Href, &versionList, 200)
 
 	if err != nil {
-		log.Errorf("Error trying to retrieve project version list list: %+v.\n", err)
+		log.Errorf("Error trying to retrieve project version list list: %+v.", err)
 		return nil, err
 	}
 
@@ -65,7 +65,7 @@ func (c *Client) GetProjectVersion(link ResourceLink) (*ProjectVersion, error) {
 	err := c.httpGetJSON(link.Href, &projectVersion, 200)
 
 	if err != nil {
-		log.Errorf("Error trying to retrieve a project version: %+v.\n", err)
+		log.Errorf("Error trying to retrieve a project version: %+v.", err)
 		return nil, err
 	}
 

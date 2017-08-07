@@ -101,7 +101,7 @@ func (c *Client) processResponse(resp *http.Response, result interface{}) error 
 	var err error
 
 	if err := validateHTTPResponse(resp); err != nil {
-		log.Errorf("Error validating HTTP Response: %+v.\n", err)
+		log.Errorf("Error validating HTTP Response: %+v.", err)
 		return err
 	}
 
@@ -111,18 +111,18 @@ func (c *Client) processResponse(resp *http.Response, result interface{}) error 
 	}
 
 	if bodyBytes, err = readBytes(resp.Body); err != nil {
-		log.Errorf("Error reading HTTP Response: %+v.\n", err)
+		log.Errorf("Error reading HTTP Response: %+v.", err)
 		return err
 	}
 
 	if c.debugFlags&HubClientDebugContent != 0 {
 		log.Debugf("START DEBUG: --------------------------------------------------------------------------- \n\n")
-		log.Debugf("TEXT OF RESPONSE: \n %s\n", string(bodyBytes[:]))
+		log.Debugf("TEXT OF RESPONSE: \n %s", string(bodyBytes[:]))
 		log.Debugf("END DEBUG: --------------------------------------------------------------------------- \n\n\n\n")
 	}
 
 	if err := json.Unmarshal(bodyBytes, result); err != nil {
-		log.Errorf("Error parsing HTTP Response: %+v.\n", err)
+		log.Errorf("Error parsing HTTP Response: %+v.", err)
 		log.Errorln("\n\n--------------------")
 		log.Errorln("Response:")
 		log.Errorln("--------------------\n\n")
@@ -141,32 +141,32 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 	var err error
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP STARTING GET REQUEST: %s\n", url)
+		log.Debugf("DEBUG HTTP STARTING GET REQUEST: %s", url)
 	}
 
 	httpStart := time.Now()
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 
 	if err != nil {
-		log.Errorf("Error making http get request: %+v.\n", err)
+		log.Errorf("Error making http get request: %+v.", err)
 		return err
 	}
 
 	c.doPreRequest(req)
 
 	if resp, err = c.httpClient.Do(req); err != nil {
-		log.Errorf("Error getting HTTP Response: %+v.\n", err)
+		log.Errorf("Error getting HTTP Response: %+v.", err)
 		return err
 	}
 
 	httpElapsed := time.Since(httpStart)
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s\n", (httpElapsed / 1000 / 1000), url)
+		log.Debugf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
 	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
-		log.Errorf("Got a %d response instead of a %d.\n", resp.StatusCode, expectedStatusCode)
+		log.Errorf("Got a %d response instead of a %d.", resp.StatusCode, expectedStatusCode)
 		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
 	}
 
@@ -179,7 +179,7 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 	var err error
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP STARTING PUT REQUEST: %s\n", url)
+		log.Debugf("DEBUG HTTP STARTING PUT REQUEST: %s", url)
 	}
 
 	// Encode json
@@ -187,7 +187,7 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 	enc := json.NewEncoder(&buf)
 
 	if err := enc.Encode(&data); err != nil {
-		log.Errorf("Error encoding json: %+v.\n", err)
+		log.Errorf("Error encoding json: %+v.", err)
 	}
 
 	httpStart := time.Now()
@@ -195,15 +195,15 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 	req.Header.Set(HeaderNameContentType, contentType)
 
 	if err != nil {
-		log.Errorf("Error making http put request: %+v.\n", err)
+		log.Errorf("Error making http put request: %+v.", err)
 		return err
 	}
 
 	c.doPreRequest(req)
-	log.Debugf("PUT Request: %+v.\n", req)
+	log.Debugf("PUT Request: %+v.", req)
 
 	if resp, err = c.httpClient.Do(req); err != nil {
-		log.Errorf("Error getting HTTP Response: %+v.\n", err)
+		log.Errorf("Error getting HTTP Response: %+v.", err)
 		readResponseBody(resp)
 		return err
 	}
@@ -211,11 +211,11 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 	httpElapsed := time.Since(httpStart)
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s\n", (httpElapsed / 1000 / 1000), url)
+		log.Debugf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
 	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
-		log.Errorf("Got a %d response instead of a %d.\n", resp.StatusCode, expectedStatusCode)
+		log.Errorf("Got a %d response instead of a %d.", resp.StatusCode, expectedStatusCode)
 		readResponseBody(resp)
 		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
 	}
@@ -238,8 +238,8 @@ func readResponseBody(resp *http.Response) {
 	var err error
 
 	if bodyBytes, err = readBytes(resp.Body); err != nil {
-		log.Errorf("Error reading HTTP Response: %+v.\n", err)
+		log.Errorf("Error reading HTTP Response: %+v.", err)
 	}
 
-	log.Debugf("TEXT OF RESPONSE: \n %s\n", string(bodyBytes[:]))
+	log.Debugf("TEXT OF RESPONSE: \n %s", string(bodyBytes[:]))
 }
