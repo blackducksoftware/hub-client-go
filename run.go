@@ -34,10 +34,10 @@ func main() {
 	versionLink, err := projects.Items[0].GetProjectVersionLink()
 
 	if err != nil {
-		fmt.Printf("Error getting project verions link: %s\n", err)
+		fmt.Printf("Error getting project versions link: %s\n", err)
 	}
 
-	versions, err := client.ListProjectVerions(*versionLink)
+	versions, err := client.ListProjectVersions(*versionLink)
 
 	if err != nil {
 		fmt.Printf("Error getting versions list: %s\n", err)
@@ -51,10 +51,10 @@ func main() {
 	versionCompLink, err := versions.Items[0].GetComponentsLink()
 
 	if err != nil {
-		fmt.Printf("Error getting project verion components link: %s\n", err)
+		fmt.Printf("Error getting project verison components link: %s\n", err)
 	}
 
-	components, err := client.ListProjectVerionComponents(*versionCompLink)
+	components, err := client.ListProjectVersionComponents(*versionCompLink)
 
 	if err != nil {
 		fmt.Printf("Error getting version component list: %s\n", err)

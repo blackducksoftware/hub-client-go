@@ -3,6 +3,8 @@ package hubclient
 import (
 	"fmt"
 	"net/url"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func (c *Client) Login(username string, password string) error {
@@ -16,16 +18,16 @@ func (c *Client) Login(username string, password string) error {
 	resp, err := c.httpClient.PostForm(loginURL, formValues)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to login via form login: %+v.\n", err)
 		return err
 	}
 
 	if resp.StatusCode != 204 {
-		fmt.Printf("Login: Got a %d reponse instead of a 204.\n", resp.StatusCode)
+		log.Errorf("Login: Got a %d reponse instead of a 204.\n", resp.StatusCode)
 		return fmt.Errorf("got a %d response instead of a 204", resp.StatusCode)
 	}
 
-	fmt.Println("Login: Successfully authenticated")
+	log.Debugln("Login: Successfully authenticated")
 
 	return nil
 }

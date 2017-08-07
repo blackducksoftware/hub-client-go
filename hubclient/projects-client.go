@@ -1,6 +1,10 @@
 package hubclient
 
-import "fmt"
+import (
+	"fmt"
+
+	log "github.com/sirupsen/logrus"
+)
 
 // What about continuation for these?
 // Should we have something where user can pass in an optional continuation/next placeholder?
@@ -19,7 +23,7 @@ func (c *Client) ListProjects() (*ProjectList, error) {
 	err := c.httpGetJSON(projectsURL, &projectList, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve project list: %+v.\n", err)
 		return nil, err
 	}
 
@@ -32,14 +36,14 @@ func (c *Client) GetProject(link ResourceLink) (*Project, error) {
 	err := c.httpGetJSON(link.Href, &project, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve a project: %+v.\n", err)
 		return nil, err
 	}
 
 	return &project, nil
 }
 
-func (c *Client) ListProjectVerions(link ResourceLink) (*ProjectVersionList, error) {
+func (c *Client) ListProjectVersions(link ResourceLink) (*ProjectVersionList, error) {
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
@@ -48,20 +52,20 @@ func (c *Client) ListProjectVerions(link ResourceLink) (*ProjectVersionList, err
 	err := c.httpGetJSON(link.Href, &versionList, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve project version list list: %+v.\n", err)
 		return nil, err
 	}
 
 	return &versionList, nil
 }
 
-func (c *Client) GetProjectVerion(link ResourceLink) (*ProjectVersion, error) {
+func (c *Client) GetProjectVersion(link ResourceLink) (*ProjectVersion, error) {
 
 	var projectVersion ProjectVersion
 	err := c.httpGetJSON(link.Href, &projectVersion, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve a project version: %+v.\n", err)
 		return nil, err
 	}
 

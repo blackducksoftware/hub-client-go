@@ -1,6 +1,8 @@
 package hubclient
 
-import "fmt"
+import (
+	log "github.com/sirupsen/logrus"
+)
 
 func (c *Client) ListCodeLocations(link ResourceLink) (*CodeLocationList, error) {
 
@@ -11,7 +13,7 @@ func (c *Client) ListCodeLocations(link ResourceLink) (*CodeLocationList, error)
 	err := c.httpGetJSON(link.Href, &codeLocationList, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve code location list: %+v.\n", err)
 		return nil, err
 	}
 
@@ -24,7 +26,7 @@ func (c *Client) GetCodeLocation(link ResourceLink) (*CodeLocation, error) {
 	err := c.httpGetJSON(link.Href, &codeLocation, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve a code location: %+v.\n", err)
 		return nil, err
 	}
 
@@ -40,7 +42,7 @@ func (c *Client) ListScanSummaries(link ResourceLink) (*ScanSummaryList, error) 
 	err := c.httpGetJSON(link.Href, &scanSummaryList, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve scan summary list: %+v.\n", err)
 		return nil, err
 	}
 
@@ -53,7 +55,7 @@ func (c *Client) GetScanSummary(link ResourceLink) (*ScanSummary, error) {
 	err := c.httpGetJSON(link.Href, &scanSummary, 200)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error trying to retrieve a scan summary: %+v.\n", err)
 		return nil, err
 	}
 
