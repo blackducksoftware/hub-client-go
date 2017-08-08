@@ -1,4 +1,4 @@
-package hubclient
+package hubapi
 
 import (
 	"fmt"

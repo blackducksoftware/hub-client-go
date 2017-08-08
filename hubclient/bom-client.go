@@ -3,15 +3,17 @@ package hubclient
 import (
 	"fmt"
 
+	"bitbucket.org/bdsengineering/go-hub-client/hubapi"
+
 	log "github.com/sirupsen/logrus"
 )
 
-func (c *Client) ListProjectVersionComponents(link ResourceLink) (*BomComponentList, error) {
+func (c *Client) ListProjectVersionComponents(link hubapi.ResourceLink) (*hubapi.BomComponentList, error) {
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
 
-	var bomList BomComponentList
+	var bomList hubapi.BomComponentList
 	err := c.httpGetJSON(link.Href+"?limit=2", &bomList, 200)
 
 	if err != nil {
@@ -23,12 +25,12 @@ func (c *Client) ListProjectVersionComponents(link ResourceLink) (*BomComponentL
 }
 
 // TODO: Should this be used?
-func (c *Client) ListProjectVerionVulnerableComponents(link ResourceLink) (*BomVulnerableComponentList, error) {
+func (c *Client) ListProjectVerionVulnerableComponents(link hubapi.ResourceLink) (*hubapi.BomVulnerableComponentList, error) {
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
 
-	var bomList BomVulnerableComponentList
+	var bomList hubapi.BomVulnerableComponentList
 	err := c.httpGetJSON(link.Href+"?limit=2", &bomList, 200)
 
 	if err != nil {
@@ -39,11 +41,11 @@ func (c *Client) ListProjectVerionVulnerableComponents(link ResourceLink) (*BomV
 	return &bomList, nil
 }
 
-func (c *Client) PageProjectVersionVulnerableComponents(link ResourceLink, offset uint32, limit uint32) (*BomVulnerableComponentList, error) {
+func (c *Client) PageProjectVersionVulnerableComponents(link hubapi.ResourceLink, offset uint32, limit uint32) (*hubapi.BomVulnerableComponentList, error) {
 
 	// Should we abstract list fetching like we did with a single Get?
 
-	var bomList BomVulnerableComponentList
+	var bomList hubapi.BomVulnerableComponentList
 	url := fmt.Sprintf("%s?offset=%d&limit=%d", link.Href, offset, limit)
 	err := c.httpGetJSON(url, &bomList, 200)
 
@@ -55,12 +57,12 @@ func (c *Client) PageProjectVersionVulnerableComponents(link ResourceLink, offse
 	return &bomList, nil
 }
 
-func (c *Client) CountProjectVerionVulnerableComponents(link ResourceLink) (uint32, error) {
+func (c *Client) CountProjectVerionVulnerableComponents(link hubapi.ResourceLink) (uint32, error) {
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
 
-	var bomList BomVulnerableComponentList
+	var bomList hubapi.BomVulnerableComponentList
 	err := c.httpGetJSON(link.Href+"?offset=0&limit=1", &bomList, 200)
 
 	if err != nil {
@@ -71,7 +73,7 @@ func (c *Client) CountProjectVerionVulnerableComponents(link ResourceLink) (uint
 	return bomList.TotalCount, nil
 }
 
-func (c *Client) ListAllProjectVerionVulnerableComponents(link ResourceLink) ([]BomVulnerableComponent, error) {
+func (c *Client) ListAllProjectVerionVulnerableComponents(link hubapi.ResourceLink) ([]hubapi.BomVulnerableComponent, error) {
 
 	log.Debugf("***** Getting total count.")
 	//totalCount, err := c.CountProjectVerionVulnerableComponents(link)
@@ -83,7 +85,7 @@ func (c *Client) ListAllProjectVerionVulnerableComponents(link ResourceLink) ([]
 	// }
 
 	pageSize := uint32(100)
-	result := make([]BomVulnerableComponent, totalCount, totalCount)
+	result := make([]hubapi.BomVulnerableComponent, totalCount, totalCount)
 
 	for offset := uint32(0); offset < totalCount; offset += pageSize {
 

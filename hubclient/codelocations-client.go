@@ -1,15 +1,16 @@
 package hubclient
 
 import (
+	"bitbucket.org/bdsengineering/go-hub-client/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
-func (c *Client) ListCodeLocations(link ResourceLink) (*CodeLocationList, error) {
+func (c *Client) ListCodeLocations(link hubapi.ResourceLink) (*hubapi.CodeLocationList, error) {
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
 
-	var codeLocationList CodeLocationList
+	var codeLocationList hubapi.CodeLocationList
 	err := c.httpGetJSON(link.Href, &codeLocationList, 200)
 
 	if err != nil {
@@ -20,9 +21,9 @@ func (c *Client) ListCodeLocations(link ResourceLink) (*CodeLocationList, error)
 	return &codeLocationList, nil
 }
 
-func (c *Client) GetCodeLocation(link ResourceLink) (*CodeLocation, error) {
+func (c *Client) GetCodeLocation(link hubapi.ResourceLink) (*hubapi.CodeLocation, error) {
 
-	var codeLocation CodeLocation
+	var codeLocation hubapi.CodeLocation
 	err := c.httpGetJSON(link.Href, &codeLocation, 200)
 
 	if err != nil {
@@ -33,12 +34,12 @@ func (c *Client) GetCodeLocation(link ResourceLink) (*CodeLocation, error) {
 	return &codeLocation, nil
 }
 
-func (c *Client) ListScanSummaries(link ResourceLink) (*ScanSummaryList, error) {
+func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummaryList, error) {
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
 
-	var scanSummaryList ScanSummaryList
+	var scanSummaryList hubapi.ScanSummaryList
 	err := c.httpGetJSON(link.Href, &scanSummaryList, 200)
 
 	if err != nil {
@@ -49,9 +50,9 @@ func (c *Client) ListScanSummaries(link ResourceLink) (*ScanSummaryList, error) 
 	return &scanSummaryList, nil
 }
 
-func (c *Client) GetScanSummary(link ResourceLink) (*ScanSummary, error) {
+func (c *Client) GetScanSummary(link hubapi.ResourceLink) (*hubapi.ScanSummary, error) {
 
-	var scanSummary ScanSummary
+	var scanSummary hubapi.ScanSummary
 	err := c.httpGetJSON(link.Href, &scanSummary, 200)
 
 	if err != nil {

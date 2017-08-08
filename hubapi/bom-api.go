@@ -1,4 +1,4 @@
-package hubclient
+package hubapi
 
 type BomComponentList struct {
 	TotalCount uint32         `json:"totalCount"`

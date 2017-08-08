@@ -1,4 +1,4 @@
-package hubclient
+package hubapi
 
 const (
 	ContentTypeExtensionJSON = "application/vnd.blackducksoftware.externalextension-1+json"

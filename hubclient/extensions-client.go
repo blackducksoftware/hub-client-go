@@ -1,12 +1,13 @@
 package hubclient
 
 import (
+	"bitbucket.org/bdsengineering/go-hub-client/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
-func (c *Client) GetExternalExtension(link ResourceLink) (*ExternalExtension, error) {
+func (c *Client) GetExternalExtension(link hubapi.ResourceLink) (*hubapi.ExternalExtension, error) {
 
-	var extension ExternalExtension
+	var extension hubapi.ExternalExtension
 	err := c.httpGetJSON(link.Href, &extension, 200)
 
 	if err != nil {
@@ -17,9 +18,9 @@ func (c *Client) GetExternalExtension(link ResourceLink) (*ExternalExtension, er
 	return &extension, nil
 }
 
-func (c *Client) UpdateExternalExtension(extension *ExternalExtension) error {
+func (c *Client) UpdateExternalExtension(extension *hubapi.ExternalExtension) error {
 
-	err := c.httpPutJSON(extension.Meta.Href, &extension, ContentTypeExtensionJSON, 200)
+	err := c.httpPutJSON(extension.Meta.Href, &extension, hubapi.ContentTypeExtensionJSON, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to update an external extension: %+v.", err)

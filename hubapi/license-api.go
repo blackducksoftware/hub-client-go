@@ -1,4 +1,4 @@
-package hubclient
+package hubapi
 
 type ComplexLicense struct {
 	Name           string           `json:"name"`
