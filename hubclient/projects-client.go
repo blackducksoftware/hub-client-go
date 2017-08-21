@@ -45,6 +45,12 @@ func (c *Client) GetProject(link hubapi.ResourceLink) (*hubapi.Project, error) {
 	return &project, nil
 }
 
+func (c *Client) CreateProject(projectRequest *hubapi.ProjectRequest) (string, error) {
+
+	projectsURL := fmt.Sprintf("%s/api/projects", c.baseURL)
+	return c.httpPostJSON(projectsURL, projectRequest, "application/json", 201)
+}
+
 func (c *Client) ListProjectVersions(link hubapi.ResourceLink) (*hubapi.ProjectVersionList, error) {
 
 	// Need offset/limit

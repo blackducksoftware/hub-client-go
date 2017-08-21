@@ -15,6 +15,10 @@ type Project struct {
 	Meta                    Meta   `json:"_meta"`
 }
 
+type ProjectRequest struct {
+	Name string `json:"name"`
+}
+
 type ProjectVersionList struct {
 	TotalCount uint32           `json:"totalCount"`
 	Items      []ProjectVersion `json:"items"`

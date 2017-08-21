@@ -22,11 +22,13 @@ const (
 
 // Client will need to support CSRF tokens for session-based auth for Hub 4.1.x (or was it 4.0?)
 type Client struct {
-	httpClient   *http.Client
-	baseURL      string
-	authToken    string
-	useAuthToken bool
-	debugFlags   HubClientDebug
+	httpClient    *http.Client
+	baseURL       string
+	authToken     string
+	useAuthToken  bool
+	haveCsrfToken bool
+	csrfToken     string
+	debugFlags    HubClientDebug
 }
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug) (*Client, error) {
@@ -85,22 +87,23 @@ func readBytes(readCloser io.ReadCloser) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func validateHTTPResponse(resp *http.Response) error {
+func validateHTTPResponse(resp *http.Response, expectedStatusCode int) error {
 
-	// TODO: Check for general success and maybe redirect?
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("received http status %d when expected 200", resp.StatusCode)
+	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
+		log.Errorf("Got a %d response instead of a %d.", resp.StatusCode, expectedStatusCode)
+		readResponseBody(resp)
+		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
 	}
 
 	return nil
 }
 
-func (c *Client) processResponse(resp *http.Response, result interface{}) error {
+func (c *Client) processResponse(resp *http.Response, result interface{}, expectedStatusCode int) error {
 
 	var bodyBytes []byte
 	var err error
 
-	if err := validateHTTPResponse(resp); err != nil {
+	if err := validateHTTPResponse(resp, expectedStatusCode); err != nil {
 		log.Errorf("Error validating HTTP Response: %+v.", err)
 		return err
 	}
@@ -165,12 +168,7 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 		log.Debugf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
-		log.Errorf("Got a %d response instead of a %d.", resp.StatusCode, expectedStatusCode)
-		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
-	}
-
-	return c.processResponse(resp, result)
+	return c.processResponse(resp, result, expectedStatusCode)
 }
 
 func (c *Client) httpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
@@ -214,13 +212,53 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 		log.Debugf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
-		log.Errorf("Got a %d response instead of a %d.", resp.StatusCode, expectedStatusCode)
-		readResponseBody(resp)
-		return fmt.Errorf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode)
+	return c.processResponse(resp, nil, expectedStatusCode) // TODO: Maybe need a response too?
+}
+
+func (c *Client) httpPostJSON(url string, data interface{}, contentType string, expectedStatusCode int) (string, error) {
+
+	var resp *http.Response
+	var err error
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING POST REQUEST: %s", url)
 	}
 
-	return c.processResponse(resp, nil) // TODO: Maybe need a response too?
+	// Encode json
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+
+	if err := enc.Encode(&data); err != nil {
+		log.Errorf("Error encoding json: %+v.", err)
+	}
+
+	httpStart := time.Now()
+	req, err := http.NewRequest(http.MethodPost, url, &buf)
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	if err != nil {
+		log.Errorf("Error making http post request: %+v.", err)
+		return "", err
+	}
+
+	c.doPreRequest(req)
+	log.Debugf("POST Request: %+v.", req)
+
+	if resp, err = c.httpClient.Do(req); err != nil {
+		log.Errorf("Error getting HTTP Response: %+v.", err)
+		readResponseBody(resp)
+		return "", err
+	}
+
+	httpElapsed := time.Since(httpStart)
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+	}
+
+	c.processResponse(resp, nil, expectedStatusCode)
+
+	return "", nil // TODO: Fix me
 }
 
 func (c *Client) doPreRequest(request *http.Request) {
@@ -229,7 +267,9 @@ func (c *Client) doPreRequest(request *http.Request) {
 		request.Header.Set(HeaderNameAuthorization, fmt.Sprintf("Bearer %s", c.authToken))
 	}
 
-	// TODO: Do something with CSRF too.
+	if c.haveCsrfToken {
+		request.Header.Set(HeaderNameCsrfToken, c.csrfToken)
+	}
 }
 
 func readResponseBody(resp *http.Response) {

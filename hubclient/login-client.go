@@ -23,8 +23,13 @@ func (c *Client) Login(username string, password string) error {
 	}
 
 	if resp.StatusCode != 204 {
-		log.Errorf("Login: Got a %d reponse instead of a 204.", resp.StatusCode)
+		log.Errorf("Login: Got a %d response instead of a 204.", resp.StatusCode)
 		return fmt.Errorf("got a %d response instead of a 204", resp.StatusCode)
+	}
+
+	if csrf := resp.Header.Get(HeaderNameCsrfToken); csrf != "" {
+		c.haveCsrfToken = true
+		c.csrfToken = csrf
 	}
 
 	log.Debugln("Login: Successfully authenticated")
