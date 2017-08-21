@@ -256,9 +256,11 @@ func (c *Client) httpPostJSON(url string, data interface{}, contentType string, 
 		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	c.processResponse(resp, nil, expectedStatusCode)
+	if err := c.processResponse(resp, nil, expectedStatusCode); err != nil {
+		return "", err
+	}
 
-	return "", nil // TODO: Fix me
+	return resp.Header.Get("Location"), nil
 }
 
 func (c *Client) doPreRequest(request *http.Request) {

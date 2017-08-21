@@ -48,7 +48,17 @@ func (c *Client) GetProject(link hubapi.ResourceLink) (*hubapi.Project, error) {
 func (c *Client) CreateProject(projectRequest *hubapi.ProjectRequest) (string, error) {
 
 	projectsURL := fmt.Sprintf("%s/api/projects", c.baseURL)
-	return c.httpPostJSON(projectsURL, projectRequest, "application/json", 201)
+	location, err := c.httpPostJSON(projectsURL, projectRequest, "application/json", 201)
+
+	if err != nil {
+		return location, err
+	}
+
+	if location == "" {
+		log.Warnf("Did not get a location header back for project creation")
+	}
+
+	return location, err
 }
 
 func (c *Client) ListProjectVersions(link hubapi.ResourceLink) (*hubapi.ProjectVersionList, error) {
@@ -78,6 +88,21 @@ func (c *Client) GetProjectVersion(link hubapi.ResourceLink) (*hubapi.ProjectVer
 	}
 
 	return &projectVersion, nil
+}
+
+func (c *Client) CreateProjectVersion(link hubapi.ResourceLink, projectVersionRequest *hubapi.ProjectVersionRequest) (string, error) {
+
+	location, err := c.httpPostJSON(link.Href, projectVersionRequest, "application/json", 201)
+
+	if err != nil {
+		return location, err
+	}
+
+	if location == "" {
+		log.Warnf("Did not get a location header back for project version creation")
+	}
+
+	return location, err
 }
 
 func (c *Client) GetProjectVersionRiskProfile(link hubapi.ResourceLink) (*hubapi.ProjectVersionRiskProfile, error) {

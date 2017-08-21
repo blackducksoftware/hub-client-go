@@ -1,5 +1,20 @@
 package hubapi
 
+const (
+	ProjectVersionPhasePlanning    = "PLANNING"
+	ProjectVersionPhaseDevelopment = "DEVELOPMENT"
+	ProjectVersionPhaseReleased    = "RELEASED"
+	ProjectVersionPhaseDeprecated  = "DEPRECATED"
+	ProjectVersionPhaseArchived    = "ARCHIVED"
+)
+
+const (
+	ProjectVersionDistributionExternal   = "EXTERNAL"
+	ProjectVersionDistributionSaaS       = "SAAS"
+	ProjectVersionDistributionInternal   = "INTERNAL"
+	ProjectVersionDistributionOpenSource = "OPENSOURCE"
+)
+
 type ProjectList struct {
 	TotalCount uint32    `json:"totalCount"`
 	Items      []Project `json:"items"`
@@ -16,7 +31,12 @@ type Project struct {
 }
 
 type ProjectRequest struct {
-	Name string `json:"name"`
+	Name                    string                 `json:"name"`
+	Description             *string                `json:"description"`
+	ProjectTier             *int                   `json:"projectTier"`
+	ProjectOwner            *string                `json:"projectOwner"`
+	ProjectLevelAdjustments bool                   `json:"projectLevelAdjustments"`
+	VersionRequest          *ProjectVersionRequest `json:"versionRequest"`
 }
 
 type ProjectVersionList struct {
@@ -25,19 +45,26 @@ type ProjectVersionList struct {
 }
 
 type ProjectVersion struct {
-	VersionName     string         `json:"versionName"`
-	Nickname        string         `json:"nickname"`
-	ReleaseComments string         `json:"releaseComments"`
-	ReleasedOn      string         `json:"releasedOn"` // TODO: change this to a date
-	Phase           string         `json:"phase"`
-	Distribution    string         `json:"distribution"`
-	License         ComplexLicense `json:"license"`
-	Meta            Meta           `json:"_meta"`
+	VersionName     string `json:"versionName"`
+	Nickname        string `json:"nickname"`
+	ReleaseComments string `json:"releaseComments"`
+	ReleasedOn      string `json:"releasedOn"` // TODO: change this to a date
+	Phase           string `json:"phase"`
+	Distribution    string `json:"distribution"`
+	Meta            Meta   `json:"_meta"`
+}
+
+type ProjectVersionRequest struct {
+	VersionName     string  `json:"versionName"`
+	Nickname        string  `json:"nickname"`
+	ReleaseComments string  `json:"releaseComments"`
+	ReleasedOn      *string `json:"releasedOn"` // TODO: change this to a date
+	Phase           string  `json:"phase"`
+	Distribution    string  `json:"distribution"`
 }
 
 // TODO: This is horrible, we need to fix up this API
 type ProjectVersionRiskProfile struct {
-	// Categories       map[string]RiskPriorityDistribution `json:"categories"`
 	Categories       map[string]map[string]int `json:"categories"`
 	BomLastUpdatedAt string                    `json:"bomLastUpdatedAt"` // TODO: Should be a date/time
 	Meta             Meta                      `json:"_meta"`
