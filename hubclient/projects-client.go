@@ -73,3 +73,16 @@ func (c *Client) GetProjectVersion(link hubapi.ResourceLink) (*hubapi.ProjectVer
 
 	return &projectVersion, nil
 }
+
+func (c *Client) GetProjectVersionRiskProfile(link hubapi.ResourceLink) (*hubapi.ProjectVersionRiskProfile, error) {
+
+	var riskProfile hubapi.ProjectVersionRiskProfile
+	err := c.httpGetJSON(link.Href, &riskProfile, 200)
+
+	if err != nil {
+		log.Errorf("Error trying to retrieve a project version risk profile: %+v.", err)
+		return nil, err
+	}
+
+	return &riskProfile, nil
+}
