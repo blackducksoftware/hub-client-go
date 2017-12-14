@@ -70,6 +70,19 @@ type ProjectVersionRiskProfile struct {
 	Meta             Meta                      `json:"_meta"`
 }
 
+type ProjectVersionPolicyStatus struct {
+	OverallStatus                string                        `json:"overallStatus"`
+	UpdatedAt                    string                        `json:"updatedAt"` // TODO should be a date/time
+	ComponentVersionStatusCounts []ComponentVersionStatusCount `json:"componentVersionStatusCounts"`
+	Meta                         Meta                          `json:"_meta"`
+}
+
+// TODO could the names and values be from an enumeration?
+type ComponentVersionStatusCount struct {
+	Name  string `json:"name"`
+	Value int    `json:"value"`
+}
+
 func (p *Project) GetProjectVersionsLink() (*ResourceLink, error) {
 	return p.Meta.FindLinkByRel("versions")
 }
@@ -92,4 +105,8 @@ func (v *ProjectVersion) GetVulnerableComponentsLink() (*ResourceLink, error) {
 
 func (v *ProjectVersion) GetProjectVersionRiskProfileLink() (*ResourceLink, error) {
 	return v.Meta.FindLinkByRel("riskProfile")
+}
+
+func (v *ProjectVersion) GetProjectVersionPolicyStatusLink() (*ResourceLink, error) {
+	return v.Meta.FindLinkByRel("policy-status")
 }
