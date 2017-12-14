@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// This is a very brittle test because it requires:
+// TestFetchPolicyStatus is a very brittle test because it requires:
 //   1. a reachable hub backend
 //   2. the hub backend to be located on localhost
 //   3. a specific username and password to be able to log in
