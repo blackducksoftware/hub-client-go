@@ -296,7 +296,7 @@ func (c *Client) httpDelete(url string, contentType string, expectedStatusCode i
 		log.Debugf("DEBUG HTTP DELETE ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	return c.processResponse(resp, nil, expectedStatusCode) // TODO: Maybe need a response too?
+	return c.processResponse(resp, nil, expectedStatusCode)
 }
 
 func (c *Client) doPreRequest(request *http.Request) {
