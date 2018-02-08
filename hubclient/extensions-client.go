@@ -1,7 +1,7 @@
 package hubclient
 
 import (
-	"bitbucket.org/bdsengineering/go-hub-client/hubapi"
+	"github.com/blackducksoftware/go-hub-client/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
