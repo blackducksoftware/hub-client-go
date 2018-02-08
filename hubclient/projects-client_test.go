@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/blackducksoftware/go-hub-client/hubapi"
+	"github.com/blackducksoftware/hub-client-go/hubapi"
 )
 
 // TestFetchPolicyStatus is a very brittle test because it requires:

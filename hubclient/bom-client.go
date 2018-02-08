@@ -3,7 +3,7 @@ package hubclient
 import (
 	"fmt"
 
-	"github.com/blackducksoftware/go-hub-client/hubapi"
+	"github.com/blackducksoftware/hub-client-go/hubapi"
 
 	log "github.com/sirupsen/logrus"
 )
