@@ -26,6 +26,9 @@ matrix:
   
 env:
   - TEST_DIR=hubapi
-  - TEST_DIR=hubclient
+  # TODO, re-enable testing of this package if we can
+  # somehow mock the hub , or point to a 'latest' exposed
+  # hub instance.
+  # - TEST_DIR=hubclient
 
 script: cd $TEST_DIR && go build ./... && go test ./...
