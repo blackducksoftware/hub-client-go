@@ -1,5 +1,7 @@
 language: go
 
+script: cd 
+
 # Only the last two Go releases are supported by the Go team with security
 # updates. Any versions older than that should be considered deprecated.
 # Don't bother testing with them. tip builds your code with the latest
@@ -22,7 +24,7 @@ matrix:
   # tests pass on the stable versions of Go.
   fast_finish: true
   
-# script always run to completion (set +e). All of these code checks are must haves
-# in a modern Go project.
-script:
-  - test
+env:
+  - TEST_DIR=hubapi
+  
+script: cd $TEST_DIR && go build ./... && go test ./...
