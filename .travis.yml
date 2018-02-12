@@ -26,5 +26,6 @@ matrix:
   
 env:
   - TEST_DIR=hubapi
-  
+  - TEST_DIR=hubclient
+
 script: cd $TEST_DIR && go build ./... && go test ./...
