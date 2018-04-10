@@ -81,6 +81,12 @@ func (c *Client) DeleteProject(projectURL string) error {
 	return c.httpDelete(projectURL, "application/json", 204)
 }
 
+// DeleteProjectVersion deletes a project version using
+// https://<base_hub_URL>/api.html#!/project45version45rest45server/deleteVersionUsingDELETE
+func (c *Client) DeleteProjectVersion(projectVersionURL string) error {
+	return c.httpDelete(projectVersionURL, "application/json", 204)
+}
+
 func (c *Client) ListProjectVersions(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.ProjectVersionList, error) {
 
 	params := ""

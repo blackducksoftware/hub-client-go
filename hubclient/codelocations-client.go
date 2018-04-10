@@ -48,6 +48,12 @@ func (c *Client) GetCodeLocation(link hubapi.ResourceLink) (*hubapi.CodeLocation
 	return &codeLocation, nil
 }
 
+// DeleteCodeLocation deletes a code location using
+// https://<base_hub_URL>/api.html#!/composite45code45location45rest45server/deleteCodeLocationUsingDELETE
+func (c *Client) DeleteCodeLocation(codeLocationURL string) error {
+	return c.httpDelete(codeLocationURL, "application/json", 204)
+}
+
 func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummaryList, error) {
 
 	// Need offset/limit
