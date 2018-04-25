@@ -160,3 +160,18 @@ func (c *Client) GetProjectVersionPolicyStatus(link hubapi.ResourceLink) (*hubap
 
 	return &policyStatus, nil
 }
+
+func (c *Client) AssignUserToProject(link hubapi.ResourceLink, userAssignmentRequest *hubapi.UserAssignmentRequest) (string, error) {
+
+	location, err := c.httpPostJSON(link.Href, userAssignmentRequest, "application/json", 201)
+
+	if err != nil {
+		return location, err
+	}
+
+	if location == "" {
+		log.Warnf("Did not get a location header back for project user assignment")
+	}
+
+	return location, err
+}
