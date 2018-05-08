@@ -91,6 +91,10 @@ func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, t
 	}, nil
 }
 
+func BaseURL(c *Client) string {
+	return c.baseURL
+}
+
 func readBytes(readCloser io.ReadCloser) ([]byte, error) {
 
 	defer readCloser.Close()
@@ -152,7 +156,7 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 	return nil
 }
 
-func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode int) error {
+func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode int) error {
 
 	// TODO: Content type?
 
@@ -187,7 +191,7 @@ func (c *Client) httpGetJSON(url string, result interface{}, expectedStatusCode 
 	return c.processResponse(resp, result, expectedStatusCode)
 }
 
-func (c *Client) httpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
+func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
 
 	var resp *http.Response
 	var err error
@@ -231,7 +235,7 @@ func (c *Client) httpPutJSON(url string, data interface{}, contentType string, e
 	return c.processResponse(resp, nil, expectedStatusCode) // TODO: Maybe need a response too?
 }
 
-func (c *Client) httpPostJSON(url string, data interface{}, contentType string, expectedStatusCode int) (string, error) {
+func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, expectedStatusCode int) (string, error) {
 
 	var resp *http.Response
 	var err error
@@ -279,7 +283,7 @@ func (c *Client) httpPostJSON(url string, data interface{}, contentType string, 
 	return resp.Header.Get("Location"), nil
 }
 
-func (c *Client) httpPostJSONExpectResult(url string, data interface{}, result interface{}, contentType string, expectedStatusCode int) (string, error) {
+func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result interface{}, contentType string, expectedStatusCode int) (string, error) {
 
 	var resp *http.Response
 	var err error
@@ -327,7 +331,7 @@ func (c *Client) httpPostJSONExpectResult(url string, data interface{}, result i
 	return resp.Header.Get("Location"), nil
 }
 
-func (c *Client) httpDelete(url string, contentType string, expectedStatusCode int) error {
+func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode int) error {
 
 	var resp *http.Response
 	var err error

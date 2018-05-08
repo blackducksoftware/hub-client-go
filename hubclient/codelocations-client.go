@@ -25,7 +25,7 @@ func (c *Client) ListCodeLocations(link hubapi.ResourceLink) (*hubapi.CodeLocati
 	// Should we abstract list fetching like we did with a single Get?
 
 	var codeLocationList hubapi.CodeLocationList
-	err := c.httpGetJSON(link.Href, &codeLocationList, 200)
+	err := c.HttpGetJSON(link.Href, &codeLocationList, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve code location list: %+v.", err)
@@ -38,7 +38,7 @@ func (c *Client) ListCodeLocations(link hubapi.ResourceLink) (*hubapi.CodeLocati
 func (c *Client) GetCodeLocation(link hubapi.ResourceLink) (*hubapi.CodeLocation, error) {
 
 	var codeLocation hubapi.CodeLocation
-	err := c.httpGetJSON(link.Href, &codeLocation, 200)
+	err := c.HttpGetJSON(link.Href, &codeLocation, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve a code location: %+v.", err)
@@ -51,7 +51,7 @@ func (c *Client) GetCodeLocation(link hubapi.ResourceLink) (*hubapi.CodeLocation
 // DeleteCodeLocation deletes a code location using
 // https://<base_hub_URL>/api.html#!/composite45code45location45rest45server/deleteCodeLocationUsingDELETE
 func (c *Client) DeleteCodeLocation(codeLocationURL string) error {
-	return c.httpDelete(codeLocationURL, "application/json", 204)
+	return c.HttpDelete(codeLocationURL, "application/json", 204)
 }
 
 func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummaryList, error) {
@@ -60,7 +60,7 @@ func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummar
 	// Should we abstract list fetching like we did with a single Get?
 
 	var scanSummaryList hubapi.ScanSummaryList
-	err := c.httpGetJSON(link.Href, &scanSummaryList, 200)
+	err := c.HttpGetJSON(link.Href, &scanSummaryList, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve scan summary list: %+v.", err)
@@ -73,7 +73,7 @@ func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummar
 func (c *Client) GetScanSummary(link hubapi.ResourceLink) (*hubapi.ScanSummary, error) {
 
 	var scanSummary hubapi.ScanSummary
-	err := c.httpGetJSON(link.Href, &scanSummary, 200)
+	err := c.HttpGetJSON(link.Href, &scanSummary, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve a scan summary: %+v.", err)
