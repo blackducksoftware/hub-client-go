@@ -15,17 +15,23 @@
 package hubclient
 
 import (
+	"fmt"
+
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
-func (c *Client) ListCodeLocations(link hubapi.ResourceLink) (*hubapi.CodeLocationList, error) {
+func (c *Client) ListCodeLocations(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.CodeLocationList, error) {
 
-	// Need offset/limit
-	// Should we abstract list fetching like we did with a single Get?
+	params := ""
+	if options != nil {
+		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
+	}
+
+	codeLocationsURL := fmt.Sprintf("%s%s", link.Href, params)
 
 	var codeLocationList hubapi.CodeLocationList
-	err := c.HttpGetJSON(link.Href, &codeLocationList, 200)
+	err := c.HttpGetJSON(codeLocationsURL, &codeLocationList, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve code location list: %+v.", err)
