@@ -91,7 +91,7 @@ func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, t
 	}, nil
 }
 
-func BaseURL(c *Client) string {
+func (c *Client) BaseURL() string {
 	return c.baseURL
 }
 
