@@ -26,7 +26,7 @@ func (c *Client) CreateUser(userRequest *hubapi.UserRequest) (*hubapi.User, erro
 
 	var result hubapi.User
 	usersURL := fmt.Sprintf("%s/api/users", c.baseURL)
-	_, err := c.httpPostJSONExpectResult(usersURL, userRequest, &result, "application/json", 201)
+	_, err := c.HttpPostJSONExpectResult(usersURL, userRequest, &result, "application/json", 201)
 
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (c *Client) ListUsers(options *hubapi.GetListOptions) (*hubapi.UserList, er
 	usersURL := fmt.Sprintf("%s/api/users%s", c.baseURL, params)
 
 	var userList hubapi.UserList
-	err := c.httpGetJSON(usersURL, &userList, 200)
+	err := c.HttpGetJSON(usersURL, &userList, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve user list: %+v.", err)
