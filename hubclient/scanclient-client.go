@@ -37,7 +37,7 @@ func (c *Client) downloadScanClientHelper(path string, urlPath string) error {
 
 	scanClientURL := fmt.Sprintf("%s/%s", c.baseURL, urlPath)
 
-	resp, err := c.httpClient.Get(scanClientURL)
+	resp, err := c.HttpClient.Get(scanClientURL)
 	if err != nil {
 		return err
 	} else if resp.StatusCode != http.StatusOK {
