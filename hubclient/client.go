@@ -36,7 +36,7 @@ const (
 
 // Client will need to support CSRF tokens for session-based auth for Hub 4.1.x (or was it 4.0?)
 type Client struct {
-	HttpClient    *http.Client
+	httpClient    *http.Client
 	baseURL       string
 	authToken     string
 	useAuthToken  bool
@@ -64,7 +64,7 @@ func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Dura
 	}
 
 	return &Client{
-		HttpClient:   client,
+		httpClient:   client,
 		baseURL:      baseURL,
 		useAuthToken: false,
 		debugFlags:   debugFlags,
@@ -83,7 +83,7 @@ func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, t
 	}
 
 	return &Client{
-		HttpClient:   client,
+		httpClient:   client,
 		baseURL:      baseURL,
 		authToken:    authToken,
 		useAuthToken: true,
@@ -177,7 +177,7 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 
 	c.doPreRequest(req)
 
-	if resp, err = c.HttpClient.Do(req); err != nil {
+	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
 		return err
 	}
@@ -220,7 +220,7 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 	c.doPreRequest(req)
 	log.Debugf("PUT Request: %+v.", req)
 
-	if resp, err = c.HttpClient.Do(req); err != nil {
+	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
 		readResponseBody(resp)
 		return err
@@ -264,7 +264,7 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 	c.doPreRequest(req)
 	log.Debugf("POST Request: %+v.", req)
 
-	if resp, err = c.HttpClient.Do(req); err != nil {
+	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
 		readResponseBody(resp)
 		return "", err
@@ -312,7 +312,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	c.doPreRequest(req)
 	log.Debugf("POST Request: %+v.", req)
 
-	if resp, err = c.HttpClient.Do(req); err != nil {
+	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
 		readResponseBody(resp)
 		return "", err
@@ -352,7 +352,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 	c.doPreRequest(req)
 	log.Debugf("DELETE Request: %+v.", req)
 
-	if resp, err = c.HttpClient.Do(req); err != nil {
+	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
 		readResponseBody(resp)
 		return err

@@ -29,7 +29,7 @@ func (c *Client) Login(username string, password string) error {
 		"j_password": {password},
 	}
 
-	resp, err := c.HttpClient.PostForm(loginURL, formValues)
+	resp, err := c.httpClient.PostForm(loginURL, formValues)
 
 	if err != nil {
 		log.Errorf("Error trying to login via form login: %+v.", err)
