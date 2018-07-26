@@ -45,6 +45,8 @@ type Client struct {
 	debugFlags    HubClientDebug
 }
 
+// TODO: I should just change 'expect status code' in all of these to just be a successful value.
+
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
 
 	jar, err := cookiejar.New(nil) // Look more at this function
@@ -366,6 +368,42 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
 		log.Debugf("DEBUG HTTP DELETE ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+	}
+
+	return c.processResponse(resp, nil, expectedStatusCode)
+}
+
+func (c *Client) HttpPostForm(url string, body *bytes.Buffer, contentType string, expectedStatusCode int) error {
+
+	var resp *http.Response
+	var err error
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING POST FORM REQUEST: %s", url)
+	}
+
+	httpStart := time.Now()
+	req, err := http.NewRequest(http.MethodPost, url, body)
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	if err != nil {
+		log.Errorf("Error making http post form request: %+v.", err)
+		return err
+	}
+
+	c.doPreRequest(req)
+	log.Debugf("POST Form Request: %+v.", req)
+
+	if resp, err = c.httpClient.Do(req); err != nil {
+		log.Errorf("Error getting HTTP Response: %+v.", err)
+		readResponseBody(resp)
+		return err
+	}
+
+	httpElapsed := time.Since(httpStart)
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP POST FORM ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
 	return c.processResponse(resp, nil, expectedStatusCode)
