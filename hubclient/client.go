@@ -22,6 +22,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"os"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -331,6 +332,53 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	}
 
 	if err := c.processResponse(resp, result, expectedStatusCode); err != nil {
+		return "", err
+	}
+
+	return resp.Header.Get("Location"), nil
+}
+
+func (c *Client) HttpPostFile(url string, filePath string, contentType string, expectedStatusCode int) (string, error) {
+
+	var resp *http.Response
+	var err error
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING POST REQUEST: %s", url)
+	}
+
+	file, err := os.Open(filePath)
+
+	if err != nil {
+		log.Errorf("Error opening file: %+v", err)
+		return "", nil
+	}
+
+	httpStart := time.Now()
+	req, err := http.NewRequest(http.MethodPost, url, file)
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	if err != nil {
+		log.Errorf("Error making http post request: %+v.", err)
+		return "", err
+	}
+
+	c.doPreRequest(req)
+	log.Debugf("POST Request: %+v.", req)
+
+	if resp, err = c.httpClient.Do(req); err != nil {
+		log.Errorf("Error getting HTTP Response: %+v.", err)
+		readResponseBody(resp)
+		return "", err
+	}
+
+	httpElapsed := time.Since(httpStart)
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+	}
+
+	if err := c.processResponse(resp, nil, expectedStatusCode); err != nil {
 		return "", err
 	}
 
