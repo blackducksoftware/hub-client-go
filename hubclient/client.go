@@ -94,6 +94,43 @@ func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, t
 	}, nil
 }
 
+func NewWithTokenTLS(baseURL string, authToken string, debugFlags HubClientDebug, timeout time.Duration, systemCert string, systemKey string, cacert string) (*Client, error) {
+
+	cert, err := tls.LoadX509KeyPair(systemCert, systemKey)
+
+	caCert, err := ioutil.ReadFile(cacert)
+	if err != nil {
+		log.Fatal(err)
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	// Setup HTTPS client
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true,
+		RootCAs:            caCertPool,
+		Certificates:       []tls.Certificate{cert},
+	}
+	tlsConfig.BuildNameToCertificate()
+
+	tr := &http.Transport{
+		TLSClientConfig: tlsConfig,
+	}
+
+	client := &http.Client{
+		Transport: tr,
+		Timeout:   timeout,
+	}
+
+	return &Client{
+		httpClient:   client,
+		baseURL:      baseURL,
+		authToken:    authToken,
+		useAuthToken: true,
+		debugFlags:   debugFlags,
+	}, nil
+}
+
 func (c *Client) BaseURL() string {
 	return c.baseURL
 }
