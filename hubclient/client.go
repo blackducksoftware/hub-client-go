@@ -17,9 +17,11 @@ package hubclient
 import (
 	"bytes"
 	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"os"
@@ -100,7 +102,8 @@ func NewWithTokenTLS(baseURL string, authToken string, debugFlags HubClientDebug
 
 	caCert, err := ioutil.ReadFile(cacert)
 	if err != nil {
-		log.Fatal(err)
+		log.Warnf("Cannot read caCert file")
+		return nil, err
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
