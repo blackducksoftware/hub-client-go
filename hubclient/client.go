@@ -96,7 +96,7 @@ func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, t
 	}, nil
 }
 
-func NewWithTokenTLS(baseURL string, authToken string, debugFlags HubClientDebug, timeout time.Duration, systemCert string, systemKey string, cacert string) (*Client, error) {
+func NewWithTokenTLS(baseURL string, authToken string, debugFlags HubClientDebug, timeout time.Duration, systemCert string, systemKey string, cacert string, insecure bool) (*Client, error) {
 
 	cert, err := tls.LoadX509KeyPair(systemCert, systemKey)
 
@@ -110,7 +110,7 @@ func NewWithTokenTLS(baseURL string, authToken string, debugFlags HubClientDebug
 
 	// Setup HTTPS client
 	tlsConfig := &tls.Config{
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: insecure,
 		RootCAs:            caCertPool,
 		Certificates:       []tls.Certificate{cert},
 	}
