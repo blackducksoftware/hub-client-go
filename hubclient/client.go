@@ -195,20 +195,6 @@ func readBytes(readCloser io.ReadCloser) ([]byte, error) {
 
 func validateHTTPResponse(resp *http.Response, expectedStatusCode int) error {
 
-	// TODO: This is a hack, I need to fix this.
-	if expectedStatusCode == 0 {
-		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-			return nil
-		}
-
-		if resp.StatusCode >= 300 && resp.StatusCode < 400 {
-			log.Warnf("Got a %d response, this indicate a redirect may need to be followed.", resp.StatusCode)
-			return nil
-		}
-
-		return fmt.Errorf("Got a status code of: %d. Expected a successful status code.", resp.StatusCode)
-	}
-
 	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
 		log.Errorf("Got a %d response instead of a %d.", resp.StatusCode, expectedStatusCode)
 		readResponseBody(resp)
