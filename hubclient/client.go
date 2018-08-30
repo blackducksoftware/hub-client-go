@@ -417,7 +417,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	return resp.Header.Get("Location"), nil
 }
 
-func (c *Client) HttpPostFile(url string, filePath string, contentType string, expectedStatusCode int) (string, error) {
+func (c *Client) HttpPostFile(url string, filePath string, contentType string) (string, int, error) {
 
 	var resp *http.Response
 	var err error
@@ -430,7 +430,7 @@ func (c *Client) HttpPostFile(url string, filePath string, contentType string, e
 
 	if err != nil {
 		log.Errorf("Error opening file: %+v", err)
-		return "", nil
+		return "", -1, err
 	}
 
 	httpStart := time.Now()
@@ -439,7 +439,7 @@ func (c *Client) HttpPostFile(url string, filePath string, contentType string, e
 
 	if err != nil {
 		log.Errorf("Error making http post request: %+v.", err)
-		return "", err
+		return "", -1, err
 	}
 
 	c.doPreRequest(req)
@@ -448,7 +448,7 @@ func (c *Client) HttpPostFile(url string, filePath string, contentType string, e
 	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
 		readResponseBody(resp)
-		return "", err
+		return "", resp.StatusCode, err
 	}
 
 	httpElapsed := time.Since(httpStart)
@@ -456,12 +456,7 @@ func (c *Client) HttpPostFile(url string, filePath string, contentType string, e
 	if c.debugFlags&HubClientDebugTimings != 0 {
 		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
-
-	if err := c.processResponse(resp, nil, expectedStatusCode); err != nil {
-		return "", err
-	}
-
-	return resp.Header.Get("Location"), nil
+	return resp.Header.Get("Location"), resp.StatusCode, nil
 }
 
 func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode int) error {
