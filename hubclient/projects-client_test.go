@@ -29,7 +29,7 @@ import (
 //   4. that there is at least one project, with a version, with a policy status
 // It's actually an integration test, not a unit test.
 func TestFetchPolicyStatus(t *testing.T) {
-	client, err := NewWithSession("https://kbemea-test-kbemea-test.10.1.176.130.xip.io", HubClientDebugTimings, 5*time.Second)
+	client, err := NewWithSession("https://localhost", HubClientDebugTimings, 5*time.Second)
 	client.Login("sysadmin", "blackduck")
 	if err != nil {
 		t.Log("unable to instantiate client: " + err.Error())
