@@ -59,3 +59,15 @@ func (c *Client) ListUsers(options *hubapi.GetListOptions) (*hubapi.UserList, er
 
 	return &userList, nil
 }
+
+func (c *Client) GetUser(link hubapi.ResourceLink) (*hubapi.User, error) {
+	var user hubapi.User
+	err := c.HttpGetJSON(link.Href, &user, 200)
+
+	if err != nil {
+		log.Errorf("Error trying to retrieve a user: %+v.", err)
+		return nil, err
+	}
+
+	return &user, nil
+}
