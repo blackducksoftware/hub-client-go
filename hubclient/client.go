@@ -152,7 +152,7 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 		log.Errorf("Error parsing HTTP Response: %+v.", err)
 		log.Errorln("\n\n--------------------")
 		log.Errorln("Response:")
-		log.Errorln("--------------------\n\n")
+		log.Errorln("--------------------")
 		log.Errorln(resp)
 		return err
 	}
