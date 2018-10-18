@@ -22,7 +22,7 @@ import (
 )
 
 func TestDownloadScanClient(t *testing.T) {
-	client, err := NewWithSession("https://localhost", HubClientDebugTimings, 5*time.Second)
+	client, err := NewWithSession("https://kbemea-test-kbemea-test.10.1.176.130.xip.io", HubClientDebugTimings, 5*time.Second)
 	if err != nil {
 		t.Error(err)
 		return
