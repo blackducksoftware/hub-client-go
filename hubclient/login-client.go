@@ -37,7 +37,7 @@ func (c *Client) Login(username string, password string) error {
 	}
 
 	if resp.StatusCode != 204 {
-		return fmt.Errorf("got a %d response instead of a 204", resp.StatusCode)
+		return errors.Errorf("got a %d response instead of a 204", resp.StatusCode)
 	}
 
 	if csrf := resp.Header.Get(HeaderNameCsrfToken); csrf != "" {
