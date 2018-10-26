@@ -38,6 +38,19 @@ func (c *Client) ListPolicyRules(options *hubapi.GetListOptions) (*hubapi.Policy
 		return nil, errors.Annotate(err, "Error trying to retrieve policy rule list")
 	}
 
+	rules := []hubapi.PolicyRule{}
+	for _, pr := range policyRuleList.Items {
+		link := hubapi.ResourceLink{
+			Href: pr.Meta.Href,
+		}
+		rule, err := c.GetPolicyRule(link)
+		if err != nil {
+			return nil, err
+		}
+		rules = append(rules, *rule)
+	}
+	policyRuleList.Items = rules
+
 	return &policyRuleList, nil
 }
 
