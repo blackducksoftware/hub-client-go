@@ -17,6 +17,8 @@ package hubapi
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 type PolicyRuleList struct {
@@ -97,4 +99,28 @@ func (intstr IntOrString) MarshalJSON() ([]byte, error) {
 	default:
 		return []byte{}, fmt.Errorf("impossible IntOrString.Type")
 	}
+}
+
+func (pr *PolicyRule) IsEqual(obj *PolicyRule) bool {
+	if !strings.EqualFold(pr.Name, obj.Name) {
+		return false
+	}
+
+	if !strings.EqualFold(pr.Description, obj.Description) {
+		return false
+	}
+
+	if pr.Overridable != obj.Overridable {
+		return false
+	}
+
+	if !strings.EqualFold(pr.Severity, obj.Severity) {
+		return false
+	}
+
+	if !reflect.DeepEqual(pr.Expression, obj.Expression) {
+		return false
+	}
+
+	return true
 }
