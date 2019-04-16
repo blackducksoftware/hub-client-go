@@ -75,7 +75,3 @@ func NewWithApiToken(baseURL string, apiToken string, debugFlags HubClientDebug,
 	}, nil
 
 }
-
-func init() {
-	log.SetLevel(log.DebugLevel)
-}
