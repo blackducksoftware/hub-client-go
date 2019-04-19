@@ -90,7 +90,7 @@ func TraceHubClientError(old error) error {
 }
 
 func HubClientErrorf(format string, args ...interface{}) error {
-	newErr := errors.Errorf(format, args).(*errors.Err)
+	newErr := errors.Errorf(format, args...).(*errors.Err)
 	err := &HubClientError{*newErr, 0, HubResponseError{}}
 	return err
 }
