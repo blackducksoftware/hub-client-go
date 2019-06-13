@@ -17,11 +17,14 @@ package hubclient
 import (
 	"bytes"
 	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
+	"os"
 	"time"
 
 	"github.com/juju/errors"
@@ -46,6 +49,8 @@ type Client struct {
 	debugFlags    HubClientDebug
 }
 
+// TODO: I should just change 'expect status code' in all of these to just be a successful value.
+
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
 
 	jar, err := cookiejar.New(nil) // Look more at this function
@@ -56,6 +61,33 @@ func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Dura
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{
+		Jar:       jar,
+		Transport: tr,
+		Timeout:   timeout,
+	}
+
+	return &Client{
+		httpClient:   client,
+		baseURL:      baseURL,
+		useAuthToken: false,
+		debugFlags:   debugFlags,
+	}, nil
+}
+
+func NewWithSessionTLS(baseURL string, debugFlags HubClientDebug, timeout time.Duration, systemCert string, systemKey string, cacert string, insecure bool) (*Client, error) {
+
+	jar, err := cookiejar.New(nil) // Look more at this function
+
+	if err != nil {
+		return nil, err
+	}
+
+	tlsconfig, err := ConfigureTLSWithCerts(systemCert, systemKey, cacert, insecure)
+	tr := &http.Transport{
+		TLSClientConfig: tlsconfig,
 	}
 
 	client := &http.Client{
@@ -90,6 +122,56 @@ func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, t
 		useAuthToken: true,
 		debugFlags:   debugFlags,
 	}, nil
+}
+
+func NewWithTokenTLS(baseURL string, authToken string, debugFlags HubClientDebug, timeout time.Duration, systemCert string, systemKey string, cacert string, insecure bool) (*Client, error) {
+
+	tlsconfig, err := ConfigureTLSWithCerts(systemCert, systemKey, cacert, insecure)
+	if err != nil {
+		log.Warnf("Cannot get tls config")
+		return nil, err
+	}
+
+	tr := &http.Transport{
+		TLSClientConfig: tlsconfig,
+	}
+
+	client := &http.Client{
+		Transport: tr,
+		Timeout:   timeout,
+	}
+
+	return &Client{
+		httpClient:   client,
+		baseURL:      baseURL,
+		authToken:    authToken,
+		useAuthToken: true,
+		debugFlags:   debugFlags,
+	}, nil
+}
+
+func ConfigureTLSWithCerts(systemCert string, systemKey string, cacert string, insecure bool) (*tls.Config, error) {
+	cert, err := tls.LoadX509KeyPair(systemCert, systemKey)
+	if err != nil {
+		log.Warnf("Cannot load system cert and key file")
+		return nil, err
+	}
+	caCert, err := ioutil.ReadFile(cacert)
+	if err != nil {
+		log.Warnf("Cannot read caCert file")
+		return nil, err
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	// Setup HTTPS client
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: insecure,
+		RootCAs:            caCertPool,
+		Certificates:       []tls.Certificate{cert},
+	}
+	tlsConfig.BuildNameToCertificate()
+	return tlsConfig, nil
 }
 
 func (c *Client) BaseURL() string {
@@ -316,6 +398,48 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	return resp.Header.Get("Location"), nil
 }
 
+func (c *Client) HttpPostFile(url string, filePath string, contentType string) (string, int, error) {
+
+	var resp *http.Response
+	var err error
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING POST REQUEST: %s", url)
+	}
+
+	file, err := os.Open(filePath)
+
+	if err != nil {
+		log.Errorf("Error opening file: %+v", err)
+		return "", -1, err
+	}
+
+	httpStart := time.Now()
+	req, err := http.NewRequest(http.MethodPost, url, file)
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	if err != nil {
+		log.Errorf("Error making http post request: %+v.", err)
+		return "", -1, err
+	}
+
+	c.doPreRequest(req)
+	log.Debugf("POST Request: %+v.", req)
+
+	if resp, err = c.httpClient.Do(req); err != nil {
+		log.Errorf("Error getting HTTP Response: %+v.", err)
+		readResponseBody(resp)
+		return "", resp.StatusCode, err
+	}
+
+	httpElapsed := time.Since(httpStart)
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+	}
+	return resp.Header.Get("Location"), resp.StatusCode, nil
+}
+
 func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode int) error {
 
 	var resp *http.Response
@@ -348,6 +472,42 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 	}
 
 	return AnnotateHubClientErrorf(c.processResponse(resp, nil, expectedStatusCode), "unable to process response from DELETE to %s", url)
+}
+
+func (c *Client) HttpPostForm(url string, body *bytes.Buffer, contentType string, expectedStatusCode int) error {
+
+	var resp *http.Response
+	var err error
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING POST FORM REQUEST: %s", url)
+	}
+
+	httpStart := time.Now()
+	req, err := http.NewRequest(http.MethodPost, url, body)
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	if err != nil {
+		log.Errorf("Error making http post form request: %+v.", err)
+		return err
+	}
+
+	c.doPreRequest(req)
+	log.Debugf("POST Form Request: %+v.", req)
+
+	if resp, err = c.httpClient.Do(req); err != nil {
+		log.Errorf("Error getting HTTP Response: %+v.", err)
+		readResponseBody(resp)
+		return err
+	}
+
+	httpElapsed := time.Since(httpStart)
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP POST FORM ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+	}
+
+	return c.processResponse(resp, nil, expectedStatusCode)
 }
 
 func (c *Client) doPreRequest(request *http.Request) {
