@@ -47,25 +47,28 @@ type Client struct {
 }
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
+	client := createHttpClient(timeout)
+	return NewWithSession2(baseURL, debugFlags, client)
+}
 
-	jar, err := cookiejar.New(nil) // Look more at this function
+func NewWithSession2(baseURL string, debugFlags HubClientDebug, httpClient *http.Client) (*Client, error) {
 
-	if err != nil {
-		return nil, AnnotateHubClientError(err, "unable to instantiate cookie jar")
+	if httpClient == nil {
+		httpClient = createHttpClient(time.Minute)
 	}
 
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
+	if httpClient.Jar == nil {
+		jar, err := cookiejar.New(nil) // Look more at this function
 
-	client := &http.Client{
-		Jar:       jar,
-		Transport: tr,
-		Timeout:   timeout,
+		if err != nil {
+			return nil, AnnotateHubClientError(err, "unable to instantiate cookie jar")
+		}
+
+		httpClient.Jar = jar
 	}
 
 	return &Client{
-		httpClient:   client,
+		httpClient:   httpClient,
 		baseURL:      baseURL,
 		useAuthToken: false,
 		debugFlags:   debugFlags,
@@ -73,23 +76,36 @@ func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Dura
 }
 
 func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
+	client := createHttpClient(timeout)
+	return NewWithToken2(baseURL, authToken, debugFlags, client)
+}
 
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-
-	client := &http.Client{
-		Transport: tr,
-		Timeout:   timeout,
+func NewWithToken2(baseURL string, authToken string, debugFlags HubClientDebug, httpClient *http.Client) (*Client, error) {
+	if httpClient == nil {
+		httpClient = createHttpClient(time.Minute)
 	}
 
 	return &Client{
-		httpClient:   client,
+		httpClient:   httpClient,
 		baseURL:      baseURL,
 		authToken:    authToken,
 		useAuthToken: true,
 		debugFlags:   debugFlags,
 	}, nil
+}
+
+func createHttpClient(timeout time.Duration) *http.Client {
+	tr := &http.Transport{
+		Proxy:           http.ProxyFromEnvironment,
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{
+		Timeout:   timeout,
+		Transport: tr,
+	}
+
+	return client
 }
 
 func (c *Client) BaseURL() string {

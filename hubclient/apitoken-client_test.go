@@ -30,5 +30,31 @@ func TestNewWithApiToken(t *testing.T) {
 	assert.Equal(t, "testBearerToken", client.authToken)
 	assert.True(t, client.haveCsrfToken)
 	assert.Equal(t, "csrf-fake-value", client.csrfToken)
+}
 
+func TestNewWithApiToken2(t *testing.T) {
+	defer gock.Off()
+
+	gock.New("http://server.com").
+		Post("/api/tokens/authenticate").
+		Reply(200).
+		JSON(map[string]interface{}{"bearerToken": "testBearerToken", "expiresInMilliseconds": 7199998}).
+		SetHeader(HeaderNameCsrfToken, "csrf-fake-value")
+
+	gock.DisableNetworking()
+
+	gock.Intercept()
+
+	httpClient := createHttpClient(time.Second*10)
+
+	client, err := NewWithApiToken2("http://server.com", "foo", 0, httpClient)
+
+	if err != nil {
+		t.Fatalf("Got error: %v", err)
+	}
+
+	assert.True(t, client.useAuthToken)
+	assert.Equal(t, "testBearerToken", client.authToken)
+	assert.True(t, client.haveCsrfToken)
+	assert.Equal(t, "csrf-fake-value", client.csrfToken)
 }
