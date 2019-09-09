@@ -3,10 +3,11 @@ package hubclient
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type BearerTokenResponse struct {
@@ -15,6 +16,15 @@ type BearerTokenResponse struct {
 }
 
 func NewWithApiToken(baseURL string, apiToken string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
+	client := createHttpClient(timeout)
+	return NewWithApiToken2(baseURL, apiToken, debugFlags, client)
+}
+
+func NewWithApiToken2(baseURL string, apiToken string, debugFlags HubClientDebug, client *http.Client) (*Client, error) {
+	if client == nil {
+		client = createHttpClient(time.Minute)
+	}
+
 	url := fmt.Sprintf("%s/api/tokens/authenticate", baseURL)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
@@ -25,10 +35,6 @@ func NewWithApiToken(baseURL string, apiToken string, debugFlags HubClientDebug,
 	tokenValue := fmt.Sprintf("token %s", apiToken)
 
 	req.Header.Add(HeaderNameAuthorization, tokenValue)
-
-	client := &http.Client{
-		Timeout: timeout,
-	}
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -73,5 +79,4 @@ func NewWithApiToken(baseURL string, apiToken string, debugFlags HubClientDebug,
 		haveCsrfToken: true,
 		debugFlags:    debugFlags,
 	}, nil
-
 }
