@@ -70,6 +70,7 @@ type VulnerabilityWithRemediation struct {
 	RemediationStatus          string  `json:"remediationStatus"`
 	RemediationCreatedAt       string  `json:"remediationCreatedAt"`
 	RemediationUpdatedAt       string  `json:"remediationUpdatedAt"`
+	CweId                      string  `json:"cweId,omitempty"`
 }
 
 type BomRiskProfile struct {
