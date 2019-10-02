@@ -25,10 +25,10 @@ func (c *Client) CreateApiToken(name, description string, readOnly bool) (locati
 
 	tokensUrl := fmt.Sprintf("%s/api/current-user/tokens", c.baseURL)
 
-	tokenRequest := &hubapi.ApiToken {
-		Name: name,
-		Description:description,
-		Scopes: []string{"read"},
+	tokenRequest := &hubapi.ApiToken{
+		Name:        name,
+		Description: description,
+		Scopes:      []string{"read"},
 	}
 
 	if !readOnly {
@@ -36,7 +36,7 @@ func (c *Client) CreateApiToken(name, description string, readOnly bool) (locati
 	}
 
 	var tokenResponse hubapi.CreateApiTokenResponse
-	location, err = c.HttpPostJSONExpectResult(tokensUrl, tokenRequest, &tokenResponse,"application/json", 201)
+	location, err = c.HttpPostJSONExpectResult(tokensUrl, tokenRequest, &tokenResponse, "application/json", 201)
 
 	if err != nil {
 		return location, "", TraceHubClientError(err)
@@ -73,4 +73,3 @@ func (c *Client) ListApiTokens(options *hubapi.GetListOptions) (*hubapi.ApiToken
 
 	return &apiTokenList, nil
 }
-
