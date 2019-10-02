@@ -48,10 +48,10 @@ type Client struct {
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
 	client := createHttpClient(timeout)
-	return NewWithSession2(baseURL, debugFlags, client)
+	return NewWithClient(baseURL, debugFlags, client)
 }
 
-func NewWithSession2(baseURL string, debugFlags HubClientDebug, httpClient *http.Client) (*Client, error) {
+func NewWithClient(baseURL string, debugFlags HubClientDebug, httpClient *http.Client) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = createHttpClient(time.Minute)
@@ -77,10 +77,10 @@ func NewWithSession2(baseURL string, debugFlags HubClientDebug, httpClient *http
 
 func NewWithToken(baseURL string, authToken string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
 	client := createHttpClient(timeout)
-	return NewWithToken2(baseURL, authToken, debugFlags, client)
+	return NewWithTokenAndClient(baseURL, authToken, debugFlags, client)
 }
 
-func NewWithToken2(baseURL string, authToken string, debugFlags HubClientDebug, httpClient *http.Client) (*Client, error) {
+func NewWithTokenAndClient(baseURL string, authToken string, debugFlags HubClientDebug, httpClient *http.Client) (*Client, error) {
 	if httpClient == nil {
 		httpClient = createHttpClient(time.Minute)
 	}

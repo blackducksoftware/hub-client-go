@@ -47,7 +47,7 @@ func TestNewWithApiToken2(t *testing.T) {
 
 	httpClient := createHttpClient(time.Second*10)
 
-	client, err := NewWithApiToken2("http://server.com", "foo", 0, httpClient)
+	client, err := NewWithApiTokenAndClient("http://server.com", "foo", 0, httpClient)
 
 	if err != nil {
 		t.Fatalf("Got error: %v", err)

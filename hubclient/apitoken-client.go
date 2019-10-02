@@ -17,10 +17,10 @@ type BearerTokenResponse struct {
 
 func NewWithApiToken(baseURL string, apiToken string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
 	client := createHttpClient(timeout)
-	return NewWithApiToken2(baseURL, apiToken, debugFlags, client)
+	return NewWithApiTokenAndClient(baseURL, apiToken, debugFlags, client)
 }
 
-func NewWithApiToken2(baseURL string, apiToken string, debugFlags HubClientDebug, client *http.Client) (*Client, error) {
+func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubClientDebug, client *http.Client) (*Client, error) {
 	if client == nil {
 		client = createHttpClient(time.Minute)
 	}
