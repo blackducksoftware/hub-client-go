@@ -51,7 +51,7 @@ type BomVulnerableComponent struct {
 	ComponentVersionName       string                       `json:"componentVersionName"`
 	ComponentVersion           string                       `json:"componentVersion"`
 	ComponentVersionOriginName string                       `json:"componentVersionOriginName"`
-	ComponentVersionOrigingID  string                       `json:"componentVersionOriginId"`
+	ComponentVersionOriginID   string                       `json:"componentVersionOriginId"`
 	License                    ComplexLicense               `json:"license"`
 	Vulnerability              VulnerabilityWithRemediation `json:"vulnerabilityWithRemediation"`
 	Meta                       Meta                         `json:"_meta"`
