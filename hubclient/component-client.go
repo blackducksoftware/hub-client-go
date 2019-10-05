@@ -54,7 +54,7 @@ func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, erro
 }
 
 func (c *Client) CreateComponent(componentRequest *hubapi.ComponentRequest) (string, error) {
-	componentURL := fmt.Sprintf("%s/api/policy-rules", c.baseURL)
+	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
 	location, err := c.HttpPostJSON(componentURL, componentRequest, "application/json", 201)
 
 	if err != nil {
