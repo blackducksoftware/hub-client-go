@@ -1,0 +1,538 @@
+{
+  "totalCount": 60,
+  "items": [
+    {
+      "versionName": "0.01",
+      "releasedOn": "2007-07-28T04:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/4b9f4f05-729e-4791-8ae6-e96ee8a4bf5b/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/4b9f4f05-729e-4791-8ae6-e96ee8a4bf5b",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/4b9f4f05-729e-4791-8ae6-e96ee8a4bf5b/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/4b9f4f05-729e-4791-8ae6-e96ee8a4bf5b/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/4b9f4f05-729e-4791-8ae6-e96ee8a4bf5b/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/4b9f4f05-729e-4791-8ae6-e96ee8a4bf5b/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "0.02",
+      "releasedOn": "2007-07-28T04:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/0fba758d-8b0f-47b7-add6-383646f7b459/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/0fba758d-8b0f-47b7-add6-383646f7b459",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/0fba758d-8b0f-47b7-add6-383646f7b459/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/0fba758d-8b0f-47b7-add6-383646f7b459/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/0fba758d-8b0f-47b7-add6-383646f7b459/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/0fba758d-8b0f-47b7-add6-383646f7b459/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "1.0",
+      "releasedOn": "2001-07-14T04:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/fc66281f-1cbb-4ea0-aff8-358106822868/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/fc66281f-1cbb-4ea0-aff8-358106822868",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/fc66281f-1cbb-4ea0-aff8-358106822868/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/fc66281f-1cbb-4ea0-aff8-358106822868/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/fc66281f-1cbb-4ea0-aff8-358106822868/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/fc66281f-1cbb-4ea0-aff8-358106822868/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.0",
+      "releasedOn": "2002-04-02T05:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/728c24f8-966d-448f-bd1b-090dd87b52b6/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/728c24f8-966d-448f-bd1b-090dd87b52b6",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/728c24f8-966d-448f-bd1b-090dd87b52b6/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/728c24f8-966d-448f-bd1b-090dd87b52b6/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/728c24f8-966d-448f-bd1b-090dd87b52b6/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/728c24f8-966d-448f-bd1b-090dd87b52b6/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.0.20020914.015953",
+      "releasedOn": "2005-11-08T22:31:32.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/45dabf09-f474-4558-a6b1-a8dfd7cc621a/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/45dabf09-f474-4558-a6b1-a8dfd7cc621a",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/45dabf09-f474-4558-a6b1-a8dfd7cc621a/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/45dabf09-f474-4558-a6b1-a8dfd7cc621a/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/45dabf09-f474-4558-a6b1-a8dfd7cc621a/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/45dabf09-f474-4558-a6b1-a8dfd7cc621a/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.0.20020914.020746",
+      "releasedOn": "2005-11-08T22:31:31.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/6cf9a02c-89fe-43d4-8afd-bd3e68b56840/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/6cf9a02c-89fe-43d4-8afd-bd3e68b56840",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/6cf9a02c-89fe-43d4-8afd-bd3e68b56840/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/6cf9a02c-89fe-43d4-8afd-bd3e68b56840/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/6cf9a02c-89fe-43d4-8afd-bd3e68b56840/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/6cf9a02c-89fe-43d4-8afd-bd3e68b56840/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.0.20020914.020858",
+      "releasedOn": "2005-11-08T22:31:32.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/d46a602c-5803-42c4-b76a-3e000e0db6e1/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/d46a602c-5803-42c4-b76a-3e000e0db6e1",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/d46a602c-5803-42c4-b76a-3e000e0db6e1/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/d46a602c-5803-42c4-b76a-3e000e0db6e1/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/d46a602c-5803-42c4-b76a-3e000e0db6e1/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/d46a602c-5803-42c4-b76a-3e000e0db6e1/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.1",
+      "releasedOn": "2002-10-21T04:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/2ef39bd9-9057-4f7a-851b-a8e42ecb91a8/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/2ef39bd9-9057-4f7a-851b-a8e42ecb91a8",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/2ef39bd9-9057-4f7a-851b-a8e42ecb91a8/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/2ef39bd9-9057-4f7a-851b-a8e42ecb91a8/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/2ef39bd9-9057-4f7a-851b-a8e42ecb91a8/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/2ef39bd9-9057-4f7a-851b-a8e42ecb91a8/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.1.1",
+      "releasedOn": "2004-05-29T04:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7e9190ad-7e50-4aa9-8d09-e641f3be0cab/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7e9190ad-7e50-4aa9-8d09-e641f3be0cab",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7e9190ad-7e50-4aa9-8d09-e641f3be0cab/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7e9190ad-7e50-4aa9-8d09-e641f3be0cab/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7e9190ad-7e50-4aa9-8d09-e641f3be0cab/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7e9190ad-7e50-4aa9-8d09-e641f3be0cab/risk-profile"
+          }
+        ]
+      }
+    },
+    {
+      "versionName": "2.1.rc1",
+      "releasedOn": "2002-10-16T04:00:00.000Z",
+      "approvalStatus": "UNREVIEWED",
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/ba196260-ec17-4c5a-b19d-f790794d1266/licenses/ca953b41-7a6d-4578-8324-72ee88f14424",
+            "licenses": [],
+            "name": "Apache License 1.1",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 1.1",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 1.1"
+      },
+      "source": "KB",
+      "type": "COMPONENT",
+      "additionalHomepages": [],
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/ba196260-ec17-4c5a-b19d-f790794d1266",
+        "links": [
+          {
+            "rel": "references",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/ba196260-ec17-4c5a-b19d-f790794d1266/references"
+          },
+          {
+            "rel": "component",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130"
+          },
+          {
+            "rel": "origins",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/ba196260-ec17-4c5a-b19d-f790794d1266/origins"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/ba196260-ec17-4c5a-b19d-f790794d1266/vulnerabilities"
+          },
+          {
+            "rel": "risk-profile",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/ba196260-ec17-4c5a-b19d-f790794d1266/risk-profile"
+          }
+        ]
+      }
+    }
+  ],
+  "appliedFilters": [
+    {
+      "label": "Local Only",
+      "name": "localOnly",
+      "selected": [
+        {
+          "key": "false",
+          "label": "False",
+          "values": []
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "allow": [
+      "GET"
+    ],
+    "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions",
+    "links": [
+      {
+        "rel": "static-filter",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions-filters?filterKey=componentSource",
+        "name": "componentSource",
+        "label": "Component Source"
+      },
+      {
+        "rel": "static-filter",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions-filters?filterKey=componentVersionApprovalStatus",
+        "name": "componentVersionApprovalStatus",
+        "label": "Component Version Approval Status"
+      }
+    ]
+  }
+}

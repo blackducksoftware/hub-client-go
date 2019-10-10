@@ -17,9 +17,8 @@ package hubapi
 import "fmt"
 
 type CodeLocationList struct {
-	TotalCount uint32         `json:"totalCount"`
-	Items      []CodeLocation `json:"items"`
-	Meta       Meta           `json:"_meta"`
+	ItemsListBase
+	Items []CodeLocation `json:"items"`
 }
 
 type CodeLocation struct {
@@ -33,9 +32,8 @@ type CodeLocation struct {
 }
 
 type ScanSummaryList struct {
-	TotalCount uint32        `json:"totalCount"`
-	Items      []ScanSummary `json:"items"`
-	Meta       Meta          `json:"_meta"`
+	ItemsListBase
+	Items []ScanSummary `json:"items"`
 }
 
 type ScanSummary struct {

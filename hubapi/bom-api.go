@@ -15,9 +15,8 @@
 package hubapi
 
 type BomComponentList struct {
-	TotalCount uint32         `json:"totalCount"`
-	Items      []BomComponent `json:"items"`
-	Meta       Meta           `json:"_meta"`
+	ItemsListBase
+	Items []BomComponent `json:"items"`
 }
 
 type BomComponent struct {
@@ -41,9 +40,8 @@ type BomComponent struct {
 }
 
 type BomVulnerableComponentList struct {
-	TotalCount uint32                   `json:"totalCount"`
-	Items      []BomVulnerableComponent `json:"items"`
-	Meta       Meta                     `json:"_meta"`
+	ItemsListBase
+	Items []BomVulnerableComponent `json:"items"`
 }
 
 type BomVulnerableComponent struct {

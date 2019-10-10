@@ -42,6 +42,12 @@ func (m *Meta) FindLinkByRel(rel string) (*ResourceLink, error) {
 	return nil, fmt.Errorf("no relation '%s' found", rel)
 }
 
+type ItemsListBase struct {
+	TotalCount     int           `json:"totalCount"`
+	AppliedFilters []interface{} `json:"appliedFilters,omitempty"`
+	Meta           Meta          `json:"_meta"`
+}
+
 // GetListOptions describes the parameter model for the list GET endpoints.
 type GetListOptions struct {
 	Limit  *int

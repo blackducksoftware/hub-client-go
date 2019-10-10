@@ -17,7 +17,6 @@ type CreateApiTokenResponse struct {
 }
 
 type ApiTokenList struct {
-	TotalCount uint32             `json:"totalCount"`
-	Items      []ApiTokenWithMeta `json:"items"`
-	Meta       Meta               `json:"_meta"`
+	ItemsListBase
+	Items []ApiTokenWithMeta `json:"items"`
 }
