@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/blackducksoftware/hub-client-go/hubapi"
-	"github.com/juju/errors"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -423,7 +423,7 @@ func newHubClientError(respBody []byte, resp *http.Response, message string) *Hu
 	var hre HubResponseError
 
 	// Do not try to read the body of the response
-	hce := &HubClientError{errors.NewErr(message), resp.StatusCode, hre}
+	hce := &HubClientError{errors.New(message), resp.StatusCode, hre}
 	if len(respBody) > 0 {
 		if err := json.Unmarshal(respBody, &hre); err != nil {
 			hce = AnnotateHubClientError(hce, fmt.Sprintf("error unmarshaling HTTP response body: %+v", err)).(*HubClientError)

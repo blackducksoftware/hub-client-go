@@ -15,13 +15,17 @@
 package hubclient
 
 import (
-	"github.com/juju/errors"
+	"github.com/pkg/errors"
 )
 
 type HubClientError struct {
-	errors.Err
+	Err error
 	StatusCode int
 	HubError   HubResponseError
+}
+
+func (e HubClientError) Error() string {
+	return e.Err.Error()
 }
 
 type HubResponseError struct {
@@ -50,8 +54,8 @@ func AnnotateHubClientError(old error, format string) error {
 		hce = &HubClientError{}
 	}
 
-	newErr := errors.Annotate(old, format).(*errors.Err)
-	err := &HubClientError{*newErr, hce.StatusCode, hce.HubError}
+	newErr := errors.WithMessage(old, format)
+	err := &HubClientError{newErr, hce.StatusCode, hce.HubError}
 	return err
 }
 
@@ -67,8 +71,8 @@ func AnnotateHubClientErrorf(old error, format string, args ...interface{}) erro
 		hce = &HubClientError{}
 	}
 
-	newErr := errors.Annotatef(old, format, args...).(*errors.Err)
-	err := &HubClientError{*newErr, hce.StatusCode, hce.HubError}
+	newErr := errors.WithMessagef(old, format, args...)
+	err := &HubClientError{newErr, hce.StatusCode, hce.HubError}
 	return err
 }
 
@@ -84,13 +88,13 @@ func TraceHubClientError(old error) error {
 		hce = &HubClientError{}
 	}
 
-	newErr := errors.Trace(old).(*errors.Err)
-	err := &HubClientError{*newErr, hce.StatusCode, hce.HubError}
+	newErr := errors.WithStack(old)
+	err := &HubClientError{newErr, hce.StatusCode, hce.HubError}
 	return err
 }
 
 func HubClientErrorf(format string, args ...interface{}) error {
-	newErr := errors.Errorf(format, args...).(*errors.Err)
-	err := &HubClientError{*newErr, 0, HubResponseError{}}
+	newErr := errors.Errorf(format, args...)
+	err := &HubClientError{newErr, 0, HubResponseError{}}
 	return err
 }
