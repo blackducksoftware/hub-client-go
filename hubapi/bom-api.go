@@ -55,7 +55,7 @@ type BomVulnerableComponent struct {
 	Meta                       Meta                         `json:"_meta"`
 }
 
-type VulnerabilityWithRemediation struct {
+type VulnerabilityBase struct {
 	VulnerabilityName          string  `json:"vulnerabilityName"`
 	Description                string  `json:"description"`
 	VulnerabilityPublishedDate string  `json:"vulnerabilityPublishedDate"`
@@ -65,10 +65,14 @@ type VulnerabilityWithRemediation struct {
 	ImpactSubscore             float32 `json:"impactSubscore"`
 	Source                     string  `json:"source"`
 	Severity                   string  `json:"severity"`
-	RemediationStatus          string  `json:"remediationStatus"`
-	RemediationCreatedAt       string  `json:"remediationCreatedAt"`
-	RemediationUpdatedAt       string  `json:"remediationUpdatedAt"`
 	CweId                      string  `json:"cweId,omitempty"`
+}
+
+type VulnerabilityWithRemediation struct {
+	VulnerabilityBase
+	RemediationStatus    string `json:"remediationStatus"`
+	RemediationCreatedAt string `json:"remediationCreatedAt"`
+	RemediationUpdatedAt string `json:"remediationUpdatedAt"`
 }
 
 type BomRiskProfile struct {

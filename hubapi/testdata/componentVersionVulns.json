@@ -1,0 +1,77 @@
+{
+  "totalCount": 3,
+  "items": [
+    {
+      "vulnerabilityName": "BDSA-2015-0766",
+      "description": "Apache Commons Collection is vulnerable to remote code execution (RCE) due to the unsafe handling of in-memory data structures. A remote attacker could execute arbitrary code on the underlying system by submitting crafted data packets to a vulnerable server.",
+      "vulnerabilityPublishedDate": "2019-08-06T11:54:54.976Z",
+      "vulnerabilityUpdatedDate": "2019-08-06T11:54:54.966Z",
+      "baseScore": 7.5,
+      "impactSubscore": 6.4,
+      "exploitabilitySubscore": 10.0,
+      "source": "BDSA",
+      "severity": "MEDIUM",
+      "accessVector": "NETWORK",
+      "accessComplexity": "LOW",
+      "authentication": "NONE",
+      "confidentialityImpact": "PARTIAL",
+      "integrityImpact": "PARTIAL",
+      "availabilityImpact": "PARTIAL",
+      "_meta": {
+        "allow": [],
+        "href": "https://SERVER/api/vulnerabilities/BDSA-2015-0766",
+        "links": []
+      }
+    },
+    {
+      "vulnerabilityName": "BDSA-2015-0753",
+      "description": "The apache commons collection (ACC) library, when utilized in an application that deserializes untrusted user input, is vulnerable to a remote attacker executing arbitrary code.",
+      "vulnerabilityPublishedDate": "2019-05-03T15:04:31.522Z",
+      "vulnerabilityUpdatedDate": "2019-05-03T15:04:31.509Z",
+      "baseScore": 10.0,
+      "impactSubscore": 10.0,
+      "exploitabilitySubscore": 10.0,
+      "source": "BDSA",
+      "severity": "HIGH",
+      "accessVector": "NETWORK",
+      "accessComplexity": "LOW",
+      "authentication": "NONE",
+      "confidentialityImpact": "COMPLETE",
+      "integrityImpact": "COMPLETE",
+      "availabilityImpact": "COMPLETE",
+      "_meta": {
+        "allow": [],
+        "href": "https://SERVER/api/vulnerabilities/BDSA-2015-0753",
+        "links": []
+      }
+    },
+    {
+      "vulnerabilityName": "BDSA-2015-0001",
+      "description": "Apache Commons Collections has a security flaw in the `InvokeTransformer` class whereby serializable collections can be built that execute arbitrary Java code.  An attacker can achieve remote code execution (*RCE*) when untrusted user-provided objects are deserialized by applications that use Commons Collections.",
+      "vulnerabilityPublishedDate": "2017-04-03T10:45:40.596Z",
+      "vulnerabilityUpdatedDate": "2018-07-19T10:28:45.447Z",
+      "baseScore": 10.0,
+      "impactSubscore": 10.0,
+      "exploitabilitySubscore": 10.0,
+      "source": "BDSA",
+      "severity": "HIGH",
+      "accessVector": "NETWORK",
+      "accessComplexity": "LOW",
+      "authentication": "NONE",
+      "confidentialityImpact": "COMPLETE",
+      "integrityImpact": "COMPLETE",
+      "availabilityImpact": "COMPLETE",
+      "_meta": {
+        "allow": [],
+        "href": "https://SERVER/api/vulnerabilities/BDSA-2015-0001",
+        "links": []
+      }
+    }
+  ],
+  "appliedFilters": [],
+  "_meta": {
+    "allow": [],
+    "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/vulnerabilities",
+    "links": []
+  }
+}

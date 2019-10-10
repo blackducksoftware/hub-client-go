@@ -400,7 +400,7 @@ func (c *Client) ForAllPages(pageFunc func(*hubapi.GetListOptions) (int, error))
 	}
 
 	for totalCount := 1; err == nil && offset < totalCount; offset += limit {
-		totalCount, err = pageFunc(&listOptions)
+		totalCount, err = pageFunc(listOptions)
 	}
 
 	return err

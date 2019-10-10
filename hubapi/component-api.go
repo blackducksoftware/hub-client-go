@@ -56,6 +56,22 @@ type ComponentVersionOrigin struct {
 	OriginID string `json:"originId"`
 }
 
+type ComponentVersionVulnerabilityList struct {
+	ItemsListBase
+	Items []ComponentVersionVulnerability `json:"items"`
+}
+
+type ComponentVersionVulnerability struct {
+	VulnerabilityBase
+	AccessVector          string `json:"accessVector"`
+	AccessComplexity      string `json:"accessComplexity"`
+	Authentication        string `json:"authentication"`
+	ConfidentialityImpact string `json:"confidentialityImpact"`
+	IntegrityImpact       string `json:"integrityImpact"`
+	AvailabilityImpact    string `json:"availabilityImpact"`
+	Meta                  Meta   `json:"_meta"`
+}
+
 type Component struct {
 	Name                string   `json:"name"`
 	Description         string   `json:"description,omitempty"`
