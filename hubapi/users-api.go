@@ -28,8 +28,8 @@ type UserAssignmentRequest struct {
 }
 
 type UserList struct {
-	TotalCount uint32 `json:"totalCount"`
-	Items      []User `json:"items"`
+	ItemsListBase
+	Items []User `json:"items"`
 }
 
 type User struct {

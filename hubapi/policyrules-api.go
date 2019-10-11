@@ -22,9 +22,8 @@ import (
 )
 
 type PolicyRuleList struct {
-	TotalCount uint32       `json:"totalCount"`
-	Items      []PolicyRule `json:"items"`
-	Meta       Meta         `json:"_meta"`
+	ItemsListBase
+	Items []PolicyRule `json:"items"`
 }
 
 type PolicyRule struct {

@@ -68,19 +68,8 @@ func (c *Client) PageProjectVersionVulnerableComponents(link hubapi.ResourceLink
 	return &bomList, nil
 }
 
-func (c *Client) CountProjectVersionVulnerableComponents(link hubapi.ResourceLink) (uint32, error) {
-
-	// Need offset/limit
-	// Should we abstract list fetching like we did with a single Get?
-
-	var bomList hubapi.BomVulnerableComponentList
-	err := c.HttpGetJSON(link.Href+"?offset=0&limit=1", &bomList, 200)
-
-	if err != nil {
-		return 0, AnnotateHubClientError(err, "Error trying to retrieve count of vulnerable components")
-	}
-
-	return bomList.TotalCount, nil
+func (c *Client) CountProjectVersionVulnerableComponents(link hubapi.ResourceLink) (int, error) {
+	return c.Count(link)
 }
 
 func (c *Client) ListAllProjectVersionVulnerableComponents(link hubapi.ResourceLink) ([]hubapi.BomVulnerableComponent, error) {

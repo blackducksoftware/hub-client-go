@@ -24,7 +24,8 @@ import (
 	"net/http/cookiejar"
 	"time"
 
-	"github.com/juju/errors"
+	"github.com/blackducksoftware/hub-client-go/hubapi"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -377,6 +378,34 @@ func (c *Client) doPreRequest(request *http.Request) {
 	}
 }
 
+func (c *Client) Count(link hubapi.ResourceLink) (int, error) {
+	var list hubapi.ItemsListBase
+	err := c.HttpGetJSON(link.Href+"?offset=0&limit=1", &list, 200)
+
+	if err != nil {
+		return 0, AnnotateHubClientError(err, "Error trying to retrieve count")
+	}
+
+	return list.TotalCount, nil
+}
+
+func (c *Client) ForAllPages(pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
+
+	var limit int = 10
+	var offset int = 0
+
+	listOptions := &hubapi.GetListOptions{
+		Limit:  &limit,
+		Offset: &offset,
+	}
+
+	for totalCount := 1; err == nil && offset < totalCount; offset += limit {
+		totalCount, err = pageFunc(listOptions)
+	}
+
+	return err
+}
+
 func readResponseBody(resp *http.Response) []byte {
 
 	var bodyBytes []byte
@@ -394,7 +423,7 @@ func newHubClientError(respBody []byte, resp *http.Response, message string) *Hu
 	var hre HubResponseError
 
 	// Do not try to read the body of the response
-	hce := &HubClientError{errors.NewErr(message), resp.StatusCode, hre}
+	hce := &HubClientError{errors.New(message), resp.StatusCode, hre}
 	if len(respBody) > 0 {
 		if err := json.Unmarshal(respBody, &hre); err != nil {
 			hce = AnnotateHubClientError(hce, fmt.Sprintf("error unmarshaling HTTP response body: %+v", err)).(*HubClientError)

@@ -47,7 +47,7 @@ func TestNewWithApiToken(t *testing.T) {
 	assert.Equal(t, "csrf-fake-value", client.csrfToken)
 }
 
-func TestNewWithApiToken2(t *testing.T) {
+func TestNewWithApiTokenAndClient(t *testing.T) {
 	defer gock.Off()
 
 	gock.New("http://server.com").

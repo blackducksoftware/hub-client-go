@@ -1,0 +1,22 @@
+{
+  "totalCount": 1,
+  "items": [
+    {
+      "componentName": "Apache Commons Collections",
+      "versionName": "4.0",
+      "originId": "org.apache.commons:commons-collections4:4.0",
+      "component": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130",
+      "version": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923",
+      "variant": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/967c343d-31d1-4aeb-905b-75192bb8a114"
+    }
+  ],
+  "appliedFilters": [],
+  "_meta": {
+    "allow": [
+      "POST",
+      "GET"
+    ],
+    "href": "https://SERVER/api/components?q=maven:org.apache.commons:commons-collections4:4.0&offset=0&limit=10",
+    "links": []
+  }
+}

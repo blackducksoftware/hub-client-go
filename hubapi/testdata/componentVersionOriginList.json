@@ -1,0 +1,553 @@
+{
+  "totalCount": 25,
+  "items": [
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/1cc092b6-cc41-4fc0-a415-feab4c66e527",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1cc092b6-cc41-4fc0-a415-feab4c66e527/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1cc092b6-cc41-4fc0-a415-feab4c66e527/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1cc092b6-cc41-4fc0-a415-feab4c66e527/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1cc092b6-cc41-4fc0-a415-feab4c66e527/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1cc092b6-cc41-4fc0-a415-feab4c66e527/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "fedora",
+      "originId": "apache-commons-collections4-javadoc/4.0-5.fc23/noarch",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/4ff95c0d-48d7-4247-a048-cc00ca3c0fbd",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/4ff95c0d-48d7-4247-a048-cc00ca3c0fbd/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/4ff95c0d-48d7-4247-a048-cc00ca3c0fbd/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/4ff95c0d-48d7-4247-a048-cc00ca3c0fbd/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/4ff95c0d-48d7-4247-a048-cc00ca3c0fbd/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/4ff95c0d-48d7-4247-a048-cc00ca3c0fbd/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "fedora",
+      "originId": "apache-commons-collections4-javadoc/4.0-6.fc24/noarch",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/718feb03-33ab-44c3-b2ef-610d70c20452",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/718feb03-33ab-44c3-b2ef-610d70c20452/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/718feb03-33ab-44c3-b2ef-610d70c20452/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/718feb03-33ab-44c3-b2ef-610d70c20452/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/718feb03-33ab-44c3-b2ef-610d70c20452/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/718feb03-33ab-44c3-b2ef-610d70c20452/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "fedora",
+      "originId": "apache-commons-collections4-javadoc/4.0-7.fc26/noarch",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/71f9ea76-e84b-44c3-b1a1-e4bcfa283a4b",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/71f9ea76-e84b-44c3-b1a1-e4bcfa283a4b/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/71f9ea76-e84b-44c3-b1a1-e4bcfa283a4b/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/71f9ea76-e84b-44c3-b1a1-e4bcfa283a4b/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/71f9ea76-e84b-44c3-b1a1-e4bcfa283a4b/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/71f9ea76-e84b-44c3-b1a1-e4bcfa283a4b/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "fedora",
+      "originId": "apache-commons-collections4/4.0-3.fc21/noarch",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/69d98ca5-4815-4f00-8724-40e690061717",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/69d98ca5-4815-4f00-8724-40e690061717/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/69d98ca5-4815-4f00-8724-40e690061717/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/69d98ca5-4815-4f00-8724-40e690061717/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/69d98ca5-4815-4f00-8724-40e690061717/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/69d98ca5-4815-4f00-8724-40e690061717/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "fedora",
+      "originId": "apache-commons-collections4/4.0-7.fc26/noarch",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/41dfea81-f0be-4c60-b578-713a9104823d",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/41dfea81-f0be-4c60-b578-713a9104823d/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/41dfea81-f0be-4c60-b578-713a9104823d/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/41dfea81-f0be-4c60-b578-713a9104823d/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/41dfea81-f0be-4c60-b578-713a9104823d/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/41dfea81-f0be-4c60-b578-713a9104823d/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "github",
+      "originId": "apache/commons-collections:collections-4.0",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/2fe2654f-0fef-4784-914d-2a1153aa6f87",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/2fe2654f-0fef-4784-914d-2a1153aa6f87/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/2fe2654f-0fef-4784-914d-2a1153aa6f87/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/2fe2654f-0fef-4784-914d-2a1153aa6f87/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/2fe2654f-0fef-4784-914d-2a1153aa6f87/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/2fe2654f-0fef-4784-914d-2a1153aa6f87/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "debian",
+      "originId": "libcommons-collections4-java/4.0-1",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/717a2d82-2e43-407a-a943-902dbbbdd84a",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/717a2d82-2e43-407a-a943-902dbbbdd84a/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/717a2d82-2e43-407a-a943-902dbbbdd84a/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/717a2d82-2e43-407a-a943-902dbbbdd84a/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/717a2d82-2e43-407a-a943-902dbbbdd84a/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/717a2d82-2e43-407a-a943-902dbbbdd84a/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "debian",
+      "originId": "libcommons-collections4-java/4.0-1/all",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/00b2eb11-460c-4dcb-b9c5-70282a39a92e",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/00b2eb11-460c-4dcb-b9c5-70282a39a92e/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/00b2eb11-460c-4dcb-b9c5-70282a39a92e/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/00b2eb11-460c-4dcb-b9c5-70282a39a92e/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/00b2eb11-460c-4dcb-b9c5-70282a39a92e/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/00b2eb11-460c-4dcb-b9c5-70282a39a92e/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    },
+    {
+      "versionName": "4.0",
+      "releasedOn": "2013-11-27T10:00:00.000Z",
+      "source": "KB",
+      "originName": "redhat",
+      "originId": "rh-maven35-apache-commons-collections4/4.0-7.2.el7/noarch",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/1db1e2f2-e7af-4429-9ca6-2f9067e0ba58",
+        "links": [
+          {
+            "rel": "version",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+          },
+          {
+            "rel": "vulnerabilities",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1db1e2f2-e7af-4429-9ca6-2f9067e0ba58/vulnerabilities"
+          },
+          {
+            "rel": "direct-dependencies",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1db1e2f2-e7af-4429-9ca6-2f9067e0ba58/direct-dependencies"
+          },
+          {
+            "rel": "file-licenses",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1db1e2f2-e7af-4429-9ca6-2f9067e0ba58/file-licenses"
+          },
+          {
+            "rel": "file-licenses-fuzzy",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1db1e2f2-e7af-4429-9ca6-2f9067e0ba58/file-licenses-fuzzy"
+          },
+          {
+            "rel": "file-copyrights",
+            "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/1db1e2f2-e7af-4429-9ca6-2f9067e0ba58/file-copyrights"
+          }
+        ]
+      },
+      "license": {
+        "type": "DISJUNCTIVE",
+        "licenses": [
+          {
+            "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses": [
+            ],
+            "name": "Apache License 2.0",
+            "ownership": "OPEN_SOURCE",
+            "licenseDisplay": "Apache License 2.0",
+            "codeSharing": "PERMISSIVE"
+          }
+        ],
+        "licenseDisplay": "Apache License 2.0"
+      }
+    }
+  ],
+  "appliedFilters": [
+  ],
+  "_meta": {
+    "allow": [
+      "GET"
+    ],
+    "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins",
+    "links": [
+    ]
+  }
+}

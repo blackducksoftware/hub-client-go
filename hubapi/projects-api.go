@@ -30,8 +30,8 @@ const (
 )
 
 type ProjectList struct {
-	TotalCount uint32    `json:"totalCount"`
-	Items      []Project `json:"items"`
+	ItemsListBase
+	Items []Project `json:"items"`
 }
 
 type Project struct {
@@ -54,8 +54,8 @@ type ProjectRequest struct {
 }
 
 type ProjectVersionList struct {
-	TotalCount uint32           `json:"totalCount"`
-	Items      []ProjectVersion `json:"items"`
+	ItemsListBase
+	Items []ProjectVersion `json:"items"`
 }
 
 type ProjectVersion struct {
