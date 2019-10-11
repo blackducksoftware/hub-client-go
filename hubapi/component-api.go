@@ -42,6 +42,8 @@ type ComponentVersion struct {
 	Source              string         `json:"source"`
 	Type                string         `json:"type"`
 	AdditionalHomepages []string       `json:"additionalHomepages"`
+	ApprovalStatus      string         `json:"approvalStatus"`
+	Notes               string         `json:"notes,omitempty"`
 	Meta                Meta           `json:"_meta"`
 }
 
@@ -81,6 +83,7 @@ type Component struct {
 	PrimaryLanguage     string   `json:"primaryLanguage,omitempty"`
 	Source              string   `json:"source"`
 	Type                string   `json:"type"`
+	Notes               string   `json:"notes,omitempty"`
 	Meta                Meta     `json:"_meta"`
 }
 
