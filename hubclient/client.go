@@ -130,10 +130,14 @@ func readBytes(readCloser io.ReadCloser) ([]byte, error) {
 }
 
 func validateHTTPResponse(resp *http.Response, expectedStatusCode int) error {
+	statusCode := 0
+	if resp != nil {
+		statusCode = resp.StatusCode
+	}
 
-	if resp.StatusCode != expectedStatusCode { // Should this be a list at some point?
+	if statusCode != expectedStatusCode { // Should this be a list at some point?
 		body := readResponseBody(resp)
-		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of a %d", resp.StatusCode, expectedStatusCode))
+		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of a %d", statusCode, expectedStatusCode))
 	}
 
 	return nil
@@ -411,6 +415,11 @@ func readResponseBody(resp *http.Response) []byte {
 	var bodyBytes []byte
 	var err error
 
+	if resp == nil {
+		log.Errorf("Empty HTTP Response")
+		return nil
+	}
+
 	if bodyBytes, err = readBytes(resp.Body); err != nil {
 		log.Errorf("Error reading HTTP Response: %+v.", err)
 	}
@@ -422,8 +431,13 @@ func readResponseBody(resp *http.Response) []byte {
 func newHubClientError(respBody []byte, resp *http.Response, message string) *HubClientError {
 	var hre HubResponseError
 
-	// Do not try to read the body of the response
-	hce := &HubClientError{errors.New(message), resp.StatusCode, hre}
+	// Do not try to read the body of the response or response itself
+	var statusCode int
+	if resp != nil {
+		statusCode = resp.StatusCode
+	}
+
+	hce := &HubClientError{errors.New(message), statusCode, hre}
 	if len(respBody) > 0 {
 		if err := json.Unmarshal(respBody, &hre); err != nil {
 			hce = AnnotateHubClientError(hce, fmt.Sprintf("error unmarshaling HTTP response body: %+v", err)).(*HubClientError)

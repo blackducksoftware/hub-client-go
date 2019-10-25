@@ -19,7 +19,7 @@ import (
 )
 
 type HubClientError struct {
-	Err error
+	Err        error
 	StatusCode int
 	HubError   HubResponseError
 }
