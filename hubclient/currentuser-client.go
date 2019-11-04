@@ -73,3 +73,17 @@ func (c *Client) ListApiTokens(options *hubapi.GetListOptions) (*hubapi.ApiToken
 
 	return &apiTokenList, nil
 }
+
+func (c *Client) GetCurrentUser() (response *hubapi.CurrentUserResponse, err error) {
+	currentUserUrl := fmt.Sprintf("%s/api/current-user", c.BaseURL())
+
+	response = &hubapi.CurrentUserResponse{}
+
+	err = c.HttpGetJSON(currentUserUrl, response, 200)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}

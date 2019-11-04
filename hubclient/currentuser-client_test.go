@@ -67,3 +67,19 @@ func TestClient_ListApiTokens(t *testing.T) {
 
 	t.Logf("successfully fetched current version %+v", currentVersion)
 }
+
+func TestClient_CurrentUser(t *testing.T) {
+	client := createTestClient(t)
+
+	currentUser, err := client.GetCurrentUser()
+
+	assert.NoError(t, err, "unable to get current user")
+
+	assert.NotNil(t, currentUser, "current user was nil")
+	assert.NotEmpty(t, currentUser.UserName, "username was empty")
+	assert.NotEmpty(t, currentUser.FirstName, "firstname was empty")
+	assert.NotEmpty(t, currentUser.LastName, "lastname was empty")
+	assert.NotEmpty(t, currentUser.Email, "email was empty")
+	assert.NotEmpty(t, currentUser.Type, "type was empty")
+	t.Logf("current-user userName: %s", currentUser.UserName)
+}

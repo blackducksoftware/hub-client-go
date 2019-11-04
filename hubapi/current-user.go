@@ -20,3 +20,15 @@ type ApiTokenList struct {
 	ItemsListBase
 	Items []ApiTokenWithMeta `json:"items"`
 }
+
+type CurrentUserResponse struct {
+	UserName         string `json:"userName"`
+	ExternalUserName string `json:"externalUserName"`
+	FirstName        string `json:"firstName"`
+	LastName         string `json:"lastName"`
+	Email            string `json:"email"`
+	Type             string `json:"type"`
+	Active           bool   `json:"active"`
+	User             string `json:"user"`
+	Meta             Meta   `json:"_meta"`
+}
