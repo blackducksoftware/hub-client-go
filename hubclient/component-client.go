@@ -71,7 +71,7 @@ func (c *Client) DeleteComponent(componentURL string) error {
 	return c.HttpDelete(componentURL, "application/json", 204)
 }
 
-func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
+func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
 	var componentVersion hubapi.ComponentVersion
 	err := c.HttpGetJSON(link.Href, &componentVersion, 200)
 
@@ -83,6 +83,6 @@ func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.Componen
 	return &componentVersion, nil
 }
 
-func (c *Client) GetComponentVersionFromVariant(componentVariant hubapi.ComponentVariant) (*hubapi.ComponentVersion, error) {
-	return c.GetComponentVersion(hubapi.ResourceLink{Href: componentVariant.Version})
+func (c *Client) GetComponentVersionFromVariant(componentVariant *hubapi.ComponentVariant) (*hubapi.ComponentVersion, error) {
+	return c.GetComponentVersion(&hubapi.ResourceLink{Href: componentVariant.Version})
 }
