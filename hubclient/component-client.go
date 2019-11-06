@@ -18,7 +18,6 @@ import (
 	"fmt"
 
 	"github.com/blackducksoftware/hub-client-go/hubapi"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -70,4 +69,20 @@ func (c *Client) CreateComponent(componentRequest *hubapi.ComponentRequest) (str
 
 func (c *Client) DeleteComponent(componentURL string) error {
 	return c.HttpDelete(componentURL, "application/json", 204)
+}
+
+func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
+	var componentVersion hubapi.ComponentVersion
+	err := c.HttpGetJSON(link.Href, &componentVersion, 200)
+
+	if err != nil {
+		log.Errorf("Error trying to retrieve a component: %+v.", err)
+		return nil, err
+	}
+
+	return &componentVersion, nil
+}
+
+func (c *Client) GetComponentVersionFromVariant(componentVariant *hubapi.ComponentVariant) (*hubapi.ComponentVersion, error) {
+	return c.GetComponentVersion(&hubapi.ResourceLink{Href: componentVariant.Version})
 }
