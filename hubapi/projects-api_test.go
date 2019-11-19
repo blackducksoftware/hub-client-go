@@ -17,6 +17,7 @@ package hubapi
 import (
 	"encoding/json"
 	"testing"
+	"time"
 )
 
 func parseJSON(jsonText string, result interface{}) error {
@@ -53,24 +54,26 @@ var policyStatusJSON = `{
 func TestParsePolicyStatus(t *testing.T) {
 	var policyStatus ProjectVersionPolicyStatus
 	err := parseJSON(policyStatusJSON, &policyStatus)
+
 	if err != nil {
-		t.Log("unable to parse json: " + err.Error())
-		t.Fail()
+		t.Error("unable to parse json: " + err.Error())
 	}
+
 	if policyStatus.OverallStatus != "NOT_IN_VIOLATION" {
-		t.Log("incorrectly parsed overallStatus")
-		t.Fail()
+		t.Error("incorrectly parsed overallStatus")
 	}
-	if policyStatus.UpdatedAt != "2017-12-13T22:44:20.087Z" {
-		t.Log("incorrectly parsed updatedAt")
-		t.Fail()
+
+	tm, err := time.Parse(time.RFC3339, "2017-12-13T22:44:20.087Z")
+
+	if policyStatus.UpdatedAt == nil || !policyStatus.UpdatedAt.Equal(tm) {
+		t.Error("incorrectly parsed updatedAt")
 	}
+
 	if len(policyStatus.Meta.Allow) != 1 {
-		t.Log("incorrectly parsed _meta.allow")
-		t.Fail()
+		t.Error("incorrectly parsed _meta.allow")
 	}
+
 	if policyStatus.Meta.Href != "https://localhost/api/projects/e93317e1-023c-45a8-89fd-19aea01a8d20/versions/5a775cd3-4542-47bc-8497-7eb7c0680430/policy-status" {
-		t.Log("incorrectly parsed _meta.href")
-		t.Fail()
+		t.Error("incorrectly parsed _meta.href")
 	}
 }
