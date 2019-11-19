@@ -100,7 +100,7 @@ type ProjectVersionPolicyStatus struct {
 // TODO could the names and values be from an enumeration?
 type ComponentVersionStatusCount struct {
 	Name  string `json:"name"` // [ IN_VIOLATION_OVERRIDDEN, NOT_IN_VIOLATION, IN_VIOLATION ]
-	Value string `json:"value"`
+	Value int    `json:"value"`
 }
 
 type ComponentVersionPolicyViolationDetail struct {
