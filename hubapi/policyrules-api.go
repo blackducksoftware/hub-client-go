@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 )
 
 type PolicyRuleList struct {
@@ -33,10 +34,10 @@ type PolicyRule struct {
 	Overridable   bool             `json:"overridable"`
 	Severity      string           `json:"severity"`
 	Expression    PolicyExpression `json:"expression"`
-	CreatedAt     string           `json:"createdAt"`
+	CreatedAt     *time.Time       `json:"createdAt"`
 	CreatedBy     string           `json:"createdBy"`
 	CreatedByUser string           `json:"createdByUser"`
-	UpdatedAt     string           `json:"updatedAt"`
+	UpdatedAt     *time.Time       `json:"updatedAt"`
 	UpdatedBy     string           `json:"updatedBy"`
 	UpdatedByUser string           `json:"updatedByUser"`
 	Meta          Meta             `json:"_meta"`

@@ -14,19 +14,30 @@
 
 package hubapi
 
+import "time"
+
 type BomComponentList struct {
 	ItemsListBase
 	Items []BomComponent `json:"items"`
 }
 
+// BomComponent represents "application/vnd.blackducksoftware.bill-of-materials-6+json"
+// We need to figure out what to do with content type here
 type BomComponent struct {
 	ComponentName          string               `json:"componentName"`
-	ComponentVersionName   string               `json:"componentVersionName"`
+	ComponentVersionName   string               `json:"componentVersionName,omitempty"`
 	Component              string               `json:"component"`
-	ComponentVersion       string               `json:"componentVersion"`
-	ReleasedOn             string               `json:"releasedOn"`
+	ComponentVersion       string               `json:"componentVersion,omitempty"`
+	ComponentPurpose       string               `json:"componentPurpose"`
+	ComponentModified      bool                 `json:"componentModified"`
+	ComponentModification  string               `json:"componentModification"`
+	ReleasedOn             *time.Time           `json:"releasedOn"`
 	ReviewStatus           string               `json:"reviewStatus"`
-	PolicyStatus           string               `json:"approvalStatus"`
+	ReviewedDetails        *BomReviewDetails    `json:"reviewedDetails, omitempty"`
+	PolicyStatus           string               `json:"policyStatus"`
+	ApprovalStatus         string               `json:"approvalStatus"`
+	Ignored                bool                 `json:"ignored"`
+	ManuallyAdjusted       bool                 `json:"manuallyAdjusted"`
 	Licenses               []ComplexLicense     `json:"licenses"`
 	Usages                 []string             `json:"usages"`
 	Origins                []BomComponentOrigin `json:"origins"`
@@ -36,6 +47,10 @@ type BomComponent struct {
 	ActivityRiskProfile    BomRiskProfile       `json:"activityRiskProfile"`
 	OperationalRiskProfile BomRiskProfile       `json:"operationalRiskProfile"`
 	ActivityData           BomActivityData      `json:"activityData"`
+	TotalFileMatchCount    int                  `json:"totalFileMatchCount"`
+	MatchTypes             []string             `json:"matchTypes"`
+	InAttributionReport    bool                 `json:"inAttributionReport"`
+	AttributionStatement   string               `json:"attributionStatement"`
 	Meta                   Meta                 `json:"_meta"`
 }
 
@@ -70,9 +85,9 @@ type VulnerabilityBase struct {
 
 type VulnerabilityWithRemediation struct {
 	VulnerabilityBase
-	RemediationStatus    string `json:"remediationStatus"`
-	RemediationCreatedAt string `json:"remediationCreatedAt"`
-	RemediationUpdatedAt string `json:"remediationUpdatedAt"`
+	RemediationStatus    string     `json:"remediationStatus"`
+	RemediationCreatedAt *time.Time `json:"remediationCreatedAt"`
+	RemediationUpdatedAt *time.Time `json:"remediationUpdatedAt"`
 }
 
 type BomRiskProfile struct {
@@ -93,8 +108,22 @@ type BomComponentOrigin struct {
 }
 
 type BomActivityData struct {
-	ContributorCount int    `json:"contributorCount12Month"`
-	CommitCount      int    `json:"commitCount12Month"`
-	LastCommitDate   string `json:"lastCommitDate"`
-	Trend            string `json:"trending"`
+	ContributorCount int        `json:"contributorCount12Month"`
+	CommitCount      int        `json:"commitCount12Month"`
+	LastCommitDate   *time.Time `json:"lastCommitDate"`
+	Trend            string     `json:"trending"` // [DECREASING, STABLE, INCREASING, UNKNOWN]
+	NewerReleases    *int       `json:"newerReleases,omitempty"`
+}
+
+type BomReviewDetails struct {
+	ReviewedAt    *time.Time       `json:"reviewedAt,omitempty"`
+	ReviewedBy    string           `json:"reviewedBy,omitempty"`
+	ReviewingUser BomReviewingUser `json:"reviewingUser"`
+}
+
+type BomReviewingUser struct {
+	Username  string `json:"username"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	User      string `json:"user"`
 }

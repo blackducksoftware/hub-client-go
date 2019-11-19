@@ -74,6 +74,22 @@ type ComponentVersionVulnerability struct {
 	Meta                  Meta   `json:"_meta"`
 }
 
+// returned by "references" component meta link
+type ComponentProjectReferenceList struct {
+	ItemsListBase
+	Items []ComponentProjectReference
+}
+
+type ComponentProjectReference struct {
+	Distribution      string `json:"distribution"`
+	Phase             string `json:"phase"`
+	ProjectName       string `json:"projectName"`
+	ProjectTier       int    `json:"projectTier"`
+	ProjectUrl        string `json:"projectUrl"`
+	ProjectVersionUrl string `json:"projectVersionUrl"`
+	VersionName       string `json:"versionName"`
+}
+
 type Component struct {
 	Name                string   `json:"name"`
 	Description         string   `json:"description,omitempty"`

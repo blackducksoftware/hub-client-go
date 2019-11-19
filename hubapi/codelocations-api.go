@@ -14,7 +14,10 @@
 
 package hubapi
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type CodeLocationList struct {
 	ItemsListBase
@@ -22,13 +25,13 @@ type CodeLocationList struct {
 }
 
 type CodeLocation struct {
-	Name                 string `json:"name"`
-	Type                 string `json:"type"`
-	URL                  string `json:"url"`
-	MappedProjectVersion string `json:"mappedProjectVersion"`
-	CreatedAt            string `json:"createdAt"`
-	UpdatedAt            string `json:"updatedAt"`
-	Meta                 Meta   `json:"_meta"`
+	Name                 string     `json:"name"`
+	Type                 string     `json:"type"`
+	URL                  string     `json:"url"`
+	MappedProjectVersion string     `json:"mappedProjectVersion"`
+	CreatedAt            *time.Time `json:"createdAt"`
+	UpdatedAt            *time.Time `json:"updatedAt"`
+	Meta                 Meta       `json:"_meta"`
 }
 
 type ScanSummaryList struct {
@@ -37,10 +40,10 @@ type ScanSummaryList struct {
 }
 
 type ScanSummary struct {
-	Status    string `json:"status"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-	Meta      Meta   `json:"_meta"`
+	Status    string     `json:"status"`
+	CreatedAt *time.Time `json:"createdAt"`
+	UpdatedAt *time.Time `json:"updatedAt"`
+	Meta      Meta       `json:"_meta"`
 }
 
 // I wonder if these can exist to make request as well...

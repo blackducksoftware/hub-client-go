@@ -15,13 +15,15 @@
 package hubapi
 
 type ComplexLicense struct {
-	Name           string           `json:"name"`
-	Ownership      string           `json:"ownership"`
-	CodeSharing    string           `json:"codeSharing"`
-	LicenseType    string           `json:"type"`
-	LicenseDisplay string           `json:"licenseDisplay"`
-	Licenses       []ComplexLicense `json:"licenses"`
-	License        string           `json:"license"` // License URL
+	Name                 string           `json:"name"`
+	Ownership            string           `json:"ownership"`
+	CodeSharing          string           `json:"codeSharing"`
+	LicenseType          string           `json:"type"`
+	LicenseDisplay       string           `json:"licenseDisplay"`
+	Licenses             []ComplexLicense `json:"licenses"`
+	License              string           `json:"license"`          // License URL
+	SpdxId               string           `json:"spdxId,omitempty"` // The ID of the license in the SPDX project’s database, if available
+	LicenseFamilySummary ResourceLink     `json:"licenseFamilySummary"`
 }
 
 type License struct {
