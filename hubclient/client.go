@@ -382,9 +382,9 @@ func (c *Client) doPreRequest(request *http.Request) {
 	}
 }
 
-func (c *Client) Count(link hubapi.ResourceLink) (int, error) {
+func (c *Client) Count(link string) (int, error) {
 	var list hubapi.ItemsListBase
-	err := c.HttpGetJSON(link.Href+"?offset=0&limit=1", &list, 200)
+	err := c.HttpGetJSON(link+"?offset=0&limit=1", &list, 200)
 
 	if err != nil {
 		return 0, AnnotateHubClientError(err, "Error trying to retrieve count")
@@ -393,21 +393,39 @@ func (c *Client) Count(link hubapi.ResourceLink) (int, error) {
 	return list.TotalCount, nil
 }
 
-func (c *Client) ForAllPages(pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
+// ForAllPages executes pageFunc for all pages. pageFunc has a control over options, with ability to override
+// limit and offsets as needed
+func (c *Client) ForAllPages(listOptions *hubapi.GetListOptions, pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
 
-	var limit int = 10
-	var offset int = 0
-
-	listOptions := &hubapi.GetListOptions{
-		Limit:  &limit,
-		Offset: &offset,
+	if listOptions == nil {
+		listOptions = &hubapi.GetListOptions{}
 	}
 
-	for totalCount := 1; err == nil && offset < totalCount; offset += limit {
+	listOptions.FirstPage()
+
+	for totalCount := 1; err == nil && *listOptions.Offset < totalCount; listOptions.NextPage() {
 		totalCount, err = pageFunc(listOptions)
 	}
 
 	return err
+}
+
+func (c *Client) Page(link string, options *hubapi.GetListOptions, list interface{}) error {
+
+	params := ""
+	if options != nil {
+		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
+	}
+
+	listUrl := fmt.Sprintf("%s%s", link, params)
+
+	err := c.HttpGetJSON(listUrl, list, 200)
+
+	if err != nil {
+		return AnnotateHubClientError(err, fmt.Sprintf("Error trying to retrieve list %T", list))
+	}
+
+	return nil
 }
 
 func readResponseBody(resp *http.Response) []byte {

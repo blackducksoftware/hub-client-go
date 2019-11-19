@@ -41,15 +41,8 @@ func (c *Client) ListAllCodeLocations(options *hubapi.GetListOptions) (*hubapi.C
 
 func (c *Client) ListCodeLocations(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.CodeLocationList, error) {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	codeLocationsURL := fmt.Sprintf("%s%s", link.Href, params)
-
 	var codeLocationList hubapi.CodeLocationList
-	err := c.HttpGetJSON(codeLocationsURL, &codeLocationList, 200)
+	err := c.Page(link.Href, options, &codeLocationList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve code location list")
@@ -80,9 +73,8 @@ func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummar
 
 	// Need offset/limit
 	// Should we abstract list fetching like we did with a single Get?
-
 	var scanSummaryList hubapi.ScanSummaryList
-	err := c.HttpGetJSON(link.Href, &scanSummaryList, 200)
+	err := c.Page(link.Href, nil, &scanSummaryList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve scan summary list")

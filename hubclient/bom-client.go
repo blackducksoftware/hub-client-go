@@ -15,10 +15,7 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -28,7 +25,7 @@ func (c *Client) ListProjectVersionComponents(link hubapi.ResourceLink) (*hubapi
 	// Should we abstract list fetching like we did with a single Get?
 
 	var bomList hubapi.BomComponentList
-	err := c.HttpGetJSON(link.Href+"?limit=2", &bomList, 200)
+	err := c.Page(link.Href, nil, &bomList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error while trying to get Project Version Component list")
@@ -44,7 +41,7 @@ func (c *Client) ListProjectVersionVulnerableComponents(link hubapi.ResourceLink
 	// Should we abstract list fetching like we did with a single Get?
 
 	var bomList hubapi.BomVulnerableComponentList
-	err := c.HttpGetJSON(link.Href+"?limit=2", &bomList, 200)
+	err := c.Page(link.Href, nil, &bomList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve vulnerable components list")
@@ -53,50 +50,33 @@ func (c *Client) ListProjectVersionVulnerableComponents(link hubapi.ResourceLink
 	return &bomList, nil
 }
 
-func (c *Client) PageProjectVersionVulnerableComponents(link hubapi.ResourceLink, offset uint32, limit uint32) (*hubapi.BomVulnerableComponentList, error) {
-
-	// Should we abstract list fetching like we did with a single Get?
-
-	var bomList hubapi.BomVulnerableComponentList
-	url := fmt.Sprintf("%s?offset=%d&limit=%d", link.Href, offset, limit)
-	err := c.HttpGetJSON(url, &bomList, 200)
-
-	if err != nil {
-		return nil, AnnotateHubClientError(err, "Error trying to retrieve vulnerable components page")
-	}
-
-	return &bomList, nil
-}
-
 func (c *Client) CountProjectVersionVulnerableComponents(link hubapi.ResourceLink) (int, error) {
-	return c.Count(link)
+	return c.Count(link.Href)
 }
 
 func (c *Client) ListAllProjectVersionVulnerableComponents(link hubapi.ResourceLink) ([]hubapi.BomVulnerableComponent, error) {
 
-	log.Debugf("***** Getting total count.")
-	//totalCount, err := c.CountProjectVersionVulnerableComponents(link)
-	totalCount := uint32(100)
-	log.Debugf("***** Got total count: %d", totalCount)
+	totalCount, err := c.Count(link.Href)
 
-	// if err != nil {
-	// 	log.Debugf("ERROR GETTING COUNT: %s\n", err)
-	// }
+	if err != nil {
+		log.Errorf("Error trying to retrieve vulnerable components list: %+v.", err)
+		return nil, AnnotateHubClientError(err, "Error trying to retrieve project's vulnerable components")
+	}
 
-	pageSize := uint32(100)
-	result := make([]hubapi.BomVulnerableComponent, totalCount, totalCount)
+	result := make([]hubapi.BomVulnerableComponent, 0, totalCount)
 
-	for offset := uint32(0); offset < totalCount; offset += pageSize {
-
-		log.Debugf("***** Going to get vulnerable components. Offset: %d, Limit: %d ", offset, pageSize)
-		bomPage, err := c.PageProjectVersionVulnerableComponents(link, offset, pageSize)
-
+	err = c.ForAllPages(nil, func(options *hubapi.GetListOptions) (int, error) {
+		var bomPage hubapi.BomVulnerableComponentList
+		err = c.Page(link.Href, options, &bomPage)
 		if err != nil {
 			log.Errorf("Error trying to retrieve vulnerable components list: %+v.", err)
+			return 0, err
 		}
 
 		result = append(result, bomPage.Items...)
-	}
+
+		return bomPage.TotalCount, nil
+	})
 
 	return result, nil
 }

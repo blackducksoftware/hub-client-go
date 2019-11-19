@@ -22,15 +22,10 @@ import (
 )
 
 func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	componentURL := fmt.Sprintf("%s/api/components%s", c.baseURL, params)
+	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
 
 	var componentList hubapi.ComponentList
-	err := c.HttpGetJSON(componentURL, &componentList, 200)
+	err := c.Page(componentURL, options, &componentList)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve component list: %+v.", err)
@@ -38,6 +33,26 @@ func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.Compone
 	}
 
 	return &componentList, nil
+}
+
+func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
+	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
+
+	cl := &hubapi.ComponentList{}
+	err := c.ForAllPages(options, func(options *hubapi.GetListOptions) (int, error) {
+		componentList := hubapi.ComponentList{}
+		err1 := c.Page(componentURL, options, &componentList)
+		cl.ItemsListBase = componentList.ItemsListBase
+		cl.Items = append(cl.Items, componentList.Items...)
+		return componentList.TotalCount, err1
+	})
+
+	if err != nil {
+		log.Errorf("Error trying to retrieve component list: %+v.", err)
+		return nil, err
+	}
+
+	return cl, nil
 }
 
 func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, error) {
@@ -71,7 +86,7 @@ func (c *Client) DeleteComponent(componentURL string) error {
 	return c.HttpDelete(componentURL, "application/json", 204)
 }
 
-func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
+func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
 	var componentVersion hubapi.ComponentVersion
 	err := c.HttpGetJSON(link.Href, &componentVersion, 200)
 
@@ -81,8 +96,4 @@ func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.Compone
 	}
 
 	return &componentVersion, nil
-}
-
-func (c *Client) GetComponentVersionFromVariant(componentVariant *hubapi.ComponentVariant) (*hubapi.ComponentVersion, error) {
-	return c.GetComponentVersion(&hubapi.ResourceLink{Href: componentVariant.Version})
 }

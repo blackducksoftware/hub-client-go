@@ -34,7 +34,7 @@ func TestClient_GetComponentVersion(t *testing.T) {
 
 	item := componentList.Items[0]
 
-	link := &hubapi.ResourceLink{Href: item.Version}
+	link := hubapi.ResourceLink{Href: item.Version}
 
 	componentVersion, err := client.GetComponentVersion(link)
 	assert.NoError(t, err)
@@ -64,7 +64,7 @@ func TestClient_GetComponentVersionFromVariant(t *testing.T) {
 
 	componentVariant := componentList.Items[0]
 
-	componentVersion, err := client.GetComponentVersionFromVariant(&componentVariant)
+	componentVersion, err := client.GetComponentVersion(hubapi.ResourceLink{Href: componentVariant.Version})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, componentVersion.Type)
 	assert.NotEmpty(t, componentVersion.ApprovalStatus)

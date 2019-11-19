@@ -73,3 +73,26 @@ func (glo *GetListOptions) Parameters() map[string]string {
 	}
 	return params
 }
+
+func (glo *GetListOptions) FirstPage() *GetListOptions {
+	if glo == nil {
+		glo = &GetListOptions{}
+	}
+
+	if glo.Limit == nil {
+		glo.Limit = new(int)
+		*glo.Limit = 100
+	}
+
+	if glo.Offset == nil {
+		glo.Offset = new(int)
+	}
+
+	return glo
+}
+
+func (glo *GetListOptions) NextPage() {
+	glo.FirstPage()
+
+	*glo.Offset += *glo.Limit
+}

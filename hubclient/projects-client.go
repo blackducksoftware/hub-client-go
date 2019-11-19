@@ -27,18 +27,12 @@ import (
 // Or maybe that is something more for RX?
 // Or maybe a special return type that can keep querying for all of them when it runs out?
 // Is there any iterator type in GoLang?
-
 func (c *Client) ListProjects(options *hubapi.GetListOptions) (*hubapi.ProjectList, error) {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	projectsURL := fmt.Sprintf("%s/api/projects%s", c.baseURL, params)
+	projectsURL := fmt.Sprintf("%s/api/projects", c.baseURL)
 
 	var projectList hubapi.ProjectList
-	err := c.HttpGetJSON(projectsURL, &projectList, 200)
+	err := c.Page(projectsURL, options, &projectList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve project list")
@@ -87,15 +81,8 @@ func (c *Client) DeleteProjectVersion(projectVersionURL string) error {
 
 func (c *Client) ListProjectVersions(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.ProjectVersionList, error) {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	projectVersionsURL := fmt.Sprintf("%s%s", link.Href, params)
-
 	var versionList hubapi.ProjectVersionList
-	err := c.HttpGetJSON(projectVersionsURL, &versionList, 200)
+	err := c.Page(link.Href, options, &versionList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve project version list")
