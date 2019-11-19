@@ -95,3 +95,17 @@ type ComponentRequest struct {
 	ApprovalStatus      string   `json:"approvalStatus"`
 	Type                string   `json:"type"`
 }
+
+type ComponentRemediation struct {
+	FixesPreviousVulnerabilities RemediationInfo `json:"fixesPreviousVulnerabilities,omitempty"`
+	NoVulnerabilities            RemediationInfo `json:"noVulnerabilities,omitempty"`
+	LatestAfterCurrent           RemediationInfo `json:"latestAfterCurrent,omitempty"`
+	Meta                         Meta            `json:"_meta"`
+}
+
+type RemediationInfo struct {
+	ComponentVersion   string `json:"componentVersion"`
+	Name               string `json:"name"`
+	ReleasedOn         string `json:"releasedOn"`
+	VulnerabilityCount int    `json:"vulnerabilityCount"`
+}

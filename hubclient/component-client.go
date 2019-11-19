@@ -21,6 +21,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	remediatingApi = "/remediating"
+)
+
 func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
 	params := ""
 	if options != nil {
@@ -85,4 +89,14 @@ func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.Compone
 
 func (c *Client) GetComponentVersionFromVariant(componentVariant *hubapi.ComponentVariant) (*hubapi.ComponentVersion, error) {
 	return c.GetComponentVersion(&hubapi.ResourceLink{Href: componentVariant.Version})
+}
+
+func (c *Client) GetRemediationForComponentVersion(componentVersion *hubapi.ComponentVersion) (*hubapi.ComponentRemediation, error) {
+	var componentRemediation hubapi.ComponentRemediation
+	err := c.HttpGetJSON(componentVersion.Meta.Href+remediatingApi, &componentRemediation, 200)
+	if err != nil {
+		log.Errorf("Error trying to retrieve component remediation: %+v.", err)
+		return nil, err
+	}
+	return &componentRemediation, nil
 }

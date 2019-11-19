@@ -77,3 +77,27 @@ func TestClient_GetComponentVersionFromVariant(t *testing.T) {
 	assert.NotEmpty(t, componentVersion.Meta.Href)
 	assert.True(t, len(componentVersion.Meta.Allow) > 0)
 }
+
+func TestClient_GetComponentRemediation(t *testing.T) {
+
+	client := createTestClient(t)
+	assert.NotNil(t, client, "unable to get client")
+
+	option := "maven:org.apache.commons:commons-collections4:4.0"
+	listOptions := &hubapi.GetListOptions{Q: &option}
+
+	componentList, err := client.ListComponents(listOptions)
+	assert.NoError(t, err)
+	assert.True(t, len(componentList.Items) > 0, "Expected at least one componentlist item")
+
+	componentVariant := componentList.Items[0]
+
+	componentVersion, err := client.GetComponentVersionFromVariant(&componentVariant)
+	assert.NoError(t, err)
+
+	remediation, err := client.GetRemediationForComponentVersion(componentVersion)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, remediation.NoVulnerabilities.Name)
+	assert.NotEmpty(t, remediation.LatestAfterCurrent.Name)
+	assert.NotEmpty(t, remediation.FixesPreviousVulnerabilities.Name)
+}
