@@ -406,7 +406,7 @@ func (c *Client) ForAllPages(listOptions *hubapi.GetListOptions, pageFunc func(*
 }
 
 
-func (c *Client) GetPage(link string, options *hubapi.GetListOptions, page interface{}) error {
+func (c *Client) GetPage(link string, options *hubapi.GetListOptions, list interface{}) error {
 
 	listUrl := link + hubapi.ParameterString(options)
 

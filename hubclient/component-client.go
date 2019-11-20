@@ -15,17 +15,17 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
+const apiComponents = "/api/components"
+
 func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
-	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
+	componentURL := c.baseURL + apiComponents
 
 	var componentList hubapi.ComponentList
-	err := c.Page(componentURL, options, &componentList)
+	err := c.GetPage(componentURL, options, &componentList)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve component list: %+v.", err)
@@ -36,12 +36,12 @@ func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.Compone
 }
 
 func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
-	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
+	componentURL := c.baseURL + apiComponents
 
 	cl := &hubapi.ComponentList{}
 	err := c.ForAllPages(options, func(options *hubapi.GetListOptions) (int, error) {
 		componentList := hubapi.ComponentList{}
-		err1 := c.Page(componentURL, options, &componentList)
+		err1 := c.GetPage(componentURL, options, &componentList)
 		cl.ItemsListBase = componentList.ItemsListBase
 		cl.Items = append(cl.Items, componentList.Items...)
 		return componentList.TotalCount, err1
@@ -68,7 +68,7 @@ func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, erro
 }
 
 func (c *Client) CreateComponent(componentRequest *hubapi.ComponentRequest) (string, error) {
-	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
+	componentURL := c.baseURL + apiComponents
 	location, err := c.HttpPostJSON(componentURL, componentRequest, "application/json", 201)
 
 	if err != nil {

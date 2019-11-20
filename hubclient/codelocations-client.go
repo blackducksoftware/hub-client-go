@@ -62,11 +62,9 @@ func (c *Client) DeleteCodeLocation(codeLocationURL string) error {
 }
 
 func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummaryList, error) {
-
-	// Need offset/limit
-	// Should we abstract list fetching like we did with a single Get?
+	// TODO: Need offset/limit
 	var scanSummaryList hubapi.ScanSummaryList
-	err := c.Page(link.Href, nil, &scanSummaryList)
+	err := c.GetPage(link.Href, nil, &scanSummaryList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve scan summary list")

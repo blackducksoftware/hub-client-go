@@ -25,7 +25,7 @@ func (c *Client) ListProjectVersionComponents(link hubapi.ResourceLink) (*hubapi
 	// Should we abstract list fetching like we did with a single Get?
 
 	var bomList hubapi.BomComponentList
-	err := c.Page(link.Href, nil, &bomList)
+	err := c.GetPage(link.Href, nil, &bomList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error while trying to get Project Version Component list")
@@ -41,7 +41,7 @@ func (c *Client) ListProjectVersionVulnerableComponents(link hubapi.ResourceLink
 	// Should we abstract list fetching like we did with a single Get?
 
 	var bomList hubapi.BomVulnerableComponentList
-	err := c.Page(link.Href, nil, &bomList)
+	err := c.GetPage(link.Href, nil, &bomList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve vulnerable components list")
@@ -67,7 +67,7 @@ func (c *Client) ListAllProjectVersionVulnerableComponents(link hubapi.ResourceL
 
 	err = c.ForAllPages(nil, func(options *hubapi.GetListOptions) (int, error) {
 		var bomPage hubapi.BomVulnerableComponentList
-		err = c.Page(link.Href, options, &bomPage)
+		err = c.GetPage(link.Href, options, &bomPage)
 		if err != nil {
 			log.Errorf("Error trying to retrieve vulnerable components list: %+v.", err)
 			return 0, err

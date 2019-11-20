@@ -15,11 +15,11 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
+
+const apiProjects = "/api/projects"
 
 // What about continuation for these?
 // Should we have something where user can pass in an optional continuation/next placeholder?
@@ -28,10 +28,10 @@ import (
 // Is there any iterator type in GoLang?
 func (c *Client) ListProjects(options *hubapi.GetListOptions) (*hubapi.ProjectList, error) {
 
-	projectsURL := fmt.Sprintf("%s/api/projects", c.baseURL)
+	projectsURL := c.baseURL + apiProjects
 
 	var projectList hubapi.ProjectList
-	err := c.Page(projectsURL, options, &projectList)
+	err := c.GetPage(projectsURL, options, &projectList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve project list")
@@ -54,7 +54,7 @@ func (c *Client) GetProject(link hubapi.ResourceLink) (*hubapi.Project, error) {
 
 func (c *Client) CreateProject(projectRequest *hubapi.ProjectRequest) (string, error) {
 
-	projectsURL := fmt.Sprintf("%s/api/projects", c.baseURL)
+	projectsURL := c.baseURL + apiProjects
 	location, err := c.HttpPostJSON(projectsURL, projectRequest, "application/json", 201)
 
 	if err != nil {
@@ -81,7 +81,7 @@ func (c *Client) DeleteProjectVersion(projectVersionURL string) error {
 func (c *Client) ListProjectVersions(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.ProjectVersionList, error) {
 
 	var versionList hubapi.ProjectVersionList
-	err := c.Page(link.Href, options, &versionList)
+	err := c.GetPage(link.Href, options, &versionList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve project version list")
