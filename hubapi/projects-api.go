@@ -90,22 +90,40 @@ type ProjectVersionRiskProfile struct {
 
 // V6
 type ProjectVersionPolicyStatus struct {
-	OverallStatus                          string                                  `json:"overallStatus"`
-	UpdatedAt                              *time.Time                              `json:"updatedAt"`
-	ComponentVersionStatusCounts           []ComponentVersionStatusCount           `json:"componentVersionStatusCounts"`
-	ComponentVersionPolicyViolationDetails []ComponentVersionPolicyViolationDetail `json:"componentVersionPolicyViolationDetails"`
-	Meta                                   Meta                                    `json:"_meta"`
+	OverallStatus          string                  `json:"overallStatus"`
+	UpdatedAt              *time.Time              `json:"updatedAt"`
+	StatusCounts           []StatusCount           `json:"componentVersionStatusCounts"`
+	PolicyViolationDetails []PolicyViolationDetail `json:"componentVersionPolicyViolationDetails"`
+	Meta                   Meta                    `json:"_meta"`
 }
 
 // TODO could the names and values be from an enumeration?
-type ComponentVersionStatusCount struct {
+type StatusCount struct {
 	Name  string `json:"name"` // [ IN_VIOLATION_OVERRIDDEN, NOT_IN_VIOLATION, IN_VIOLATION ]
 	Value int    `json:"value"`
 }
 
-type ComponentVersionPolicyViolationDetail struct {
-	Name           string                        `json:"name"` // [ IN_VIOLATION_OVERRIDDEN, NOT_IN_VIOLATION, IN_VIOLATION ]
-	SeverityLevels []ComponentVersionStatusCount `json:"severityLevels"`
+type PolicyViolationDetail struct {
+	Name           string        `json:"name"` // [ IN_VIOLATION_OVERRIDDEN, NOT_IN_VIOLATION, IN_VIOLATION ]
+	SeverityLevels []StatusCount `json:"severityLevels"`
+}
+
+// result of bom policy-status link under project's component version
+type BomComponentPolicyStatus struct {
+	ApprovalStatus string `json:"approvalStatus"`
+	Meta           Meta   `json:"_meta"`
+}
+
+// result of bom policy-rules link under project's component version
+type BomComponentPolicyRulesList struct {
+	ItemsListBase
+	Items []BomComponentPolicyRule `json:"items"`
+}
+
+type BomComponentPolicyRule struct {
+	PolicyRule
+	PolicyApprovalStatus string `json:"policyApprovalStatus"`
+	Comment              string `json:"comment"`
 }
 
 func (p *Project) GetProjectVersionsLink() (*ResourceLink, error) {
