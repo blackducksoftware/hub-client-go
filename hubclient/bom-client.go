@@ -65,18 +65,16 @@ func (c *Client) ListAllProjectVersionVulnerableComponents(link hubapi.ResourceL
 
 	result := make([]hubapi.BomVulnerableComponent, 0, totalCount)
 
-	err = c.ForAllPages(nil, func(options *hubapi.GetListOptions) (int, error) {
-		var bomPage hubapi.BomVulnerableComponentList
-		err = c.GetPage(link.Href, options, &bomPage)
-		if err != nil {
-			log.Errorf("Error trying to retrieve vulnerable components list: %+v.", err)
-			return 0, err
-		}
-
+	var bomPage hubapi.BomVulnerableComponentList
+	err = c.ForEachPage(link.Href, nil, &bomPage, func() error {
 		result = append(result, bomPage.Items...)
-
-		return bomPage.TotalCount, nil
+		return nil
 	})
+
+	if err != nil {
+		log.Errorf("Error trying to retrieve vulnerable components list: %+v.", err)
+		return nil, err
+	}
 
 	return result, nil
 }

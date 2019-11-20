@@ -48,6 +48,14 @@ type ItemsListBase struct {
 	Meta           Meta          `json:"_meta"`
 }
 
+func (b ItemsListBase) Total() int {
+	return b.TotalCount
+}
+
+type TotalCountable interface {
+	Total() int
+}
+
 // GetListOptions describes the parameter model for the list GET endpoints.
 type GetListOptions struct {
 	Limit  *int

@@ -22,6 +22,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"reflect"
 	"time"
 
 	"github.com/blackducksoftware/hub-client-go/hubapi"
@@ -393,21 +394,30 @@ func (c *Client) Count(link string) (int, error) {
 	return list.TotalCount, nil
 }
 
-// ForAllPages executes pageFunc for all pages. pageFunc has a control over options, with ability to override
-// limit and offsets as needed
-func (c *Client) ForAllPages(listOptions *hubapi.GetListOptions, pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
+func (c *Client) ForEachPage(link string, listOptions *hubapi.GetListOptions, list interface{}, pageFunc func() error) (err error) {
 	listOptions = hubapi.EnsureLimits(listOptions)
 
 	for totalCount := 1; err == nil && *listOptions.Offset < totalCount; listOptions.NextPage() {
-		totalCount, err = pageFunc(listOptions)
+		resetList(list)
+		err = c.GetPage(link, listOptions, list)
+		if err == nil {
+			err = pageFunc()
+		}
+
+		if t, ok := list.(hubapi.TotalCountable); ok {
+			totalCount = t.Total()
+		}
 	}
 
 	return err
 }
 
+func resetList(v interface{}) {
+	p := reflect.ValueOf(v).Elem()
+	p.Set(reflect.Zero(p.Type()))
+}
 
 func (c *Client) GetPage(link string, options *hubapi.GetListOptions, list interface{}) error {
-
 	listUrl := link + hubapi.ParameterString(options)
 
 	err := c.HttpGetJSON(listUrl, list, 200)

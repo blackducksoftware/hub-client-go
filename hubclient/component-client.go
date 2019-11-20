@@ -38,13 +38,12 @@ func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.Compone
 func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
 	componentURL := c.baseURL + apiComponents
 
-	cl := &hubapi.ComponentList{}
-	err := c.ForAllPages(options, func(options *hubapi.GetListOptions) (int, error) {
-		componentList := hubapi.ComponentList{}
-		err1 := c.GetPage(componentURL, options, &componentList)
-		cl.ItemsListBase = componentList.ItemsListBase
-		cl.Items = append(cl.Items, componentList.Items...)
-		return componentList.TotalCount, err1
+	accum := &hubapi.ComponentList{}
+	componentList := hubapi.ComponentList{}
+	err := c.ForEachPage(componentURL, options, &componentList, func() error {
+		accum.ItemsListBase = componentList.ItemsListBase
+		accum.Items = append(accum.Items, componentList.Items...)
+		return nil
 	})
 
 	if err != nil {
@@ -52,7 +51,7 @@ func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.Comp
 		return nil, err
 	}
 
-	return cl, nil
+	return accum, nil
 }
 
 func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, error) {
