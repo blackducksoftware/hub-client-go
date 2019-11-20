@@ -29,9 +29,8 @@ func TestGetListOptionsURLSerialization(t *testing.T) {
 		Q: &q,
 	}
 	actual := ParameterString(&gpo)
-	expected := "limit=3&offset=12&q=a%3Fbc"
+	expected := "?limit=3&offset=12&q=a%3Fbc"
 	if actual != expected {
 		t.Errorf("URL parameters serialized incorrectly -- expected %s, got %s", expected, actual)
-		t.Fail()
 	}
 }

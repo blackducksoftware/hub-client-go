@@ -29,8 +29,13 @@ type URLParameters interface {
 
 // ParameterString takes a URLParameters object
 // and converts it to a string which can be added to
-// a URL.
+// a URL. The resulting string starts from "?" if there were any parameters.
+// If params was empty, it will return an empty string
 func ParameterString(params URLParameters) string {
+	if params == nil {
+		return ""
+	}
+
 	dict := params.Parameters()
 
 	var keys []string
@@ -44,5 +49,5 @@ func ParameterString(params URLParameters) string {
 		val := dict[key]
 		pairs = append(pairs, fmt.Sprintf("%s=%s", url.QueryEscape(key), url.QueryEscape(val)))
 	}
-	return strings.Join(pairs, "&")
+	return "?" + strings.Join(pairs, "&")
 }

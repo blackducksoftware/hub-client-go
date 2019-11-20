@@ -23,12 +23,7 @@ import (
 )
 
 func (c *Client) ListPolicyRules(options *hubapi.GetListOptions) (*hubapi.PolicyRuleList, error) {
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	policyRuleURL := fmt.Sprintf("%s/api/policy-rules%s", c.baseURL, params)
+	policyRuleURL := c.baseURL + "/api/policy-rules" + hubapi.ParameterString(options)
 
 	var policyRuleList hubapi.PolicyRuleList
 	err := c.HttpGetJSON(policyRuleURL, &policyRuleList, 200)

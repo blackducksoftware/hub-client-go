@@ -15,22 +15,14 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 )
 
 func (c *Client) ListAllCodeLocations(options *hubapi.GetListOptions) (*hubapi.CodeLocationList, error) {
-
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	codeLocationsURL := fmt.Sprintf("%s/api/codelocations%s", c.baseURL, params)
+	codeLocationsURL := c.baseURL + "/api/codelocations" + hubapi.ParameterString(options)
 
 	var codeLocationsList hubapi.CodeLocationList
-	err := c.HttpGetJSON(codeLocationsURL, &codeLocationsList, 200)
+	err := c.GetPage(codeLocationsURL, options, &codeLocationsList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve code locations list")
@@ -42,7 +34,7 @@ func (c *Client) ListAllCodeLocations(options *hubapi.GetListOptions) (*hubapi.C
 func (c *Client) ListCodeLocations(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.CodeLocationList, error) {
 
 	var codeLocationList hubapi.CodeLocationList
-	err := c.Page(link.Href, options, &codeLocationList)
+	err := c.GetPage(link.Href, options, &codeLocationList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve code location list")

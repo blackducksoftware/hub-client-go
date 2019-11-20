@@ -396,12 +396,7 @@ func (c *Client) Count(link string) (int, error) {
 // ForAllPages executes pageFunc for all pages. pageFunc has a control over options, with ability to override
 // limit and offsets as needed
 func (c *Client) ForAllPages(listOptions *hubapi.GetListOptions, pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
-
-	if listOptions == nil {
-		listOptions = &hubapi.GetListOptions{}
-	}
-
-	listOptions.FirstPage()
+	listOptions = listOptions.FirstPage()
 
 	for totalCount := 1; err == nil && *listOptions.Offset < totalCount; listOptions.NextPage() {
 		totalCount, err = pageFunc(listOptions)
@@ -410,14 +405,10 @@ func (c *Client) ForAllPages(listOptions *hubapi.GetListOptions, pageFunc func(*
 	return err
 }
 
-func (c *Client) Page(link string, options *hubapi.GetListOptions, list interface{}) error {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
+func (c *Client) GetPage(link string, options *hubapi.GetListOptions, page interface{}) error {
 
-	listUrl := fmt.Sprintf("%s%s", link, params)
+	listUrl := link + hubapi.ParameterString(options)
 
 	err := c.HttpGetJSON(listUrl, list, 200)
 

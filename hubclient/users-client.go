@@ -41,12 +41,7 @@ func (c *Client) CreateUser(userRequest *hubapi.UserRequest) (*hubapi.User, erro
 
 func (c *Client) ListUsers(options *hubapi.GetListOptions) (*hubapi.UserList, error) {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	usersURL := fmt.Sprintf("%s/api/users%s", c.baseURL, params)
+	usersURL := c.baseURL + "/api/users" + hubapi.ParameterString(options)
 
 	var userList hubapi.UserList
 	err := c.HttpGetJSON(usersURL, &userList, 200)
