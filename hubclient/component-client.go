@@ -15,22 +15,17 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
-func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
+const apiComponents = "/api/components"
 
-	componentURL := fmt.Sprintf("%s/api/components%s", c.baseURL, params)
+func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
+	componentURL := c.baseURL + apiComponents
 
 	var componentList hubapi.ComponentList
-	err := c.HttpGetJSON(componentURL, &componentList, 200)
+	err := c.GetPage(componentURL, options, &componentList)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve component list: %+v.", err)
@@ -38,6 +33,25 @@ func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.Compone
 	}
 
 	return &componentList, nil
+}
+
+func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
+	componentURL := c.baseURL + apiComponents
+
+	accum := &hubapi.ComponentList{}
+	componentList := hubapi.ComponentList{}
+	err := c.ForEachPage(componentURL, options, &componentList, func() error {
+		accum.ItemsListBase = componentList.ItemsListBase
+		accum.Items = append(accum.Items, componentList.Items...)
+		return nil
+	})
+
+	if err != nil {
+		log.Errorf("Error trying to retrieve component list: %+v.", err)
+		return nil, err
+	}
+
+	return accum, nil
 }
 
 func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, error) {
@@ -53,7 +67,7 @@ func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, erro
 }
 
 func (c *Client) CreateComponent(componentRequest *hubapi.ComponentRequest) (string, error) {
-	componentURL := fmt.Sprintf("%s/api/components", c.baseURL)
+	componentURL := c.baseURL + apiComponents
 	location, err := c.HttpPostJSON(componentURL, componentRequest, "application/json", 201)
 
 	if err != nil {
@@ -71,7 +85,7 @@ func (c *Client) DeleteComponent(componentURL string) error {
 	return c.HttpDelete(componentURL, "application/json", 204)
 }
 
-func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
+func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
 	var componentVersion hubapi.ComponentVersion
 	err := c.HttpGetJSON(link.Href, &componentVersion, 200)
 
@@ -81,8 +95,4 @@ func (c *Client) GetComponentVersion(link *hubapi.ResourceLink) (*hubapi.Compone
 	}
 
 	return &componentVersion, nil
-}
-
-func (c *Client) GetComponentVersionFromVariant(componentVariant *hubapi.ComponentVariant) (*hubapi.ComponentVersion, error) {
-	return c.GetComponentVersion(&hubapi.ResourceLink{Href: componentVariant.Version})
 }

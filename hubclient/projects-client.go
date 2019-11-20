@@ -15,30 +15,23 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
-
 	log "github.com/sirupsen/logrus"
 )
+
+const apiProjects = "/api/projects"
 
 // What about continuation for these?
 // Should we have something where user can pass in an optional continuation/next placeholder?
 // Or maybe that is something more for RX?
 // Or maybe a special return type that can keep querying for all of them when it runs out?
 // Is there any iterator type in GoLang?
-
 func (c *Client) ListProjects(options *hubapi.GetListOptions) (*hubapi.ProjectList, error) {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	projectsURL := fmt.Sprintf("%s/api/projects%s", c.baseURL, params)
+	projectsURL := c.baseURL + apiProjects
 
 	var projectList hubapi.ProjectList
-	err := c.HttpGetJSON(projectsURL, &projectList, 200)
+	err := c.GetPage(projectsURL, options, &projectList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve project list")
@@ -61,7 +54,7 @@ func (c *Client) GetProject(link hubapi.ResourceLink) (*hubapi.Project, error) {
 
 func (c *Client) CreateProject(projectRequest *hubapi.ProjectRequest) (string, error) {
 
-	projectsURL := fmt.Sprintf("%s/api/projects", c.baseURL)
+	projectsURL := c.baseURL + apiProjects
 	location, err := c.HttpPostJSON(projectsURL, projectRequest, "application/json", 201)
 
 	if err != nil {
@@ -87,15 +80,8 @@ func (c *Client) DeleteProjectVersion(projectVersionURL string) error {
 
 func (c *Client) ListProjectVersions(link hubapi.ResourceLink, options *hubapi.GetListOptions) (*hubapi.ProjectVersionList, error) {
 
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	projectVersionsURL := fmt.Sprintf("%s%s", link.Href, params)
-
 	var versionList hubapi.ProjectVersionList
-	err := c.HttpGetJSON(projectVersionsURL, &versionList, 200)
+	err := c.GetPage(link.Href, options, &versionList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve project version list")

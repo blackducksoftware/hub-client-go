@@ -15,15 +15,13 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 )
 
 func (c *Client) CurrentVersion() (*hubapi.CurrentVersion, error) {
+	currentVersionURL := c.baseURL + "/api/current-version"
 
 	var currentVersion hubapi.CurrentVersion
-	currentVersionURL := fmt.Sprintf("%s/api/current-version", c.baseURL)
 	err := c.HttpGetJSON(currentVersionURL, &currentVersion, 200)
 
 	if err != nil {

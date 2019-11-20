@@ -15,15 +15,15 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
+const apiCurrentUser = "/api/current-user"
+
 func (c *Client) CreateApiToken(name, description string, readOnly bool) (location string, token string, err error) {
 
-	tokensUrl := fmt.Sprintf("%s/api/current-user/tokens", c.baseURL)
+	tokensUrl := c.baseURL + apiCurrentUser + "/tokens"
 
 	tokenRequest := &hubapi.ApiToken{
 		Name:        name,
@@ -54,18 +54,10 @@ func (c *Client) DeleteApiToken(tokenUrl string) error {
 }
 
 func (c *Client) ListApiTokens(options *hubapi.GetListOptions) (*hubapi.ApiTokenList, error) {
-
-	tokensUrl := fmt.Sprintf("%s/api/current-user/tokens", c.baseURL)
-
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	apiTokenListURL := fmt.Sprintf("%s%s", tokensUrl, params)
-
+	tokensUrl := c.baseURL + apiCurrentUser + "/tokens"
 	var apiTokenList hubapi.ApiTokenList
-	err := c.HttpGetJSON(apiTokenListURL, &apiTokenList, 200)
+
+	err := c.GetPage(tokensUrl, options, &apiTokenList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve api tokens list")
@@ -75,7 +67,7 @@ func (c *Client) ListApiTokens(options *hubapi.GetListOptions) (*hubapi.ApiToken
 }
 
 func (c *Client) GetCurrentUser() (response *hubapi.CurrentUserResponse, err error) {
-	currentUserUrl := fmt.Sprintf("%s/api/current-user", c.BaseURL())
+	currentUserUrl := c.baseURL + apiCurrentUser
 
 	response = &hubapi.CurrentUserResponse{}
 

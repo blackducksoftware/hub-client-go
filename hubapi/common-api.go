@@ -48,6 +48,14 @@ type ItemsListBase struct {
 	Meta           Meta          `json:"_meta"`
 }
 
+func (b ItemsListBase) Total() int {
+	return b.TotalCount
+}
+
+type TotalCountable interface {
+	Total() int
+}
+
 // GetListOptions describes the parameter model for the list GET endpoints.
 type GetListOptions struct {
 	Limit  *int
@@ -72,4 +80,37 @@ func (glo *GetListOptions) Parameters() map[string]string {
 		params["q"] = *glo.Q
 	}
 	return params
+}
+
+func FirstPageOptions() *GetListOptions {
+	return EnsureLimits(nil)
+}
+
+func (glo *GetListOptions) EnsureLimits() *GetListOptions {
+	return EnsureLimits(glo)
+}
+
+func (glo *GetListOptions) NextPage() *GetListOptions {
+	glo = EnsureLimits(glo)
+
+	*glo.Offset += *glo.Limit
+
+	return glo
+}
+
+func EnsureLimits(glo *GetListOptions) *GetListOptions {
+	if glo == nil {
+		glo = &GetListOptions{}
+	}
+
+	if glo.Limit == nil {
+		glo.Limit = new(int)
+		*glo.Limit = 100
+	}
+
+	if glo.Offset == nil {
+		glo.Offset = new(int)
+	}
+
+	return glo
 }

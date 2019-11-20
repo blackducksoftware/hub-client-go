@@ -39,7 +39,7 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 		client = createHttpClient(time.Minute)
 	}
 
-	url := fmt.Sprintf("%s/api/tokens/authenticate", baseURL)
+	url := baseURL + "/api/tokens/authenticate"
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {

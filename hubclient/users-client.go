@@ -15,16 +15,16 @@
 package hubclient
 
 import (
-	"fmt"
-
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 )
 
+const apiUsers = "/api/users"
+
 // TODO: This API should also be returning a location
 func (c *Client) CreateUser(userRequest *hubapi.UserRequest) (*hubapi.User, error) {
+	usersURL := c.baseURL + apiUsers
 
 	var result hubapi.User
-	usersURL := fmt.Sprintf("%s/api/users", c.baseURL)
 	_, err := c.HttpPostJSONExpectResult(usersURL, userRequest, &result, "application/json", 201)
 
 	if err != nil {
@@ -40,16 +40,10 @@ func (c *Client) CreateUser(userRequest *hubapi.UserRequest) (*hubapi.User, erro
 }
 
 func (c *Client) ListUsers(options *hubapi.GetListOptions) (*hubapi.UserList, error) {
-
-	params := ""
-	if options != nil {
-		params = fmt.Sprintf("?%s", hubapi.ParameterString(options))
-	}
-
-	usersURL := fmt.Sprintf("%s/api/users%s", c.baseURL, params)
+	usersURL := c.baseURL + "/api/users"
 
 	var userList hubapi.UserList
-	err := c.HttpGetJSON(usersURL, &userList, 200)
+	err := c.GetPage(usersURL, options, &userList)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve user list")

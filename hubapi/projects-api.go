@@ -14,6 +14,10 @@
 
 package hubapi
 
+import (
+	"time"
+)
+
 const (
 	ProjectVersionPhasePlanning    = "PLANNING"
 	ProjectVersionPhaseDevelopment = "DEVELOPMENT"
@@ -59,42 +63,67 @@ type ProjectVersionList struct {
 }
 
 type ProjectVersion struct {
-	VersionName     string `json:"versionName"`
-	Nickname        string `json:"nickname"`
-	ReleaseComments string `json:"releaseComments"`
-	ReleasedOn      string `json:"releasedOn"` // TODO: change this to a date
-	Phase           string `json:"phase"`
-	Distribution    string `json:"distribution"`
-	Meta            Meta   `json:"_meta"`
+	VersionName     string     `json:"versionName"`
+	Nickname        string     `json:"nickname"`
+	ReleaseComments string     `json:"releaseComments"`
+	ReleasedOn      *time.Time `json:"releasedOn"`
+	Phase           string     `json:"phase"`
+	Distribution    string     `json:"distribution"`
+	Meta            Meta       `json:"_meta"`
 }
 
 type ProjectVersionRequest struct {
-	VersionName     string  `json:"versionName"`
-	Nickname        string  `json:"nickname"`
-	ReleaseComments string  `json:"releaseComments"`
-	ReleasedOn      *string `json:"releasedOn"` // TODO: change this to a date
-	Phase           string  `json:"phase"`
-	Distribution    string  `json:"distribution"`
+	VersionName     string     `json:"versionName"`
+	Nickname        string     `json:"nickname"`
+	ReleaseComments string     `json:"releaseComments"`
+	ReleasedOn      *time.Time `json:"releasedOn"`
+	Phase           string     `json:"phase"`
+	Distribution    string     `json:"distribution"`
 }
 
 // TODO: This is horrible, we need to fix up this API
 type ProjectVersionRiskProfile struct {
 	Categories       map[string]map[string]int `json:"categories"`
-	BomLastUpdatedAt string                    `json:"bomLastUpdatedAt"` // TODO: Should be a date/time
+	BomLastUpdatedAt *time.Time                `json:"bomLastUpdatedAt"`
 	Meta             Meta                      `json:"_meta"`
 }
 
+// V6
 type ProjectVersionPolicyStatus struct {
-	OverallStatus                string                        `json:"overallStatus"`
-	UpdatedAt                    string                        `json:"updatedAt"` // TODO should be a date/time
-	ComponentVersionStatusCounts []ComponentVersionStatusCount `json:"componentVersionStatusCounts"`
-	Meta                         Meta                          `json:"_meta"`
+	OverallStatus          string                  `json:"overallStatus"`
+	UpdatedAt              *time.Time              `json:"updatedAt"`
+	StatusCounts           []StatusCount           `json:"componentVersionStatusCounts"`
+	PolicyViolationDetails []PolicyViolationDetail `json:"componentVersionPolicyViolationDetails"`
+	Meta                   Meta                    `json:"_meta"`
 }
 
 // TODO could the names and values be from an enumeration?
-type ComponentVersionStatusCount struct {
-	Name  string `json:"name"`
+type StatusCount struct {
+	Name  string `json:"name"` // [ IN_VIOLATION_OVERRIDDEN, NOT_IN_VIOLATION, IN_VIOLATION ]
 	Value int    `json:"value"`
+}
+
+type PolicyViolationDetail struct {
+	Name           string        `json:"name"` // [ IN_VIOLATION_OVERRIDDEN, NOT_IN_VIOLATION, IN_VIOLATION ]
+	SeverityLevels []StatusCount `json:"severityLevels"`
+}
+
+// result of bom policy-status link under project's component version
+type BomComponentPolicyStatus struct {
+	ApprovalStatus string `json:"approvalStatus"`
+	Meta           Meta   `json:"_meta"`
+}
+
+// result of bom policy-rules link under project's component version
+type BomComponentPolicyRulesList struct {
+	ItemsListBase
+	Items []BomComponentPolicyRule `json:"items"`
+}
+
+type BomComponentPolicyRule struct {
+	PolicyRule
+	PolicyApprovalStatus string `json:"policyApprovalStatus"`
+	Comment              string `json:"comment"`
 }
 
 func (p *Project) GetProjectVersionsLink() (*ResourceLink, error) {

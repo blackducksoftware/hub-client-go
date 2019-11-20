@@ -15,7 +15,6 @@
 package hubclient
 
 import (
-	"fmt"
 	"net/url"
 
 	log "github.com/sirupsen/logrus"
@@ -23,7 +22,7 @@ import (
 
 func (c *Client) Login(username string, password string) error {
 
-	loginURL := fmt.Sprintf("%s/j_spring_security_check", c.baseURL)
+	loginURL := c.baseURL + "/j_spring_security_check"
 	formValues := url.Values{
 		"j_username": {username},
 		"j_password": {password},

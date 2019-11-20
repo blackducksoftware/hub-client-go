@@ -22,6 +22,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"reflect"
 	"time"
 
 	"github.com/blackducksoftware/hub-client-go/hubapi"
@@ -382,9 +383,9 @@ func (c *Client) doPreRequest(request *http.Request) {
 	}
 }
 
-func (c *Client) Count(link hubapi.ResourceLink) (int, error) {
+func (c *Client) Count(link string) (int, error) {
 	var list hubapi.ItemsListBase
-	err := c.HttpGetJSON(link.Href+"?offset=0&limit=1", &list, 200)
+	err := c.HttpGetJSON(link+"?offset=0&limit=1", &list, 200)
 
 	if err != nil {
 		return 0, AnnotateHubClientError(err, "Error trying to retrieve count")
@@ -393,21 +394,39 @@ func (c *Client) Count(link hubapi.ResourceLink) (int, error) {
 	return list.TotalCount, nil
 }
 
-func (c *Client) ForAllPages(pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
+func (c *Client) ForEachPage(link string, listOptions *hubapi.GetListOptions, list interface{}, pageFunc func() error) (err error) {
+	listOptions = hubapi.EnsureLimits(listOptions)
 
-	var limit int = 10
-	var offset int = 0
+	for totalCount := 1; err == nil && *listOptions.Offset < totalCount; listOptions.NextPage() {
+		resetList(list)
+		err = c.GetPage(link, listOptions, list)
+		if err == nil {
+			err = pageFunc()
+		}
 
-	listOptions := &hubapi.GetListOptions{
-		Limit:  &limit,
-		Offset: &offset,
-	}
-
-	for totalCount := 1; err == nil && offset < totalCount; offset += limit {
-		totalCount, err = pageFunc(listOptions)
+		if t, ok := list.(hubapi.TotalCountable); ok {
+			totalCount = t.Total()
+		}
 	}
 
 	return err
+}
+
+func resetList(v interface{}) {
+	p := reflect.ValueOf(v).Elem()
+	p.Set(reflect.Zero(p.Type()))
+}
+
+func (c *Client) GetPage(link string, options *hubapi.GetListOptions, list interface{}) error {
+	listUrl := link + hubapi.ParameterString(options)
+
+	err := c.HttpGetJSON(listUrl, list, 200)
+
+	if err != nil {
+		return AnnotateHubClientError(err, fmt.Sprintf("Error trying to retrieve list %T", list))
+	}
+
+	return nil
 }
 
 func readResponseBody(resp *http.Response) []byte {
