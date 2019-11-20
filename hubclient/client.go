@@ -396,7 +396,7 @@ func (c *Client) Count(link string) (int, error) {
 // ForAllPages executes pageFunc for all pages. pageFunc has a control over options, with ability to override
 // limit and offsets as needed
 func (c *Client) ForAllPages(listOptions *hubapi.GetListOptions, pageFunc func(*hubapi.GetListOptions) (int, error)) (err error) {
-	listOptions = listOptions.FirstPage()
+	listOptions = hubapi.EnsureLimits(listOptions)
 
 	for totalCount := 1; err == nil && *listOptions.Offset < totalCount; listOptions.NextPage() {
 		totalCount, err = pageFunc(listOptions)

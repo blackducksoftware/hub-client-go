@@ -74,19 +74,23 @@ func (glo *GetListOptions) Parameters() map[string]string {
 	return params
 }
 
-func (glo *GetListOptions) FirstPage() *GetListOptions {
-	return ensureLimits(glo)
+func FirstPageOptions() *GetListOptions {
+	return EnsureLimits(nil)
+}
+
+func (glo *GetListOptions) EnsureLimits() *GetListOptions {
+	return EnsureLimits(glo)
 }
 
 func (glo *GetListOptions) NextPage() *GetListOptions {
-	glo = ensureLimits(glo)
+	glo = EnsureLimits(glo)
 
 	*glo.Offset += *glo.Limit
 
 	return glo
 }
 
-func ensureLimits(glo *GetListOptions) *GetListOptions {
+func EnsureLimits(glo *GetListOptions) *GetListOptions {
 	if glo == nil {
 		glo = &GetListOptions{}
 	}
