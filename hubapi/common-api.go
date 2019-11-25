@@ -49,7 +49,8 @@ func (m *Meta) GetLinksByRel(rel string) ([]*ResourceLink, error) {
 
 	for _, l := range m.Links {
 		if l.Rel == rel {
-			links = append(links, &l)
+			copy := l
+			links = append(links, &copy)
 		}
 	}
 
