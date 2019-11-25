@@ -191,6 +191,7 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 	}
 
 	c.doPreRequest(req)
+	req.Header.Set("Accept", "application/json")
 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {

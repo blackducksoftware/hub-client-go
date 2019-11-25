@@ -31,6 +31,7 @@ type ResourceLink struct {
 	Name  string `json:"name"`
 }
 
+// Returns the first link with the corresponding relation value.  However, there may be additional matches not returned
 func (m *Meta) FindLinkByRel(rel string) (*ResourceLink, error) {
 
 	for _, l := range m.Links {
@@ -40,6 +41,24 @@ func (m *Meta) FindLinkByRel(rel string) (*ResourceLink, error) {
 	}
 
 	return nil, fmt.Errorf("no relation '%s' found", rel)
+}
+
+// Returns all links with the corresponding relation value
+func (m *Meta) GetLinksByRel(rel string) ([]*ResourceLink, error) {
+	links := make([]*ResourceLink, 0)
+
+	for _, l := range m.Links {
+		if l.Rel == rel {
+			copy := l
+			links = append(links, &copy)
+		}
+	}
+
+	if len(links) == 0 {
+		return nil, fmt.Errorf("no relation '%s' found", rel)
+	}
+
+	return links, nil
 }
 
 type ItemsListBase struct {
