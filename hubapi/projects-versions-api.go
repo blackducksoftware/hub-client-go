@@ -60,7 +60,7 @@ type ProjectVersionPolicyStatus struct {
 	OverallStatus          string                  `json:"overallStatus"`
 	UpdatedAt              *time.Time              `json:"updatedAt"`
 	StatusCounts           []StatusCount           `json:"componentVersionStatusCounts"`
-	PolicyViolationDetails PolicyViolationDetails `json:"componentVersionPolicyViolationDetails"`
+	PolicyViolationDetails *PolicyViolationDetails `json:"componentVersionPolicyViolationDetails"`
 	Meta                   Meta                    `json:"_meta"`
 }
 
