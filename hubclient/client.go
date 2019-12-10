@@ -175,9 +175,7 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 	return nil
 }
 
-func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode int) error {
-
-	// TODO: Content type?
+func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode int, mimetypes ...string) error {
 
 	var resp *http.Response
 
@@ -190,7 +188,17 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http get request for %s: %+v", url, err))
 	}
 
-	c.doPreRequest(req)
+	c.setAuthHeaders(req)
+
+	if len(mimetypes) > 0 {
+		for _, mimetype := range mimetypes {
+			if mimetype != "" {
+				req.Header.Add("Accept", mimetype)
+			}
+		}
+	} else if bdJsonType := hubapi.GetMimeType(result); bdJsonType != "" {
+		req.Header.Add("Accept", bdJsonType)
+	}
 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
@@ -204,11 +212,11 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 		log.Debugf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	return AnnotateHubClientErrorf(c.processResponse(resp, result, expectedStatusCode), "unable to process response from GET to %s", url)
+	err = c.processResponse(resp, result, expectedStatusCode)
+	return AnnotateHubClientErrorf(err, "unable to process response from GET to %s", url)
 }
 
 func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
-
 	var resp *http.Response
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
@@ -230,7 +238,7 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.doPreRequest(req)
+	c.setAuthHeaders(req)
 	log.Debugf("PUT Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -271,7 +279,7 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.doPreRequest(req)
+	c.setAuthHeaders(req)
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -316,7 +324,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.doPreRequest(req)
+	c.setAuthHeaders(req)
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -354,7 +362,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.doPreRequest(req)
+	c.setAuthHeaders(req)
 	log.Debugf("DELETE Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -372,7 +380,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 	return AnnotateHubClientErrorf(c.processResponse(resp, nil, expectedStatusCode), "unable to process response from DELETE to %s", url)
 }
 
-func (c *Client) doPreRequest(request *http.Request) {
+func (c *Client) setAuthHeaders(request *http.Request) {
 
 	if c.useAuthToken {
 		request.Header.Set(HeaderNameAuthorization, fmt.Sprintf("Bearer %s", c.authToken))

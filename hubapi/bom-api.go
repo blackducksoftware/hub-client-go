@@ -16,14 +16,22 @@ package hubapi
 
 import "time"
 
+type bdJsonBomV6 struct{}
+
+func (bdJsonBomV6) GetMimeType() string {
+	return "application/vnd.blackducksoftware.bill-of-materials-6+json"
+}
+
 type BomComponentList struct {
 	ItemsListBase
+	bdJsonBomV6
 	Items []BomComponent `json:"items"`
 }
 
 // BomComponent represents "application/vnd.blackducksoftware.bill-of-materials-6+json"
 // We need to figure out what to do with content type here
 type BomComponent struct {
+	bdJsonBomV6
 	ComponentName          string               `json:"componentName"`
 	ComponentVersionName   string               `json:"componentVersionName,omitempty"`
 	Component              string               `json:"component"`
@@ -33,7 +41,7 @@ type BomComponent struct {
 	ComponentModification  string               `json:"componentModification"`
 	ReleasedOn             *time.Time           `json:"releasedOn"`
 	ReviewStatus           string               `json:"reviewStatus"`
-	ReviewedDetails        *BomReviewDetails    `json:"reviewedDetails, omitempty"`
+	ReviewedDetails        *BomReviewDetails    `json:"reviewedDetails,omitempty"`
 	PolicyStatus           string               `json:"policyStatus"`
 	ApprovalStatus         string               `json:"approvalStatus"`
 	Ignored                bool                 `json:"ignored"`
@@ -55,11 +63,13 @@ type BomComponent struct {
 }
 
 type BomVulnerableComponentList struct {
+	bdJsonBomV6
 	ItemsListBase
 	Items []BomVulnerableComponent `json:"items"`
 }
 
 type BomVulnerableComponent struct {
+	bdJsonBomV6
 	ComponentName              string                       `json:"componentName"`
 	ComponentVersionName       string                       `json:"componentVersionName"`
 	ComponentVersion           string                       `json:"componentVersion"`
@@ -68,19 +78,6 @@ type BomVulnerableComponent struct {
 	License                    ComplexLicense               `json:"license"`
 	Vulnerability              VulnerabilityWithRemediation `json:"vulnerabilityWithRemediation"`
 	Meta                       Meta                         `json:"_meta"`
-}
-
-type VulnerabilityBase struct {
-	VulnerabilityName          string  `json:"vulnerabilityName"`
-	Description                string  `json:"description"`
-	VulnerabilityPublishedDate string  `json:"vulnerabilityPublishedDate"`
-	VulnerabilityUpdatedDate   string  `json:"vulnerabilityUpdatedDate"`
-	BaseScore                  float32 `json:"baseScore"`
-	ExploitabilitySubscore     float32 `json:"exploitabilitySubscore"`
-	ImpactSubscore             float32 `json:"impactSubscore"`
-	Source                     string  `json:"source"`
-	Severity                   string  `json:"severity"`
-	CweId                      string  `json:"cweId,omitempty"`
 }
 
 type VulnerabilityWithRemediation struct {
@@ -126,4 +123,25 @@ type BomReviewingUser struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	User      string `json:"user"`
+}
+
+// result of bom policy-status link under project's component version
+type BomComponentPolicyStatus struct {
+	bdJsonBomV6
+	ApprovalStatus string `json:"approvalStatus"`
+	Meta           Meta   `json:"_meta"`
+}
+
+// result of bom policy-rules link under project's component version
+type BomComponentPolicyRulesList struct {
+	bdJsonBomV6
+	ItemsListBase
+	Items []BomComponentPolicyRule `json:"items"`
+}
+
+type BomComponentPolicyRule struct {
+	bdJsonBomV6
+	PolicyRule
+	PolicyApprovalStatus string `json:"policyApprovalStatus"`
+	Comment              string `json:"comment"`
 }

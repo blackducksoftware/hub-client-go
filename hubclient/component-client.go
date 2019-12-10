@@ -19,7 +19,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const apiComponents = "/api/components"
+const (
+	apiComponents  = "/api/components"
+	remediatingApi = "/remediating"
+)
 
 func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
 	componentURL := c.baseURL + apiComponents
@@ -95,4 +98,16 @@ func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.Componen
 	}
 
 	return &componentVersion, nil
+}
+
+func (c *Client) GetComponentVersionRemediation(componentVersionHref string) (*hubapi.ComponentRemediation, error) {
+	var componentRemediation hubapi.ComponentRemediation
+
+	err := c.HttpGetJSON(componentVersionHref+remediatingApi, &componentRemediation, 200)
+
+	if err != nil {
+		return nil, AnnotateHubClientError(err, "Error trying to retrieve component remediation advice")
+	}
+
+	return &componentRemediation, nil
 }
