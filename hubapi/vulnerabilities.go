@@ -14,28 +14,52 @@
 
 package hubapi
 
-// Data representation of the values returned by /api/vulnerabilities/$vulerability
+import "time"
+
+type bdJsonVulnerabilityV4 struct{}
+
+func (bdJsonVulnerabilityV4) GetMimeType() string {
+	return "application/vnd.blackducksoftware.vulnerability-4+json"
+}
+
+// Common fields that used in more than one place
+type VulnerabilityBase struct {
+	VulnerabilityName          string     `json:"vulnerabilityName"`
+	Description                string     `json:"description"`
+	VulnerabilityPublishedDate *time.Time `json:"vulnerabilityPublishedDate"`
+	VulnerabilityUpdatedDate   *time.Time `json:"vulnerabilityUpdatedDate"`
+	BaseScore                  float32    `json:"baseScore"`
+	ExploitabilitySubscore     float32    `json:"exploitabilitySubscore"`
+	ImpactSubscore             float32    `json:"impactSubscore"`
+	Source                     string     `json:"source"`
+	Severity                   string     `json:"severity"`
+	CweId                      string     `json:"cweId,omitempty"`
+}
+
+// Data representation of the values returned by
+// /api/vulnerabilities/$vulnerability
 type Vulnerability struct {
-	Source               string `json:"source"`
-	Name                 string `json:"name"`
-	Title                string `json:"title"`
-	Description          string `json:"description"`
-	TechnicalDescription string `json:"technicalDescription"`
-	PublishedDate        string `json:"publishedDate"`
-	UpdatedDate          string `json:"updatedDate"`
-	DisclosureDate       string `json:"disclosureDate"`
-	Solution             string `json:"solution"`
-	Severity             string `json:"severity"`
-	CVSS2                CVSS   `json:"cvss2"`
-	CVSS3                CVSS   `json:"cvss3"`
-	UseCVSS3             bool   `json:"useCvss3"`
-	ZeroDay              bool   `json:"zeroDay"`
-	UnderReview          bool   `json:"underReview"`
-	ParentAdvisory       bool   `json:"parentAdvisory"`
-	Credit               string `json:"credit"`
-	Workaround           string `json:"workaround"`
-	VendorFixDate        string `json:"vendorFixDate"`
-	Meta                 Meta   `json:"_meta"`
+	bdJsonVulnerabilityV4
+	Source               string     `json:"source"`
+	Name                 string     `json:"name"`
+	Title                string     `json:"title"`
+	Description          string     `json:"description"`
+	TechnicalDescription string     `json:"technicalDescription"`
+	PublishedDate        *time.Time `json:"publishedDate"`
+	UpdatedDate          *time.Time `json:"updatedDate"`
+	DisclosureDate       *time.Time `json:"disclosureDate"`
+	Solution             string     `json:"solution"`
+	Severity             string     `json:"severity"`
+	CVSS2                CVSS       `json:"cvss2"`
+	CVSS3                CVSS       `json:"cvss3"`
+	UseCVSS3             bool       `json:"useCvss3"`
+	ZeroDay              bool       `json:"zeroDay"`
+	UnderReview          bool       `json:"underReview"`
+	ParentAdvisory       bool       `json:"parentAdvisory"`
+	Credit               string     `json:"credit"`
+	Workaround           string     `json:"workaround"`
+	VendorFixDate        *time.Time `json:"vendorFixDate"`
+	Meta                 Meta       `json:"_meta"`
 }
 
 type CVSS struct {
@@ -60,4 +84,22 @@ type VulnerabilityMetrics struct {
 	RemediationLevel string  `json:"remediationLevel"`
 	ReportConfidence string  `json:"reportConfidence"`
 	Score            float32 `json:"score"`
+}
+
+// Common Weakness Enumeration endpoint result -- retrieved from /api/cwes/{cweId}
+// Links: "sources"
+type CweDetails struct {
+	bdJsonVulnerabilityV4
+	CweId               string              `json:"id"`
+	Name                string              `json:"name"`
+	Description         string              `json:"description"`
+	ExtendedDescription string              `json:"extendedDescription"`
+	CommonConsequences  []CommonConsequence `json:"commonConsequences"`
+	Meta                Meta                `json:"_meta"`
+}
+
+type CommonConsequence struct {
+	Note             string   `json:"note"`
+	Scopes           []string `json:"scopes"`
+	TechnicalImpacts []string `json:"technicalImpacts"`
 }

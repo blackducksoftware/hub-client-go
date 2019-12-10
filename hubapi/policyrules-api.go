@@ -22,12 +22,20 @@ import (
 	"time"
 )
 
+type bdJsonPolicyV5 struct{}
+
+func (bdJsonPolicyV5) GetMimeType() string {
+	return "application/vnd.blackducksoftware.policy-5+json"
+}
+
 type PolicyRuleList struct {
+	bdJsonPolicyV5
 	ItemsListBase
 	Items []PolicyRule `json:"items"`
 }
 
 type PolicyRule struct {
+	bdJsonPolicyV5
 	Name          string           `json:"name"`
 	Description   string           `json:"description"`
 	Enabled       bool             `json:"enabled"`
@@ -60,6 +68,7 @@ type ExpressionParameter struct {
 }
 
 type PolicyRuleRequest struct {
+	bdJsonPolicyV5
 	Name        string           `json:"name"`
 	Description string           `json:"description"`
 	Enabled     bool             `json:"enabled"`

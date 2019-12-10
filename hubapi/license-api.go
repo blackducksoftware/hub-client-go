@@ -15,6 +15,7 @@
 package hubapi
 
 type ComplexLicense struct {
+	bdJsonComponentDetailV5
 	Name                 string           `json:"name"`
 	Ownership            string           `json:"ownership"`
 	CodeSharing          string           `json:"codeSharing"`
