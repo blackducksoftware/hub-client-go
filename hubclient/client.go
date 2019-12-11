@@ -30,13 +30,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type HubClientDebug uint16
-
-const (
-	HubClientDebugTimings HubClientDebug = 1 << iota
-	HubClientDebugContent
-)
-
 // Client will need to support CSRF tokens for session-based auth for Hub 4.1.x (or was it 4.0?)
 type Client struct {
 	httpClient    *http.Client
@@ -130,14 +123,14 @@ func readBytes(readCloser io.ReadCloser) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func validateHTTPResponse(resp *http.Response, expectedStatusCode int) error {
+func validateHTTPResponse(resp *http.Response, expectedStatusCode int, debugFlags HubClientDebug) error {
 	statusCode := 0
 	if resp != nil {
 		statusCode = resp.StatusCode
 	}
 
 	if statusCode != expectedStatusCode { // Should this be a list at some point?
-		body := readResponseBody(resp)
+		body := readResponseBody(resp, debugFlags)
 		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of a %d", statusCode, expectedStatusCode))
 	}
 
@@ -146,9 +139,7 @@ func validateHTTPResponse(resp *http.Response, expectedStatusCode int) error {
 
 func (c *Client) processResponse(resp *http.Response, result interface{}, expectedStatusCode int) error {
 
-	var bodyBytes []byte
-
-	if err := validateHTTPResponse(resp, expectedStatusCode); err != nil {
+	if err := validateHTTPResponse(resp, expectedStatusCode, c.debugFlags); err != nil {
 		return AnnotateHubClientError(err, "error validating HTTP Response")
 	}
 
@@ -162,11 +153,7 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error reading HTTP Response: %+v", err))
 	}
 
-	if c.debugFlags&HubClientDebugContent != 0 {
-		log.Debugf("START DEBUG: --------------------------------------------------------------------------- \n\n")
-		log.Debugf("TEXT OF RESPONSE: \n %s", string(bodyBytes[:]))
-		log.Debugf("END DEBUG: --------------------------------------------------------------------------- \n\n\n\n")
-	}
+	debugReportBytes(bodyBytes, c.debugFlags)
 
 	if err := json.Unmarshal(bodyBytes, result); err != nil {
 		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error parsing HTTP Response: %+v", err))
@@ -193,22 +180,21 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 	if len(mimetypes) > 0 {
 		for _, mimetype := range mimetypes {
 			if mimetype != "" {
-				req.Header.Add("Accept", mimetype)
+				req.Header.Add(HeaderNameAccept, mimetype)
 			}
 		}
 	} else if bdJsonType := hubapi.GetMimeType(result); bdJsonType != "" {
-		req.Header.Add("Accept", bdJsonType)
+		req.Header.Add(HeaderNameAccept, bdJsonType)
 	}
 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp)
+		body := readResponseBody(resp, c.debugFlags)
 		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from %s: %+v", url, err))
 	}
 
-	httpElapsed := time.Since(httpStart)
-
 	if c.debugFlags&HubClientDebugTimings != 0 {
+		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
@@ -243,13 +229,12 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp)
+		body := readResponseBody(resp, c.debugFlags)
 		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from PUT to %s: %+v", url, err))
 	}
 
-	httpElapsed := time.Since(httpStart)
-
 	if c.debugFlags&HubClientDebugTimings != 0 {
+		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
@@ -283,14 +268,14 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
+
 	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp)
+		body := readResponseBody(resp, c.debugFlags)
 		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err))
 	}
 
-	httpElapsed := time.Since(httpStart)
-
 	if c.debugFlags&HubClientDebugTimings != 0 {
+		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
@@ -325,17 +310,17 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	req.Header.Set(HeaderNameContentType, contentType)
 
 	c.setAuthHeaders(req)
+
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp)
+		body := readResponseBody(resp, c.debugFlags)
 		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err))
 	}
 
-	httpElapsed := time.Since(httpStart)
-
 	if c.debugFlags&HubClientDebugTimings != 0 {
+		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
@@ -366,14 +351,14 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 	log.Debugf("DELETE Request: %+v.", req)
 
 	httpStart := time.Now()
+
 	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp)
+		body := readResponseBody(resp, c.debugFlags)
 		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from DELETE to %s: %+v", url, err))
 	}
 
-	httpElapsed := time.Since(httpStart)
-
 	if c.debugFlags&HubClientDebugTimings != 0 {
+		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP DELETE ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
@@ -437,21 +422,20 @@ func (c *Client) GetPage(link string, options *hubapi.GetListOptions, list inter
 	return nil
 }
 
-func readResponseBody(resp *http.Response) []byte {
-
-	var bodyBytes []byte
-	var err error
+func readResponseBody(resp *http.Response, debugFlags HubClientDebug) (bodyBytes []byte) {
 
 	if resp == nil {
 		log.Errorf("Empty HTTP Response")
 		return nil
 	}
 
+	var err error
 	if bodyBytes, err = readBytes(resp.Body); err != nil {
 		log.Errorf("Error reading HTTP Response: %+v.", err)
 	}
 
-	log.Debugf("TEXT OF RESPONSE: \n %s", string(bodyBytes[:]))
+	debugReportBytes(bodyBytes, debugFlags)
+
 	return bodyBytes
 }
 
