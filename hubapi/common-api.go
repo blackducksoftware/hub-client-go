@@ -86,18 +86,26 @@ type GetListOptions struct {
 // Parameters implements the URLParameters interface.
 func (glo *GetListOptions) Parameters() map[string]string {
 	params := make(map[string]string)
+	if glo == nil {
+		return params
+	}
+
 	if glo.Limit != nil {
 		params["limit"] = fmt.Sprintf("%d", *glo.Limit)
 	}
+
 	if glo.Offset != nil {
 		params["offset"] = fmt.Sprintf("%d", *glo.Offset)
 	}
+
 	if glo.Sort != nil {
 		params["sort"] = *glo.Sort
 	}
+
 	if glo.Q != nil {
 		params["q"] = *glo.Q
 	}
+
 	return params
 }
 

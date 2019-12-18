@@ -38,6 +38,10 @@ func ParameterString(params URLParameters) string {
 
 	dict := params.Parameters()
 
+	if len(dict) == 0 {
+		return ""
+	}
+
 	var keys []string
 	for k := range dict {
 		keys = append(keys, k)
