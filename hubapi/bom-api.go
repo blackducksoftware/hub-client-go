@@ -16,10 +16,12 @@ package hubapi
 
 import "time"
 
+const ContentTypeBdBomV6 = "application/vnd.blackducksoftware.bill-of-materials-6+json"
+
 type bdJsonBomV6 struct{}
 
 func (bdJsonBomV6) GetMimeType() string {
-	return "application/vnd.blackducksoftware.bill-of-materials-6+json"
+	return ContentTypeBdBomV6
 }
 
 type BomComponentList struct {

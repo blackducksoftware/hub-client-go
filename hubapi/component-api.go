@@ -16,16 +16,21 @@ package hubapi
 
 import "time"
 
+const (
+	ContentTypeBdComponentDetailV4 = "application/vnd.blackducksoftware.component-detail-4+json"
+	ContentTypeBdComponentDetailV5 = "application/vnd.blackducksoftware.component-detail-5+json"
+)
+
 type bdJsonComponentDetailV4 struct{}
 
 func (bdJsonComponentDetailV4) GetMimeType() string {
-	return "application/vnd.blackducksoftware.component-detail-4+json"
+	return ContentTypeBdComponentDetailV4
 }
 
 type bdJsonComponentDetailV5 struct{}
 
 func (bdJsonComponentDetailV5) GetMimeType() string {
-	return "application/vnd.blackducksoftware.component-detail-5+json"
+	return ContentTypeBdComponentDetailV5
 }
 
 type ComponentList struct {

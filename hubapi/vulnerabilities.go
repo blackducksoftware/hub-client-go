@@ -16,10 +16,12 @@ package hubapi
 
 import "time"
 
+const ContentTypeBdVulnerabilityV4 = "application/vnd.blackducksoftware.vulnerability-4+json"
+
 type bdJsonVulnerabilityV4 struct{}
 
 func (bdJsonVulnerabilityV4) GetMimeType() string {
-	return "application/vnd.blackducksoftware.vulnerability-4+json"
+	return ContentTypeBdVulnerabilityV4
 }
 
 // Common fields that used in more than one place

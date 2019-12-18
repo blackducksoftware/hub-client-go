@@ -22,10 +22,12 @@ import (
 	"time"
 )
 
+const ContentTypeBdPolicyV5 = "application/vnd.blackducksoftware.policy-5+json"
+
 type bdJsonPolicyV5 struct{}
 
 func (bdJsonPolicyV5) GetMimeType() string {
-	return "application/vnd.blackducksoftware.policy-5+json"
+	return ContentTypeBdPolicyV5
 }
 
 type PolicyRuleList struct {

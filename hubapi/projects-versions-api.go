@@ -4,10 +4,12 @@ import "time"
 
 // items related to  /api/projects/{projectId}/versions endpoint
 
+const ContentTypeBdProjectDetailV5 = "application/vnd.blackducksoftware.project-detail-5+json"
+
 type bdJsonProjectDetailV5 struct{}
 
 func (bdJsonProjectDetailV5) GetMimeType() string {
-	return "application/vnd.blackducksoftware.project-detail-5+json"
+	return ContentTypeBdProjectDetailV5
 }
 
 type ProjectVersionList struct {

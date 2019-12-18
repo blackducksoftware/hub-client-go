@@ -33,10 +33,12 @@ const (
 	ProjectVersionDistributionOpenSource = "OPENSOURCE"
 )
 
+const ContentTypeBdProjectDetailV4 = "application/vnd.blackducksoftware.project-detail-4+json"
+
 type bdJsonProjectDetailV4 struct{}
 
 func (bdJsonProjectDetailV4) GetMimeType() string {
-	return "application/vnd.blackducksoftware.project-detail-4+json"
+	return ContentTypeBdProjectDetailV4
 }
 
 type ProjectList struct {
