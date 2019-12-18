@@ -111,10 +111,14 @@ func (c *Client) SetTimeout(timeout time.Duration) {
 	c.httpClient.Timeout = timeout
 }
 
-func readBytes(readCloser io.ReadCloser) ([]byte, error) {
+func readBytes(readCloser io.ReadCloser, expected int64) ([]byte, error) {
 
 	defer readCloser.Close()
-	buf := new(bytes.Buffer)
+
+	buf := bytes.Buffer{}
+	if expected > 0 && int(expected) > 0 {
+		buf.Grow(int(expected))
+	}
 
 	if _, err := buf.ReadFrom(readCloser); err != nil {
 		return nil, TraceHubClientError(err)
@@ -148,7 +152,7 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 		return nil
 	}
 
-	bodyBytes, err := readBytes(resp.Body)
+	bodyBytes, err := readBytes(resp.Body, resp.ContentLength)
 	if err != nil {
 		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error reading HTTP Response: %+v", err))
 	}
@@ -206,7 +210,7 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 	var resp *http.Response
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP STARTING PUT REQUEST: %s", url)
+		log.Debugf("DEBUG HTTP STARTING %s REQUEST: %s", http.MethodPut, url)
 	}
 
 	// Encode json
@@ -246,7 +250,7 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 	var resp *http.Response
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP STARTING POST REQUEST: %s", url)
+		log.Debugf("DEBUG HTTP STARTING %s REQUEST: %s", http.MethodPost, url)
 	}
 
 	// Encode json
@@ -276,7 +280,7 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
 		httpElapsed := time.Since(httpStart)
-		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms. -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
 	if err := c.processResponse(resp, nil, expectedStatusCode); err != nil {
@@ -430,7 +434,7 @@ func readResponseBody(resp *http.Response, debugFlags HubClientDebug) (bodyBytes
 	}
 
 	var err error
-	if bodyBytes, err = readBytes(resp.Body); err != nil {
+	if bodyBytes, err = readBytes(resp.Body, resp.ContentLength); err != nil {
 		log.Errorf("Error reading HTTP Response: %+v.", err)
 	}
 
