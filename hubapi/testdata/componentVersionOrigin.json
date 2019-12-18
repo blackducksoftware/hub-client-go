@@ -1,0 +1,53 @@
+{
+  "versionName": "4.0",
+  "releasedOn": "2013-11-27T10:00:00.000Z",
+  "source": "KB",
+  "originName": "maven",
+  "originId": "org.apache.commons:commons-collections4:4.0",
+  "_meta": {
+    "allow": [
+      "GET"
+    ],
+    "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/967c343d-31d1-4aeb-905b-75192bb8a114",
+    "links": [
+      {
+        "rel": "version",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923"
+      },
+      {
+        "rel": "vulnerabilities",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/vulnerabilities"
+      },
+      {
+        "rel": "direct-dependencies",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/direct-dependencies"
+      },
+      {
+        "rel": "file-licenses",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/file-licenses"
+      },
+      {
+        "rel": "file-licenses-fuzzy",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/file-licenses-fuzzy"
+      },
+      {
+        "rel": "file-copyrights",
+        "href": "https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/file-copyrights"
+      }
+    ]
+  },
+  "license": {
+    "type": "DISJUNCTIVE",
+    "licenses": [
+      {
+        "license": "https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+        "licenses": [],
+        "name": "Apache License 2.0",
+        "ownership": "OPEN_SOURCE",
+        "licenseDisplay": "Apache License 2.0",
+        "codeSharing": "PERMISSIVE"
+      }
+    ],
+    "licenseDisplay": "Apache License 2.0"
+  }
+}

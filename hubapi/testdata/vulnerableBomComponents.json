@@ -1,0 +1,117 @@
+{
+  "totalCount":5,
+  "items":[
+    {
+      "componentVersion":"https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923",
+      "componentName":"Apache Commons Collections",
+      "componentVersionName":"4.0",
+      "componentVersionOriginName":"maven",
+      "componentVersionOriginId":"org.apache.commons:commons-collections4:4.0",
+      "license":{
+        "type":"DISJUNCTIVE",
+        "licenses":[
+          {
+            "license":"https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses":[
+
+            ],
+            "name":"Apache License 2.0",
+            "ownership":"OPEN_SOURCE",
+            "licenseDisplay":"Apache License 2.0",
+            "codeSharing":"PERMISSIVE"
+          }
+        ],
+        "licenseDisplay":"Apache License 2.0"
+      },
+      "vulnerabilityWithRemediation":{
+        "vulnerabilityName":"BDSA-2015-0001",
+        "description":"Apache Commons Collections has a security flaw in the `InvokeTransformer` class whereby serializable collections can be built that execute arbitrary Java code.  An attacker can achieve remote code execution (*RCE*) when untrusted user-provided objects are deserialized by applications that use Commons Collections.",
+        "vulnerabilityPublishedDate":"2017-04-03T10:45:40.596Z",
+        "vulnerabilityUpdatedDate":"2018-07-19T10:28:45.447Z",
+        "baseScore":10.0,
+        "exploitabilitySubscore":10.0,
+        "impactSubscore":10.0,
+        "source":"BDSA",
+        "severity":"HIGH",
+        "remediationStatus":"NEW",
+        "cweId":"CWE-502",
+        "remediationCreatedAt":"2019-01-23T08:39:45.316Z",
+        "remediationUpdatedAt":"2019-01-23T08:39:45.316Z"
+      },
+      "_meta":{
+        "links":[
+          {
+            "rel":"matched-files",
+            "href":"https://SERVER/api/projects/6c973848-ab0d-4d1b-8e04-ab5070ea1f20/versions/75ea22ab-ccf6-4876-becc-4d38f5e972dd/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/967c343d-31d1-4aeb-905b-75192bb8a114/matched-files"
+          },
+          {
+            "rel":"vulnerabilities",
+            "href":"https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/vulnerabilities"
+          }
+        ]
+      }
+    },
+    {
+      "componentVersion":"https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923",
+      "componentName":"Apache Commons Collections",
+      "componentVersionName":"4.0",
+      "componentVersionOriginName":"maven",
+      "componentVersionOriginId":"org.apache.commons:commons-collections4:4.0",
+      "license":{
+        "type":"DISJUNCTIVE",
+        "licenses":[
+          {
+            "license":"https://SERVER/api/licenses/7cae335f-1193-421e-92f1-8802b4243e93",
+            "licenses":[
+
+            ],
+            "name":"Apache License 2.0",
+            "ownership":"OPEN_SOURCE",
+            "licenseDisplay":"Apache License 2.0",
+            "codeSharing":"PERMISSIVE"
+          }
+        ],
+        "licenseDisplay":"Apache License 2.0"
+      },
+      "vulnerabilityWithRemediation":{
+        "vulnerabilityName":"BDSA-2015-0753",
+        "description":"The apache commons collection (ACC) library, when utilized in an application that deserializes untrusted user input, is vulnerable to a remote attacker executing arbitrary code.",
+        "vulnerabilityPublishedDate":"2019-05-03T15:04:31.522Z",
+        "vulnerabilityUpdatedDate":"2019-05-03T15:04:31.509Z",
+        "baseScore":10.0,
+        "exploitabilitySubscore":10.0,
+        "impactSubscore":10.0,
+        "source":"BDSA",
+        "severity":"HIGH",
+        "remediationStatus":"NEW",
+        "cweId":"CWE-502",
+        "remediationCreatedAt":"2019-01-23T08:39:45.315Z",
+        "remediationUpdatedAt":"2019-05-03T16:31:14.939Z"
+      },
+      "_meta":{
+        "links":[
+          {
+            "rel":"matched-files",
+            "href":"https://SERVER/api/projects/6c973848-ab0d-4d1b-8e04-ab5070ea1f20/versions/75ea22ab-ccf6-4876-becc-4d38f5e972dd/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origins/967c343d-31d1-4aeb-905b-75192bb8a114/matched-files"
+          },
+          {
+            "rel":"vulnerabilities",
+            "href":"https://SERVER/api/components/87ac8642-f639-46fe-ab2b-66e89cca0130/versions/7b17b1ca-9ff3-4709-9336-6999d6f38923/origin/967c343d-31d1-4aeb-905b-75192bb8a114/vulnerabilities"
+          }
+        ]
+      }
+    }
+  ],
+  "appliedFilters":[
+
+  ],
+  "_meta":{
+    "allow":[
+      "GET"
+    ],
+    "href":"https://SERVER/api/project/6c973848-ab0d-4d1b-8e04-ab5070ea1f20/versions/75ea22ab-ccf6-4876-becc-4d38f5e972dd/vulnerable-bom-components",
+    "links":[
+
+    ]
+  }
+}
