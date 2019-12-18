@@ -80,23 +80,6 @@ type ComponentVersionOrigin struct {
 	OriginID string `json:"originId"`
 }
 
-type ComponentVersionVulnerabilityList struct {
-	bdJsonVulnerabilityV4
-	ItemsListBase
-	Items []ComponentVersionVulnerability `json:"items"`
-}
-
-type ComponentVersionVulnerability struct {
-	VulnerabilityBase
-	AccessVector          string `json:"accessVector"`
-	AccessComplexity      string `json:"accessComplexity"`
-	Authentication        string `json:"authentication"`
-	ConfidentialityImpact string `json:"confidentialityImpact"`
-	IntegrityImpact       string `json:"integrityImpact"`
-	AvailabilityImpact    string `json:"availabilityImpact"`
-	Meta                  Meta   `json:"_meta"`
-}
-
 // returned by "references" component meta link
 type ComponentProjectReferenceList struct {
 	bdJsonApplicationJson // TODO get the type, nothing in documentation

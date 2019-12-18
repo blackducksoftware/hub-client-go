@@ -64,6 +64,8 @@ type BomComponent struct {
 	Meta                   Meta                 `json:"_meta"`
 }
 
+// "vulnerable-components" link under projects api, link ends with "/vulnerable-bom-components"
+// GET /api/projects/{projectId}/versions/{projectVersionId}/vulnerable-bom-components
 type BomVulnerableComponentList struct {
 	bdJsonBomV6
 	ItemsListBase
@@ -83,11 +85,52 @@ type BomVulnerableComponent struct {
 }
 
 type VulnerabilityWithRemediation struct {
-	VulnerabilityBase
-	RemediationStatus    string     `json:"remediationStatus"`
-	RemediationCreatedAt *time.Time `json:"remediationCreatedAt"`
-	RemediationUpdatedAt *time.Time `json:"remediationUpdatedAt"`
+	VulnerabilityName          string     `json:"vulnerabilityName"`
+	Description                string     `json:"description"`
+	VulnerabilityPublishedDate *time.Time `json:"vulnerabilityPublishedDate"`
+	VulnerabilityUpdatedDate   *time.Time `json:"vulnerabilityUpdatedDate"`
+	BaseScore                  float32    `json:"baseScore"`
+	ExploitabilitySubscore     float32    `json:"exploitabilitySubscore"`
+	ImpactSubscore             float32    `json:"impactSubscore"`
+	Source                     string     `json:"source"`
+	Severity                   string     `json:"severity"`
+	CweId                      string     `json:"cweId,omitempty"`
+	RemediationStatus          string     `json:"remediationStatus"`
+	RemediationTargetAt        *time.Time `json:"remediationTargetAt"`
+	RemediationActualAt        *time.Time `json:"remediationActualAt"`
+	RemediationCreatedAt       *time.Time `json:"remediationCreatedAt"`
+	RemediationUpdatedAt       *time.Time `json:"remediationUpdatedAt"`
 }
+
+/*
+// I suspect this is from the old versions of API, I cannot trace it back --tandr
+type BomVulnerabilityList struct {
+	bdJsonVulnerabilityV4
+	ItemsListBase
+	Items []BomVulnerability `json:"items"`
+}
+
+type BomVulnerability struct {
+	VulnerabilityName          string     `json:"vulnerabilityName"`
+	Description                string     `json:"description"`
+	VulnerabilityPublishedDate *time.Time `json:"vulnerabilityPublishedDate"`
+	VulnerabilityUpdatedDate   *time.Time `json:"vulnerabilityUpdatedDate"`
+	BaseScore                  float32    `json:"baseScore"`
+	ExploitabilitySubscore     float32    `json:"exploitabilitySubscore"`
+	ImpactSubscore             float32    `json:"impactSubscore"`
+	Source                     string     `json:"source"`
+	Severity                   string     `json:"severity"`
+	CweId                      string     `json:"cweId,omitempty"`
+
+	AccessVector          string `json:"accessVector"`
+	AccessComplexity      string `json:"accessComplexity"`
+	Authentication        string `json:"authentication"`
+	ConfidentialityImpact string `json:"confidentialityImpact"`
+	IntegrityImpact       string `json:"integrityImpact"`
+	AvailabilityImpact    string `json:"availabilityImpact"`
+	Meta                  Meta   `json:"_meta"`
+}
+*/
 
 type BomRiskProfile struct {
 	Counts []BomRiskProfileItem `json:"counts"`

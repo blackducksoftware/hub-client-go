@@ -24,18 +24,12 @@ func (bdJsonVulnerabilityV4) GetMimeType() string {
 	return ContentTypeBdVulnerabilityV4
 }
 
-// Common fields that used in more than one place
-type VulnerabilityBase struct {
-	VulnerabilityName          string     `json:"vulnerabilityName"`
-	Description                string     `json:"description"`
-	VulnerabilityPublishedDate *time.Time `json:"vulnerabilityPublishedDate"`
-	VulnerabilityUpdatedDate   *time.Time `json:"vulnerabilityUpdatedDate"`
-	BaseScore                  float32    `json:"baseScore"`
-	ExploitabilitySubscore     float32    `json:"exploitabilitySubscore"`
-	ImpactSubscore             float32    `json:"impactSubscore"`
-	Source                     string     `json:"source"`
-	Severity                   string     `json:"severity"`
-	CweId                      string     `json:"cweId,omitempty"`
+// returned by (what I saw so far --tandr)
+// /api/component/xxx/version/yyy/vulnerabilities
+type VulnerabilitiesList struct {
+	bdJsonVulnerabilityV4
+	ItemsListBase
+	Items []Vulnerability `json:"items"`
 }
 
 // Data representation of the values returned by
@@ -50,35 +44,33 @@ type Vulnerability struct {
 	PublishedDate        *time.Time `json:"publishedDate"`
 	UpdatedDate          *time.Time `json:"updatedDate"`
 	DisclosureDate       *time.Time `json:"disclosureDate"`
+	ExploitPublishDate   *time.Time `json:"exploitPublishDate"`
+	SolutionDate         *time.Time `json:"solutionDate"`
 	Solution             string     `json:"solution"`
-	Severity             string     `json:"severity"`
-	CVSS2                CVSS       `json:"cvss2"`
-	CVSS3                CVSS       `json:"cvss3"`
+	Severity             string     `json:"severity"` //  [LOW, MEDIUM, HIGH, CRITICAL]
+	CVSS2                *CVSS      `json:"cvss2,omitempty"`
+	CVSS3                *CVSS      `json:"cvss3,omitempty"`
 	UseCVSS3             bool       `json:"useCvss3"`
-	ZeroDay              bool       `json:"zeroDay"`
-	UnderReview          bool       `json:"underReview"`
-	ParentAdvisory       bool       `json:"parentAdvisory"`
-	Credit               string     `json:"credit"`
-	Workaround           string     `json:"workaround"`
-	VendorFixDate        *time.Time `json:"vendorFixDate"`
+	OverallScore         float32    `json:"overallScore"`
+	Classifications      []string   `json:"classifications"`
 	Meta                 Meta       `json:"_meta"`
 }
 
 type CVSS struct {
-	BaseScore              float32              `json:"baseScore"`
-	ImpactSubscore         float32              `json:"impactSubscore"`
-	ExploitabilitySubscore float32              `json:"exploitabilitySubscore"`
-	AccessVector           string               `json:"accessVector"`
-	AccessComplexity       string               `json:"accessComplexity"`
-	Authentication         string               `json:"authentication"`
-	ConfidentialityImpact  string               `json:"confidentialityImpact"`
-	IntegrityImpact        string               `json:"integrityImpact"`
-	AvailabilityImpact     string               `json:"availabilityImpact"`
-	PrivilegesRequired     string               `json:"privilegesRequired"`
-	Scope                  string               `json:"scope"`
-	UserInteraction        string               `json:"userInteraction"`
-	TemporalMetrics        VulnerabilityMetrics `json:"temporalMetrics"`
-	Vector                 string               `json:"vector"`
+	BaseScore              float32               `json:"baseScore"`
+	ImpactSubscore         float32               `json:"impactSubscore"`
+	ExploitabilitySubscore float32               `json:"exploitabilitySubscore"`
+	AccessVector           string                `json:"accessVector"` // [LOCAL, ADJACENT_NETWORK, NETWORK]
+	AccessComplexity       string                `json:"accessComplexity"`
+	Authentication         string                `json:"authentication"`
+	ConfidentialityImpact  string                `json:"confidentialityImpact"`
+	IntegrityImpact        string                `json:"integrityImpact"`
+	AvailabilityImpact     string                `json:"availabilityImpact"`
+	PrivilegesRequired     string                `json:"privilegesRequired"`
+	Scope                  string                `json:"scope"`
+	UserInteraction        string                `json:"userInteraction"`
+	TemporalMetrics        *VulnerabilityMetrics `json:"temporalMetrics,omitempty"`
+	Vector                 string                `json:"vector"`
 }
 
 type VulnerabilityMetrics struct {
