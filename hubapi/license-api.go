@@ -14,17 +14,39 @@
 
 package hubapi
 
+import "time"
+
 type ComplexLicense struct {
-	bdJsonComponentDetailV5
 	Name                 string           `json:"name"`
 	Ownership            string           `json:"ownership"`
-	CodeSharing          string           `json:"codeSharing"`
 	LicenseType          string           `json:"type"`
 	LicenseDisplay       string           `json:"licenseDisplay"`
 	Licenses             []ComplexLicense `json:"licenses"`
 	License              string           `json:"license"`          // License URL
 	SpdxId               string           `json:"spdxId,omitempty"` // The ID of the license in the SPDX project’s database, if available
 	LicenseFamilySummary ResourceLink     `json:"licenseFamilySummary"`
+}
+
+type LicenseDetails struct {
+	bdJsonComponentDetailV5
+	Name           string       `json:"name"`
+	LicenseFamily  ResourceLink `json:"licenseFamily"`
+	Ownership      string       `json:"ownership"`
+	Notes          string       `json:"notes"`
+	ExpirationDate *time.Time   `json:"expirationDate"`
+
+	CreatedAt *time.Time `json:"createdAt"`
+	CreatedBy *User      `json:"createdBy"`
+
+	UpdatedAt *time.Time `json:"updatedAt"`
+	UpdatedBy *User      `json:"updatedBy"`
+
+	LicenseSource string `json:"licenseSource"`
+	SpdxId        string `json:"spdxId,omitempty"` // The ID of the license in the SPDX project’s database, if available
+
+	LicenseStatus   string     `json:"licenseStatus"`
+	StatusUpdatedAt *time.Time `json:"statusUpdatedAt"`
+	StatusUpdatedBy *User      `json:"statusUpdatedBy"`
 }
 
 type License struct {
