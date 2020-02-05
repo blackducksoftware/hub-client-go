@@ -28,6 +28,7 @@ type CodeLocation struct {
 	Name                 string     `json:"name"`
 	Type                 string     `json:"type"`
 	URL                  string     `json:"url"`
+	ScanSize             int32      `json:"scanSize"`
 	MappedProjectVersion string     `json:"mappedProjectVersion"`
 	CreatedAt            *time.Time `json:"createdAt"`
 	UpdatedAt            *time.Time `json:"updatedAt"`
