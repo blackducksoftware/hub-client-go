@@ -135,3 +135,36 @@ type RemediationInfo struct {
 	ReleasedOn         *time.Time `json:"releasedOn"`
 	VulnerabilityCount int        `json:"vulnerabilityCount"`
 }
+
+type VulnerabilityRisk struct {
+	Critical uint `json:"critical"`
+	High     uint `json:"high"`
+	Medium   uint `json:"medium"`
+	Low      uint `json:"low"`
+}
+
+type UpgradeGuidance struct {
+	Version                 string             `json:"version"`
+	VersionName             string             `json:"versionName"`
+	Origin                  string             `json:"origin"`
+	OriginName              string             `json:"originName"`
+	OriginExternalNamespace string             `json:"originExternalNamespace"`
+	OriginExternalId        string             `json:"originExternalId"`
+	VulnerabilityRisk       *VulnerabilityRisk `json:"vulnerabilityRisk, omitempty"`
+}
+
+type ComponentUpgradeGuidance struct {
+	bdJsonComponentDetailV5
+	Component               string           `json:"component"`
+	ComponentName           string           `json:"componentName"`
+	Version                 string           `json:"version"`
+	VersionName             string           `json:"versionName"`
+	Origin                  string           `json:"origin"`
+	OriginName              string           `json:"originName"`
+	OriginExternalNamespace string           `json:"originExternalNamespace"`
+	OriginExternalId        string           `json:"originExternalId"`
+	ShortTerm               *UpgradeGuidance `json:"shortTerm, omitempty"`
+	LongTerm                *UpgradeGuidance `json:"longTerm, omitempty"`
+	Meta                    Meta             `json:"_meta"`
+}
+
