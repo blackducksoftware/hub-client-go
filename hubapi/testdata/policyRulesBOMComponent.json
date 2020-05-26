@@ -1,0 +1,115 @@
+{
+  "totalCount": 2,
+  "items": [
+    {
+      "name": "Apache Ant",
+      "enabled": true,
+      "overridable": true,
+      "severity": "MAJOR",
+      "expression": {
+        "operator": "AND",
+        "expressions": [
+          {
+            "name": "SINGLE_VERSION",
+            "operation": "EQ",
+            "parameters": {
+              "values": [
+                "https://localhost/api/components/b3f578fd-f966-4953-9a8d-6cb28323e7d4/versions/e80b2e6d-1506-4639-80f6-fa9945e9af6e"
+              ],
+              "data": [
+                {
+                  "componentName": "Apache Ant",
+                  "componentUrl": "https://localhost/api/components/b3f578fd-f966-4953-9a8d-6cb28323e7d4",
+                  "componentVersionName": "1.7.1",
+                  "componentVersionUrl": "https://localhost/api/components/b3f578fd-f966-4953-9a8d-6cb28323e7d4/versions/e80b2e6d-1506-4639-80f6-fa9945e9af6e"
+                }
+              ]
+            },
+            "displayName": "Component"
+          }
+        ]
+      },
+      "createdAt": "2020-05-20T22:18:59.086Z",
+      "createdBy": "demo",
+      "createdByUser": "https://localhost/api/users/1f2ddd68-001e-4f63-8212-4286d987527e",
+      "updatedAt": "2020-05-20T22:18:59.086Z",
+      "updatedBy": "demo",
+      "updatedByUser": "https://localhost/api/users/1f2ddd68-001e-4f63-8212-4286d987527e",
+      "policyApprovalStatus": "IN_VIOLATION",
+      "_meta": {
+        "allow": [
+          "DELETE",
+          "GET",
+          "PUT"
+        ],
+        "href": "https://localhost/api/policy-rules/e1a48b5c-ca7e-4120-adde-0357d9ee42ac",
+        "links": []
+      }
+    },
+    {
+      "name": "No High Exploitable Vuns",
+      "enabled": true,
+      "overridable": true,
+      "severity": "MAJOR",
+      "expression": {
+        "operator": "AND",
+        "expressions": [
+          {
+            "name": "HIGH_SEVERITY_VULN_COUNT",
+            "operation": "GT",
+            "parameters": {
+              "values": [
+                "0"
+              ],
+              "data": [
+                {
+                  "data": 0
+                }
+              ]
+            },
+            "displayName": "High Severity Vulnerability Count"
+          },
+          {
+            "name": "VULN_LEVEL_EXPLOIT",
+            "operation": "EQ",
+            "parameters": {
+              "values": [
+                "TRUE"
+              ],
+              "data": [
+                {
+                  "data": true
+                }
+              ]
+            },
+            "displayName": "Exploit Available"
+          }
+        ]
+      },
+      "createdAt": "2020-01-21T18:35:57.080Z",
+      "createdBy": "demo",
+      "createdByUser": "https://localhost/api/users/1f2ddd68-001e-4f63-8212-4286d987527e",
+      "updatedAt": "2020-05-01T10:54:38.963Z",
+      "updatedBy": "demo",
+      "updatedByUser": "https://localhost/api/users/1f2ddd68-001e-4f63-8212-4286d987527e",
+      "policyApprovalStatus": "IN_VIOLATION",
+      "_meta": {
+        "allow": [
+          "DELETE",
+          "GET",
+          "PUT"
+        ],
+        "href": "https://localhost/api/policy-rules/74bf8e72-0a7e-464a-ac23-cc946d3f4e92",
+        "links": []
+      }
+    }
+  ],
+  "appliedFilters": [],
+  "_meta": {
+    "allow": [
+      "GET"
+    ],
+    "href": "https://localhost/api/projects/9f7a0dd9-4137-42cc-a59e-9d0abe85561a/versions/a06b9064-d14e-4bba-ae51-dc94cf54e27d/components/b3f578fd-f966-4953-9a8d-6cb28323e7d4/versions/e80b2e6d-1506-4639-80f6-fa9945e9af6e/policy-rules",
+    "links": []
+  }
+}

@@ -15,8 +15,6 @@
 package hubapi
 
 import (
-	"encoding/json"
-	"fmt"
 	"reflect"
 	"strings"
 	"time"
@@ -66,7 +64,7 @@ type Expression struct {
 
 type ExpressionParameter struct {
 	Values []string                 `json:"values"`
-	Data   []map[string]IntOrString `json:"data"`
+	Data   []map[string]interface{} `json:"data"`
 }
 
 type PolicyRuleRequest struct {
@@ -79,38 +77,12 @@ type PolicyRuleRequest struct {
 	Severity    string           `json:"severity"`
 }
 
-type IntOrString struct {
-	Type   Type   `json:"type"`
-	IntVal int32  `json:"intVal"`
-	StrVal string `json:"strVal"`
-}
-
 type Type int
 
 const (
 	Int    Type = iota // The IntOrString holds an int.
 	String             // The IntOrString holds a string.
 )
-
-func (intstr *IntOrString) UnmarshalJSON(value []byte) error {
-	if value[0] == '"' {
-		intstr.Type = String
-		return json.Unmarshal(value, &intstr.StrVal)
-	}
-	intstr.Type = Int
-	return json.Unmarshal(value, &intstr.IntVal)
-}
-
-func (intstr IntOrString) MarshalJSON() ([]byte, error) {
-	switch intstr.Type {
-	case Int:
-		return json.Marshal(intstr.IntVal)
-	case String:
-		return json.Marshal(intstr.StrVal)
-	default:
-		return []byte{}, fmt.Errorf("impossible IntOrString.Type")
-	}
-}
 
 func (pr *PolicyRule) IsEqual(obj *PolicyRule) bool {
 	if !strings.EqualFold(pr.Name, obj.Name) {
