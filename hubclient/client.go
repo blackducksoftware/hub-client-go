@@ -39,6 +39,7 @@ type Client struct {
 	haveCsrfToken bool
 	csrfToken     string
 	debugFlags    HubClientDebug
+	headerValues  map[string]string
 }
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
@@ -67,6 +68,7 @@ func NewWithClient(baseURL string, debugFlags HubClientDebug, httpClient *http.C
 		baseURL:      baseURL,
 		useAuthToken: false,
 		debugFlags:   debugFlags,
+		headerValues: make(map[string]string),
 	}, nil
 }
 
@@ -86,6 +88,7 @@ func NewWithTokenAndClient(baseURL string, authToken string, debugFlags HubClien
 		authToken:    authToken,
 		useAuthToken: true,
 		debugFlags:   debugFlags,
+		headerValues: make(map[string]string),
 	}, nil
 }
 
@@ -179,7 +182,7 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http get request for %s: %+v", url, err))
 	}
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
 
 	if len(mimetypes) > 0 {
 		for _, mimetype := range mimetypes {
@@ -228,7 +231,7 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
 	log.Debugf("PUT Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -268,7 +271,8 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
+
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -313,7 +317,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
 
 	log.Debugf("POST Request: %+v.", req)
 
@@ -351,7 +355,8 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
+
 	log.Debugf("DELETE Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -367,6 +372,14 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 	}
 
 	return AnnotateHubClientErrorf(c.processResponse(resp, nil, expectedStatusCode), "unable to process response from DELETE to %s", url)
+}
+
+// Applies authentication headers (see setAuthHeaders) and also applies any custom header values to the provided request
+func (c *Client) applyHeaderValues(request *http.Request) {
+	for key, value := range c.headerValues {
+		request.Header.Set(key, value)
+	}
+	c.setAuthHeaders(request)
 }
 
 func (c *Client) setAuthHeaders(request *http.Request) {
@@ -407,6 +420,16 @@ func (c *Client) ForEachPage(link string, listOptions *hubapi.GetListOptions, li
 	}
 
 	return err
+}
+
+// Sets header values to use for any subsequent requests by this client
+func (c *Client) SetHeaderValue(key string, value string) {
+	c.headerValues[key] = value
+}
+
+// Clears a previously set header value for this client
+func (c *Client) ClearHeaderValue(key string) {
+	delete(c.headerValues, key)
 }
 
 func resetList(v interface{}) {
