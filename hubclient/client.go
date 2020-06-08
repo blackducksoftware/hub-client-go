@@ -88,7 +88,7 @@ func NewWithTokenAndClient(baseURL string, authToken string, debugFlags HubClien
 		authToken:       authToken,
 		useAuthToken:    true,
 		debugFlags:      debugFlags,
-		headerOverrides: make(map[string][]string),
+		headerOverrides: http.Header{},
 	}, nil
 }
 
