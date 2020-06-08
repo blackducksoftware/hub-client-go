@@ -68,7 +68,7 @@ func NewWithClient(baseURL string, debugFlags HubClientDebug, httpClient *http.C
 		baseURL:         baseURL,
 		useAuthToken:    false,
 		debugFlags:      debugFlags,
-		headerOverrides: make(map[string][]string),
+		headerOverrides: http.Header{},
 	}, nil
 }
 
