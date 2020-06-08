@@ -32,13 +32,14 @@ import (
 
 // Client will need to support CSRF tokens for session-based auth for Hub 4.1.x (or was it 4.0?)
 type Client struct {
-	httpClient    *http.Client
-	baseURL       string
-	authToken     string
-	useAuthToken  bool
-	haveCsrfToken bool
-	csrfToken     string
-	debugFlags    HubClientDebug
+	httpClient      *http.Client
+	baseURL         string
+	authToken       string
+	useAuthToken    bool
+	haveCsrfToken   bool
+	csrfToken       string
+	debugFlags      HubClientDebug
+	headerOverrides http.Header
 }
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
@@ -63,10 +64,11 @@ func NewWithClient(baseURL string, debugFlags HubClientDebug, httpClient *http.C
 	}
 
 	return &Client{
-		httpClient:   httpClient,
-		baseURL:      baseURL,
-		useAuthToken: false,
-		debugFlags:   debugFlags,
+		httpClient:      httpClient,
+		baseURL:         baseURL,
+		useAuthToken:    false,
+		debugFlags:      debugFlags,
+		headerOverrides: http.Header{},
 	}, nil
 }
 
@@ -81,11 +83,12 @@ func NewWithTokenAndClient(baseURL string, authToken string, debugFlags HubClien
 	}
 
 	return &Client{
-		httpClient:   httpClient,
-		baseURL:      baseURL,
-		authToken:    authToken,
-		useAuthToken: true,
-		debugFlags:   debugFlags,
+		httpClient:      httpClient,
+		baseURL:         baseURL,
+		authToken:       authToken,
+		useAuthToken:    true,
+		debugFlags:      debugFlags,
+		headerOverrides: http.Header{},
 	}, nil
 }
 
@@ -179,7 +182,7 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http get request for %s: %+v", url, err))
 	}
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
 
 	if len(mimetypes) > 0 {
 		for _, mimetype := range mimetypes {
@@ -228,7 +231,7 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
 	log.Debugf("PUT Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -268,7 +271,8 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
+
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -313,7 +317,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
 
 	log.Debugf("POST Request: %+v.", req)
 
@@ -351,7 +355,8 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.setAuthHeaders(req)
+	c.applyHeaderValues(req)
+
 	log.Debugf("DELETE Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -367,6 +372,20 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 	}
 
 	return AnnotateHubClientErrorf(c.processResponse(resp, nil, expectedStatusCode), "unable to process response from DELETE to %s", url)
+}
+
+// Applies authentication headers (see setAuthHeaders) and also applies any custom header values to the provided request
+func (c *Client) applyHeaderValues(request *http.Request) {
+	for key, values := range c.headerOverrides {
+		// remove any old values in the provided request header
+		request.Header.Del(key)
+		for _, value := range values {
+			// add the new values
+			request.Header.Add(key, value)
+		}
+
+	}
+	c.setAuthHeaders(request)
 }
 
 func (c *Client) setAuthHeaders(request *http.Request) {
@@ -407,6 +426,21 @@ func (c *Client) ForEachPage(link string, listOptions *hubapi.GetListOptions, li
 	}
 
 	return err
+}
+
+// Sets header override values for the provided key for any subsequent requests by this client
+func (c *Client) SetHeaderValue(key string, value string) {
+	c.headerOverrides.Set(key, value)
+}
+
+// Clears a previously set header override value for this client
+func (c *Client) DeleteHeaderValue(key string) {
+	c.headerOverrides.Del(key)
+}
+
+// Adds header override values for the provided key for any subsequent requests by this client
+func (c *Client) AddHeaderValue(key string, value string) {
+	c.headerOverrides.Add(key, value)
 }
 
 func resetList(v interface{}) {
