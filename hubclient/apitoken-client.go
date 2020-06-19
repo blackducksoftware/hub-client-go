@@ -85,12 +85,13 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 	log.Debug("Logged in with auth token successfully")
 
 	return &Client{
-		httpClient:    client,
-		baseURL:       baseURL,
-		authToken:     bearerTokenResponse.BearerToken,
-		useAuthToken:  true,
-		csrfToken:     csrf,
-		haveCsrfToken: true,
-		debugFlags:    debugFlags,
+		httpClient:      client,
+		baseURL:         baseURL,
+		authToken:       bearerTokenResponse.BearerToken,
+		useAuthToken:    true,
+		csrfToken:       csrf,
+		haveCsrfToken:   true,
+		debugFlags:      debugFlags,
+		headerOverrides: http.Header{},
 	}, nil
 }
