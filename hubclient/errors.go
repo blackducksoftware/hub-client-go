@@ -99,7 +99,7 @@ func HubClientErrorf(format string, args ...interface{}) error {
 	return err
 }
 
-func HubClientErrorfWithStatusCode(statusCode int, format string, args ...interface{}) error {
+func HubClientStatusCodeErrorf(statusCode int, format string, args ...interface{}) error {
 	newErr := errors.Errorf(format, args...)
 	err := &HubClientError{newErr, statusCode, HubResponseError{}}
 	return err
