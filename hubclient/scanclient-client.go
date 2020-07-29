@@ -41,7 +41,7 @@ func (c *Client) downloadScanClientHelper(path string, urlPath string) error {
 	if err != nil {
 		return AnnotateHubClientErrorf(err, "unable to http GET %s", urlPath)
 	} else if resp.StatusCode != http.StatusOK {
-		return HubClientErrorf("GET failed: received status != 200 from %s: %s", scanClientURL, resp.Status)
+		return HubClientStatusCodeErrorf(resp.StatusCode, "GET failed: received status != 200 from %s: %s", scanClientURL, resp.Status)
 	}
 
 	body := resp.Body
