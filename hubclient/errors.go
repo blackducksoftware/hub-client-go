@@ -98,3 +98,10 @@ func HubClientErrorf(format string, args ...interface{}) error {
 	err := &HubClientError{newErr, 0, HubResponseError{}}
 	return err
 }
+
+func HubClientErrorfWithStatusCode(format string, statusCode int, args ...interface{}) error {
+	newErr := errors.Errorf(format, args...)
+	err := &HubClientError{newErr, statusCode, HubResponseError{}}
+	return err
+}
+
