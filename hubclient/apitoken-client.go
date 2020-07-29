@@ -58,7 +58,7 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, HubClientErrorf("got a %d response instead of a %d", resp.StatusCode, http.StatusOK)
+		return nil, HubClientErrorf("got a %d response instead of a %d", resp.StatusCode, resp.StatusCode, http.StatusOK)
 	}
 
 	csrf := resp.Header.Get(HeaderNameCsrfToken)
