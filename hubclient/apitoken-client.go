@@ -63,7 +63,7 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 
 	csrf := resp.Header.Get(HeaderNameCsrfToken)
 	if csrf == "" {
-		return nil, newHubClientError(nil, resp, "CSRF token not found")
+		return nil, newHubClientError(nil, resp, "CSRF token not found", nil)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -79,7 +79,7 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 	}
 
 	if bearerTokenResponse.BearerToken == "" {
-		return nil, newHubClientError(body, resp, "bearer token not found")
+		return nil, newHubClientError(body, resp, "bearer token not found", nil)
 	}
 
 	log.Debug("Logged in with auth token successfully")

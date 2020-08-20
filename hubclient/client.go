@@ -138,7 +138,7 @@ func validateHTTPResponse(resp *http.Response, expectedStatusCode int, debugFlag
 
 	if statusCode != expectedStatusCode { // Should this be a list at some point?
 		body := readResponseBody(resp, debugFlags)
-		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of a %d", statusCode, expectedStatusCode))
+		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of a %d", statusCode, expectedStatusCode), nil)
 	}
 
 	return nil
@@ -157,13 +157,13 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 
 	bodyBytes, err := readBytes(resp.Body, resp.ContentLength)
 	if err != nil {
-		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error reading HTTP Response: %+v", err))
+		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error reading HTTP Response: %+v", err), err)
 	}
 
 	debugReportBytes(bodyBytes, c.debugFlags)
 
 	if err := json.Unmarshal(bodyBytes, result); err != nil {
-		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error parsing HTTP Response: %+v", err))
+		return newHubClientError(bodyBytes, resp, fmt.Sprintf("error parsing HTTP Response: %+v", err), err)
 	}
 
 	return nil
@@ -179,7 +179,7 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return newHubClientError(nil, nil, fmt.Sprintf("error creating http get request for %s: %+v", url, err))
+		return newHubClientError(nil, nil, fmt.Sprintf("error creating http get request for %s: %+v", url, err), err)
 	}
 
 	c.applyHeaderValues(req)
@@ -197,7 +197,7 @@ func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
 		body := readResponseBody(resp, c.debugFlags)
-		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from %s: %+v", url, err))
+		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from %s: %+v", url, err), err)
 	}
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
@@ -221,12 +221,12 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 	enc := json.NewEncoder(&buf)
 
 	if err := enc.Encode(&data); err != nil {
-		return newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err))
+		return newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
 	}
 
 	req, err := http.NewRequest(http.MethodPut, url, &buf)
 	if err != nil {
-		return newHubClientError(nil, nil, fmt.Sprintf("error creating http put request for %s: %+v", url, err))
+		return newHubClientError(nil, nil, fmt.Sprintf("error creating http put request for %s: %+v", url, err), err)
 	}
 
 	req.Header.Set(HeaderNameContentType, contentType)
@@ -237,7 +237,7 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
 		body := readResponseBody(resp, c.debugFlags)
-		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from PUT to %s: %+v", url, err))
+		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from PUT to %s: %+v", url, err), err)
 	}
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
@@ -261,12 +261,12 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 	enc := json.NewEncoder(&buf)
 
 	if err := enc.Encode(&data); err != nil {
-		return "", newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err))
+		return "", newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
 	}
 
 	req, err := http.NewRequest(http.MethodPost, url, &buf)
 	if err != nil {
-		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err))
+		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err), err)
 	}
 
 	req.Header.Set(HeaderNameContentType, contentType)
@@ -279,7 +279,7 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 
 	if resp, err = c.httpClient.Do(req); err != nil {
 		body := readResponseBody(resp, c.debugFlags)
-		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err))
+		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err), err)
 	}
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
@@ -307,12 +307,12 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	enc := json.NewEncoder(&buf)
 
 	if err := enc.Encode(&data); err != nil {
-		return "", newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err))
+		return "", newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
 	}
 
 	req, err := http.NewRequest(http.MethodPost, url, &buf)
 	if err != nil {
-		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err))
+		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err), err)
 	}
 
 	req.Header.Set(HeaderNameContentType, contentType)
@@ -324,7 +324,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
 		body := readResponseBody(resp, c.debugFlags)
-		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err))
+		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err), err)
 	}
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
@@ -350,7 +350,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	req, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte{}))
 	if err != nil {
-		return newHubClientError(nil, nil, fmt.Sprintf("error creating http delete request for %s: %+v", url, err))
+		return newHubClientError(nil, nil, fmt.Sprintf("error creating http delete request for %s: %+v", url, err), err)
 	}
 
 	req.Header.Set(HeaderNameContentType, contentType)
@@ -363,7 +363,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	if resp, err = c.httpClient.Do(req); err != nil {
 		body := readResponseBody(resp, c.debugFlags)
-		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from DELETE to %s: %+v", url, err))
+		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from DELETE to %s: %+v", url, err), err)
 	}
 
 	if c.debugFlags&HubClientDebugTimings != 0 {
@@ -477,7 +477,7 @@ func readResponseBody(resp *http.Response, debugFlags HubClientDebug) (bodyBytes
 	return bodyBytes
 }
 
-func newHubClientError(respBody []byte, resp *http.Response, message string) *HubClientError {
+func newHubClientError(respBody []byte, resp *http.Response, message string, underlyingErr error) *HubClientError {
 	var hre HubResponseError
 
 	// Do not try to read the body of the response or response itself
@@ -486,7 +486,17 @@ func newHubClientError(respBody []byte, resp *http.Response, message string) *Hu
 		statusCode = resp.StatusCode
 	}
 
-	hce := &HubClientError{errors.New(message), statusCode, hre}
+	var err error
+	if underlyingErr == nil {
+		err = errors.New(message)
+	} else {
+		err = &errorWithMessage{
+			err:     underlyingErr,
+			message: message,
+		}
+	}
+
+	hce := &HubClientError{err, statusCode, hre}
 	if len(respBody) > 0 {
 		if err := json.Unmarshal(respBody, &hre); err != nil {
 			hce = AnnotateHubClientError(hce, fmt.Sprintf("error unmarshaling HTTP response body: %+v", err)).(*HubClientError)
