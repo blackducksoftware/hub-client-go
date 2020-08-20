@@ -103,3 +103,10 @@ func HubClientStatusCodeErrorf(statusCode int, format string, args ...interface{
 	return err
 }
 
+type errorWithMessage struct {
+	err error
+	message string
+}
+
+func (e *errorWithMessage) Error() string  {return e.message}
+func (e *errorWithMessage) Cause() error  {return e.err}

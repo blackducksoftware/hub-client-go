@@ -1,2 +1,5 @@
 *~
 /hubclient/testserver.json
+
+# All of .idea folder
+/.idea/*
