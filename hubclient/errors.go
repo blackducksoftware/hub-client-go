@@ -28,6 +28,10 @@ func (e HubClientError) Error() string {
 	return e.Err.Error()
 }
 
+func (e HubClientError) Cause() error {
+	return errors.Cause(e.Err)
+}
+
 type HubResponseError struct {
 	ErrorMessage string                   `json:"errorMessage"`
 	Arguments    HubResponseErrorArgument `json:"arguments"`
