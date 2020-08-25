@@ -28,6 +28,10 @@ func (e HubClientError) Error() string {
 	return e.Err.Error()
 }
 
+func (e HubClientError) Cause() error {
+	return errors.Cause(e.Err)
+}
+
 type HubResponseError struct {
 	ErrorMessage string                   `json:"errorMessage"`
 	Arguments    HubResponseErrorArgument `json:"arguments"`
@@ -104,9 +108,9 @@ func HubClientStatusCodeErrorf(statusCode int, format string, args ...interface{
 }
 
 type errorWithMessage struct {
-	err error
+	err     error
 	message string
 }
 
-func (e *errorWithMessage) Error() string  {return e.message}
-func (e *errorWithMessage) Cause() error  {return e.err}
+func (e *errorWithMessage) Error() string { return e.message }
+func (e *errorWithMessage) Cause() error  { return e.err }
