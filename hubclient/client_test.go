@@ -101,7 +101,7 @@ func TestAddClearHeaders(t *testing.T) {
 	assert.Equal(t, "another value", req.Header.Get("Another-Header-Key"))
 
 	// clear the user agent extra header value
-	client.ClearHeaderValue("User-Agent")
+	client.DeleteHeaderValue("User-Agent")
 
 	// create a new request
 	req, err = http.NewRequest(http.MethodGet, client.baseURL+apiCurrentUser, nil)
