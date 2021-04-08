@@ -25,7 +25,7 @@ const (
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 	rapidScansURL := c.baseURL + apiDeveloperScans
-	result, err := c.HttpPostJSON(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScan, 200)
+	result, err := c.HttpPostJSON(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScan, 201)
 
 	if err != nil {
 		log.Errorf("Error kicking off a rapid scan.", err)
