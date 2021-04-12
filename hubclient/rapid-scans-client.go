@@ -17,10 +17,13 @@ package hubclient
 import (
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
+	"strconv"
 )
 
 const (
-	apiDeveloperScans = "/api/developer-scans"
+	apiDeveloperScans     = "/api/developer-scans"
+	headerBdMode          = "X-BD-MODE"
+	headerBdDocumentCount = "X-BD-DOCUMENT-COUNT"
 )
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
@@ -33,4 +36,29 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 	}
 
 	return nil, bdioUploadEndpoint
+}
+
+func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []string) error {
+	c.AddHeaderValue(headerBdMode, "append")
+	c.AddHeaderValue(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
+
+	for _, bdioContent := range bdioContents {
+		err := c.HttpPutJSON(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScan, 202)
+		if err != nil {
+			log.Errorf("Error uploading bdio files.", err)
+			return err
+		}
+	}
+
+	c.SetHeaderValue(headerBdMode, "finish")
+	err := c.HttpPutJSON(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScan, 202)
+	if err != nil {
+		log.Errorf("Error uploading bdio files.", err)
+		return err
+	}
+
+	c.DeleteHeaderValue(headerBdMode)
+	c.DeleteHeaderValue(headerBdDocumentCount)
+
+	return nil
 }
