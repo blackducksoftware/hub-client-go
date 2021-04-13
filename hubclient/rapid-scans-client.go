@@ -24,6 +24,8 @@ const (
 	apiDeveloperScans     = "/api/developer-scans"
 	headerBdMode          = "X-BD-MODE"
 	headerBdDocumentCount = "X-BD-DOCUMENT-COUNT"
+	bdModeAppend          = "append"
+	bdModeFinish          = "finish"
 )
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
@@ -39,7 +41,7 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 }
 
 func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []string) error {
-	c.AddHeaderValue(headerBdMode, "append")
+	c.AddHeaderValue(headerBdMode, bdModeAppend)
 	c.AddHeaderValue(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
 
 	for _, bdioContent := range bdioContents {
@@ -50,7 +52,7 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 		}
 	}
 
-	c.SetHeaderValue(headerBdMode, "finish")
+	c.SetHeaderValue(headerBdMode, bdModeFinish)
 	err := c.HttpPutJSON(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScan, 202)
 	if err != nil {
 		log.Errorf("Error uploading bdio files.", err)
