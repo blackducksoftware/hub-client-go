@@ -15,5 +15,46 @@
 package hubapi
 
 const (
-	ContentTypeRapidScan = "application/vnd.blackducksoftware.developer-scan-1-ld-2+json"
+	ContentTypeRapidScanRequest = "application/vnd.blackducksoftware.developer-scan-1-ld-2+json"
+	ContentTypeRapidScanResults = "application/vnd.blackducksoftware.scan-5+json"
 )
+
+type RapidScanResult struct {
+	Count          int                  `json:"totalCount"`
+	Components     []RapidScanComponent `json:"items"`
+	AppliedFilters []interface{}        `json:"appliedFilters"`
+	Meta           Meta                 `json:"_meta"`
+}
+type Policy struct {
+	Name     string `json:"policyName"`
+	Severity string `json:"policySeverity"`
+}
+type ComponentVulnerability struct {
+	Name              string   `json:"name"`
+	Description       string   `json:"description"`
+	Severity          string   `json:"vulnSeverity"`
+	OverallScore      float64  `json:"overallScore"`
+	ViolatingPolicies []Policy `json:"violatingPolicies"`
+	Meta              Meta     `json:"_meta"`
+}
+type ComponentLicense struct {
+	Name       string `json:"name"`
+	FamilyName string `json:"licenseFamilyName"`
+	Meta       Meta   `json:"_meta"`
+}
+type RapidScanComponent struct {
+	Name                           string                   `json:"componentName"`
+	Version                        string                   `json:"versionName"`
+	Identifier                     string                   `json:"componentIdentifier"`
+	ExternalId                     string                   `json:"externalId"`
+	OriginId                       string                   `json:"originId"`
+	ViolatingPolicies              []Policy                 `json:"violatingPolicies"`
+	ComponentViolatingPolicies     []Policy                 `json:"componentViolatingPolicies"`
+	Vulnerabilities                []ComponentVulnerability `json:"allVulnerabilities"`
+	Licenses                       []ComponentLicense       `json:"allLicenses"`
+	PolicyViolationVulnerabilities []ComponentVulnerability `json:"policyViolationVulnerabilities"`
+	PolicyViolationLicenses        []ComponentLicense       `json:"policyViolationLicenses"`
+	PartiallyEvaluatedPolicies     []string                 `json:"partiallyEvaluatedPolicies"`
+	NonEvaluatedPolicies           []string                 `json:"nonEvaluatedPolicies"`
+	Meta                           Meta                     `json:"_meta"`
+}
