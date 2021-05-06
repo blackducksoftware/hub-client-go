@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -31,14 +32,11 @@ const (
 	headerBdDocumentCount = "X-BD-DOCUMENT-COUNT"
 	bdModeAppend          = "append"
 	bdModeFinish          = "finish"
-	OkStatusCode          = 200
-	CreatedStatusCode     = 201
-	AcceptedStatusCode    = 202
 )
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 	rapidScansURL := c.baseURL + apiDeveloperScans
-	bdioUploadEndpoint, err := c.HttpPostString(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScanRequest, CreatedStatusCode)
+	bdioUploadEndpoint, err := c.HttpPostString(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScanRequest, http.StatusCreated)
 
 	if err != nil {
 		log.Errorf("Error kicking off a rapid scan.", err)
@@ -53,7 +51,7 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	c.AddHeaderValue(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
 
 	for _, bdioContent := range bdioContents {
-		err := c.HttpPutString(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, AcceptedStatusCode)
+		err := c.HttpPutString(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
 		if err != nil {
 			log.Errorf("Error uploading bdio files.", err)
 			return err
@@ -61,7 +59,7 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	}
 
 	c.SetHeaderValue(headerBdMode, bdModeFinish)
-	err := c.HttpPutString(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, AcceptedStatusCode)
+	err := c.HttpPutString(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
 	if err != nil {
 		log.Errorf("Error uploading bdio files.", err)
 		return err
@@ -73,10 +71,8 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	return nil
 }
 
-func (c *Client) PollRapidScanResults(rapidScanEndpoint string, intervalInSeconds int, timeoutInSeconds int) (error, *hubapi.RapidScanResult) {
+func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeout time.Duration) (error, *hubapi.RapidScanResult) {
 	url := rapidScanEndpoint + apiFullResults
-	interval := time.Duration(intervalInSeconds) * time.Second
-	timeout := time.Duration(timeoutInSeconds) * time.Second
 	ticker := time.NewTicker(interval)
 	timeoutTimer := time.NewTimer(timeout)
 
@@ -89,7 +85,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, intervalInSecond
 			ticker.Stop()
 			return errors.New(fmt.Sprintf("The polling for rapid scan result timed out: %s", rapidScanEndpoint)), result
 		case <-ticker.C:
-			err := c.HttpGetString(url, &body, OkStatusCode, hubapi.ContentTypeRapidScanResults)
+			err := c.HttpGetString(url, &body, http.StatusOK, hubapi.ContentTypeRapidScanResults)
 			if err != nil || body != "" {
 				ticker.Stop()
 				timeoutTimer.Stop()

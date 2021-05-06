@@ -225,35 +225,31 @@ func (c *Client) httpGet(url string, result interface{}, expectedStatusCode int,
 }
 
 func (c *Client) HttpPutString(url string, data string, contentType string, expectedStatusCode int) error {
-	return c.httpPut(url, data, contentType, expectedStatusCode, false)
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING %s STRING REQUEST: %s", http.MethodPut, url)
+	}
+
+	reader := strings.NewReader(data)
+	return putRequest(url, reader, contentType, c, expectedStatusCode)
 }
 
 func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
-	return c.httpPut(url, data, contentType, expectedStatusCode, true)
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING %s JSON REQUEST: %s", http.MethodPut, url)
+	}
+
+	// Encode json
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	if err := enc.Encode(&data); err != nil {
+		return newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
+	}
+	reader := &buf
+
+	return putRequest(url, reader, contentType, c, expectedStatusCode)
 }
 
-func (c *Client) httpPut(url string, data interface{}, contentType string, expectedStatusCode int, isJsonData bool) error {
-	var resp *http.Response
-
-	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP STARTING %s REQUEST: %s", http.MethodPut, url)
-	}
-
-	var reader io.Reader
-
-	if isJsonData {
-		// Encode json
-		var buf bytes.Buffer
-		enc := json.NewEncoder(&buf)
-		if err := enc.Encode(&data); err != nil {
-			return newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
-		}
-		reader = &buf
-	} else {
-		str, _ := data.(string)
-		reader = strings.NewReader(str)
-	}
-
+func putRequest(url string, reader io.Reader, contentType string, client *Client, expectedStatusCode int) error {
 	req, err := http.NewRequest(http.MethodPut, url, reader)
 	if err != nil {
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http put request for %s: %+v", url, err), err)
@@ -261,55 +257,50 @@ func (c *Client) httpPut(url string, data interface{}, contentType string, expec
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.applyHeaderValues(req)
+	client.applyHeaderValues(req)
 	log.Debugf("PUT Request: %+v.", req)
 
 	httpStart := time.Now()
-	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp, c.debugFlags)
+	var resp *http.Response
+	if resp, err = client.httpClient.Do(req); err != nil {
+		body := readResponseBody(resp, client.debugFlags)
 		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from PUT to %s: %+v", url, err), err)
 	}
 
-	if c.debugFlags&HubClientDebugTimings != 0 {
+	if client.debugFlags&HubClientDebugTimings != 0 {
 		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	return AnnotateHubClientErrorf(c.processResponse(resp, nil, expectedStatusCode), "unable to process response from PUT to %s", url) // TODO: Maybe need a response too?
+	return AnnotateHubClientErrorf(client.processResponse(resp, nil, expectedStatusCode), "unable to process response from PUT to %s", url) // TODO: Maybe need a response too?
 }
 
 func (c *Client) HttpPostString(url string, data string, contentType string, expectedStatusCode int) (string, error) {
-	return c.httpPost(url, data, contentType, expectedStatusCode, false)
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING %s STRING REQUEST: %s", http.MethodPost, url)
+	}
+
+	reader := strings.NewReader(data)
+	return postRequest(url, reader, contentType, c, expectedStatusCode)
 }
 
 func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, expectedStatusCode int) (string, error) {
-	return c.httpPost(url, data, contentType, expectedStatusCode, true)
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING %s JSON REQUEST: %s", http.MethodPost, url)
+	}
+
+	// Encode json
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	if err := enc.Encode(&data); err != nil {
+		return "", newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
+	}
+	reader := &buf
+
+	return postRequest(url, reader, contentType, c, expectedStatusCode)
 }
 
-func (c *Client) httpPost(url string, data interface{}, contentType string, expectedStatusCode int, isJsonData bool) (string, error) {
-
-	var resp *http.Response
-
-	if c.debugFlags&HubClientDebugTimings != 0 {
-		log.Debugf("DEBUG HTTP STARTING %s REQUEST: %s", http.MethodPost, url)
-	}
-
-	var reader io.Reader
-
-	if isJsonData {
-		// Encode json
-		var buf bytes.Buffer
-		enc := json.NewEncoder(&buf)
-
-		if err := enc.Encode(&data); err != nil {
-			return "", newHubClientError(nil, nil, fmt.Sprintf("error encoding json: %+v", err), err)
-		}
-		reader = &buf
-	} else {
-		str, _ := data.(string)
-		reader = strings.NewReader(str)
-	}
-
+func postRequest(url string, reader io.Reader, contentType string, client *Client, expectedStatusCode int) (string, error) {
 	req, err := http.NewRequest(http.MethodPost, url, reader)
 	if err != nil {
 		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err), err)
@@ -317,23 +308,24 @@ func (c *Client) httpPost(url string, data interface{}, contentType string, expe
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.applyHeaderValues(req)
+	client.applyHeaderValues(req)
 
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
 
-	if resp, err = c.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp, c.debugFlags)
+	var resp *http.Response
+	if resp, err = client.httpClient.Do(req); err != nil {
+		body := readResponseBody(resp, client.debugFlags)
 		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err), err)
 	}
 
-	if c.debugFlags&HubClientDebugTimings != 0 {
+	if client.debugFlags&HubClientDebugTimings != 0 {
 		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms. -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	if err := c.processResponse(resp, nil, expectedStatusCode); err != nil {
+	if err := client.processResponse(resp, nil, expectedStatusCode); err != nil {
 		return "", AnnotateHubClientErrorf(err, "unable to process response from POST to %s", url)
 	}
 
