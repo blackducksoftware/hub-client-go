@@ -230,7 +230,7 @@ func (c *Client) HttpPutString(url string, data string, contentType string, expe
 	}
 
 	reader := strings.NewReader(data)
-	return putRequest(url, reader, contentType, c, expectedStatusCode)
+	return c.putRequest(url, reader, contentType, expectedStatusCode)
 }
 
 func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
@@ -246,10 +246,10 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 	}
 	reader := &buf
 
-	return putRequest(url, reader, contentType, c, expectedStatusCode)
+	return c.putRequest(url, reader, contentType, expectedStatusCode)
 }
 
-func putRequest(url string, reader io.Reader, contentType string, client *Client, expectedStatusCode int) error {
+func (c *Client) putRequest(url string, reader io.Reader, contentType string, expectedStatusCode int) error {
 	req, err := http.NewRequest(http.MethodPut, url, reader)
 	if err != nil {
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http put request for %s: %+v", url, err), err)
@@ -257,22 +257,22 @@ func putRequest(url string, reader io.Reader, contentType string, client *Client
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	client.applyHeaderValues(req)
+	c.applyHeaderValues(req)
 	log.Debugf("PUT Request: %+v.", req)
 
 	httpStart := time.Now()
 	var resp *http.Response
-	if resp, err = client.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp, client.debugFlags)
+	if resp, err = c.httpClient.Do(req); err != nil {
+		body := readResponseBody(resp, c.debugFlags)
 		return newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from PUT to %s: %+v", url, err), err)
 	}
 
-	if client.debugFlags&HubClientDebugTimings != 0 {
+	if c.debugFlags&HubClientDebugTimings != 0 {
 		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP PUT ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	return AnnotateHubClientErrorf(client.processResponse(resp, nil, expectedStatusCode), "unable to process response from PUT to %s", url) // TODO: Maybe need a response too?
+	return AnnotateHubClientErrorf(c.processResponse(resp, nil, expectedStatusCode), "unable to process response from PUT to %s", url) // TODO: Maybe need a response too?
 }
 
 func (c *Client) HttpPostString(url string, data string, contentType string, expectedStatusCode int) (string, error) {
@@ -281,7 +281,7 @@ func (c *Client) HttpPostString(url string, data string, contentType string, exp
 	}
 
 	reader := strings.NewReader(data)
-	return postRequest(url, reader, contentType, c, expectedStatusCode)
+	return c.postRequest(url, reader, contentType, expectedStatusCode)
 }
 
 func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, expectedStatusCode int) (string, error) {
@@ -297,10 +297,10 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 	}
 	reader := &buf
 
-	return postRequest(url, reader, contentType, c, expectedStatusCode)
+	return c.postRequest(url, reader, contentType, expectedStatusCode)
 }
 
-func postRequest(url string, reader io.Reader, contentType string, client *Client, expectedStatusCode int) (string, error) {
+func (c *Client) postRequest(url string, reader io.Reader, contentType string, expectedStatusCode int) (string, error) {
 	req, err := http.NewRequest(http.MethodPost, url, reader)
 	if err != nil {
 		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err), err)
@@ -308,24 +308,24 @@ func postRequest(url string, reader io.Reader, contentType string, client *Clien
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	client.applyHeaderValues(req)
+	c.applyHeaderValues(req)
 
 	log.Debugf("POST Request: %+v.", req)
 
 	httpStart := time.Now()
 
 	var resp *http.Response
-	if resp, err = client.httpClient.Do(req); err != nil {
-		body := readResponseBody(resp, client.debugFlags)
+	if resp, err = c.httpClient.Do(req); err != nil {
+		body := readResponseBody(resp, c.debugFlags)
 		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err), err)
 	}
 
-	if client.debugFlags&HubClientDebugTimings != 0 {
+	if c.debugFlags&HubClientDebugTimings != 0 {
 		httpElapsed := time.Since(httpStart)
 		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms. -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	if err := client.processResponse(resp, nil, expectedStatusCode); err != nil {
+	if err := c.processResponse(resp, nil, expectedStatusCode); err != nil {
 		return "", AnnotateHubClientErrorf(err, "unable to process response from POST to %s", url)
 	}
 
