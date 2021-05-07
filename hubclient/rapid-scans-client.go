@@ -70,7 +70,6 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 
 	return nil
 }
-
 func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeout time.Duration) (error, *hubapi.RapidScanResult) {
 	url := rapidScanEndpoint + apiFullResults
 	ticker := time.NewTicker(interval)
