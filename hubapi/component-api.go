@@ -1,4 +1,4 @@
-// Copyright 2018 Synopsys, Inc.
+// Copyright 2021 Synopsys, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -167,4 +167,3 @@ type ComponentUpgradeGuidance struct {
 	LongTerm                *UpgradeGuidance `json:"longTerm, omitempty"`
 	Meta                    Meta             `json:"_meta"`
 }
-

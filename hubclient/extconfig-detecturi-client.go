@@ -18,13 +18,13 @@ import "github.com/blackducksoftware/hub-client-go/hubapi"
 
 func (c *Client) DetectURI() (*hubapi.DetectURI, error) {
 
-    detectURIURL := c.baseURL + "/api/external-config/detect-uri"
+	detectURIURL := c.baseURL + "/api/external-config/detect-uri"
 
-    var detectURI hubapi.DetectURI
-    err := c.HttpGetJSON(detectURIURL, &detectURI, 200)
+	var detectURI hubapi.DetectURI
+	err := c.HttpGetJSON(detectURIURL, &detectURI, 200)
 
-    if err != nil {
-        return nil, AnnotateHubClientError(err, "Error trying to get Detect URI")
-    }
-    return &detectURI, nil
+	if err != nil {
+		return nil, AnnotateHubClientError(err, "Error trying to get Detect URI")
+	}
+	return &detectURI, nil
 }

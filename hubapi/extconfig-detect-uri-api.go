@@ -15,8 +15,8 @@
 package hubapi
 
 type DetectURI struct {
-    bdJsonAdminDetailV4
-    Category  string `json:"category"`
-    DetectURI string `json:"value"`
-    Meta      Meta   `json:"_meta"`
+	bdJsonAdminDetailV4
+	Category  string `json:"category"`
+	DetectURI string `json:"value"`
+	Meta      Meta   `json:"_meta"`
 }

@@ -1,4 +1,4 @@
-// Copyright 2020 Synopsys, Inc.
+// Copyright 2021 Synopsys, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,5 +25,5 @@ func (bdJsonAdminDetailV4) GetMimeType() string {
 type SsoStatus struct {
 	bdJsonAdminDetailV4
 	SsoEnabled bool `json:"ssoEnabled"`
-	Meta       Meta   `json:"_meta"`
+	Meta       Meta `json:"_meta"`
 }
