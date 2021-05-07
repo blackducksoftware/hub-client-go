@@ -150,7 +150,7 @@ type UpgradeGuidance struct {
 	OriginName              string             `json:"originName"`
 	OriginExternalNamespace string             `json:"originExternalNamespace"`
 	OriginExternalId        string             `json:"originExternalId"`
-	VulnerabilityRisk       *VulnerabilityRisk `json:"vulnerabilityRisk, omitempty"`
+	VulnerabilityRisk       *VulnerabilityRisk `json:"vulnerabilityRisk,omitempty"`
 }
 
 type ComponentUpgradeGuidance struct {
@@ -163,7 +163,7 @@ type ComponentUpgradeGuidance struct {
 	OriginName              string           `json:"originName"`
 	OriginExternalNamespace string           `json:"originExternalNamespace"`
 	OriginExternalId        string           `json:"originExternalId"`
-	ShortTerm               *UpgradeGuidance `json:"shortTerm, omitempty"`
-	LongTerm                *UpgradeGuidance `json:"longTerm, omitempty"`
+	ShortTerm               *UpgradeGuidance `json:"shortTerm,omitempty"`
+	LongTerm                *UpgradeGuidance `json:"longTerm,omitempty"`
 	Meta                    Meta             `json:"_meta"`
 }

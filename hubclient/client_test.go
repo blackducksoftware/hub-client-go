@@ -1,4 +1,4 @@
-// Copyright 2018 Synopsys, Inc.
+// Copyright 2021 Synopsys, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ func TestAddClearHeaders(t *testing.T) {
 	assert.Equal(t, "another value", req.Header.Get("Another-Header-Key"))
 
 	// clear the user agent extra header value
-	client.ClearHeaderValue("User-Agent")
+	client.DeleteHeaderValue("User-Agent")
 
 	// create a new request
 	req, err = http.NewRequest(http.MethodGet, client.baseURL+apiCurrentUser, nil)
