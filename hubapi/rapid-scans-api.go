@@ -26,14 +26,15 @@ type RapidScanResult struct {
 	Meta           Meta                 `json:"_meta"`
 }
 type Policy struct {
-	Name     string `json:"policyName"`
-	Severity string `json:"policySeverity"`
+	Name        string `json:"policyName"`
+	Description string `json:"description"`
+	Severity    string `json:"policySeverity"`
 }
 type ComponentVulnerability struct {
 	Name              string   `json:"name"`
 	Description       string   `json:"description"`
 	Severity          string   `json:"vulnSeverity"`
-	OverallScore      float64  `json:"overallScore"`
+	OverallScore      float32  `json:"overallScore"`
 	ViolatingPolicies []Policy `json:"violatingPolicies"`
 	Meta              Meta     `json:"_meta"`
 }
@@ -48,6 +49,8 @@ type RapidScanComponent struct {
 	Identifier                     string                   `json:"componentIdentifier"`
 	ExternalId                     string                   `json:"externalId"`
 	OriginId                       string                   `json:"originId"`
+	ComponentId                    string                   `json:"componentId"`
+	VersionId                      string                   `json:"versionId"`
 	ViolatingPolicies              []Policy                 `json:"violatingPolicies"`
 	ComponentViolatingPolicies     []Policy                 `json:"componentViolatingPolicies"`
 	Vulnerabilities                []ComponentVulnerability `json:"allVulnerabilities"`
