@@ -49,8 +49,6 @@ type RapidScanComponent struct {
 	Identifier                     string                   `json:"componentIdentifier"`
 	ExternalId                     string                   `json:"externalId"`
 	OriginId                       string                   `json:"originId"`
-	ComponentId                    string                   `json:"componentId"`
-	VersionId                      string                   `json:"versionId"`
 	ViolatingPolicies              []Policy                 `json:"violatingPolicies"`
 	ComponentViolatingPolicies     []Policy                 `json:"componentViolatingPolicies"`
 	Vulnerabilities                []ComponentVulnerability `json:"allVulnerabilities"`
