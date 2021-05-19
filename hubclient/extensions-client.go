@@ -21,7 +21,7 @@ import (
 func (c *Client) GetExternalExtension(link hubapi.ResourceLink) (*hubapi.ExternalExtension, error) {
 
 	var extension hubapi.ExternalExtension
-	err := c.HttpGetJSON(link.Href, &extension, 200)
+	err := c.HttpGetJSON(link.Href, &extension, []int{200})
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve an external extension")

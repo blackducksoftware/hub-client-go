@@ -46,7 +46,7 @@ func (c *Client) ListCodeLocations(link hubapi.ResourceLink, options *hubapi.Get
 func (c *Client) GetCodeLocation(link hubapi.ResourceLink) (*hubapi.CodeLocation, error) {
 
 	var codeLocation hubapi.CodeLocation
-	err := c.HttpGetJSON(link.Href, &codeLocation, 200)
+	err := c.HttpGetJSON(link.Href, &codeLocation, []int{200})
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a code location")
@@ -76,7 +76,7 @@ func (c *Client) ListScanSummaries(link hubapi.ResourceLink) (*hubapi.ScanSummar
 func (c *Client) GetScanSummary(link hubapi.ResourceLink) (*hubapi.ScanSummary, error) {
 
 	var scanSummary hubapi.ScanSummary
-	err := c.HttpGetJSON(link.Href, &scanSummary, 200)
+	err := c.HttpGetJSON(link.Href, &scanSummary, []int{200})
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a scan summary")
