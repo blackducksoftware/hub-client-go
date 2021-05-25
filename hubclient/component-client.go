@@ -59,7 +59,7 @@ func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.Comp
 
 func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, error) {
 	var component hubapi.Component
-	err := c.HttpGetJSON(link.Href, &component, []int{200})
+	err := c.HttpGetJSON(link.Href, &component, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve a component: %+v.", err)
@@ -90,7 +90,7 @@ func (c *Client) DeleteComponent(componentURL string) error {
 
 func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.ComponentVersion, error) {
 	var componentVersion hubapi.ComponentVersion
-	err := c.HttpGetJSON(link.Href, &componentVersion, []int{200})
+	err := c.HttpGetJSON(link.Href, &componentVersion, 200)
 
 	if err != nil {
 		log.Errorf("Error trying to retrieve a component: %+v.", err)
@@ -103,7 +103,7 @@ func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.Componen
 func (c *Client) GetComponentVersionRemediation(componentVersionHref string) (*hubapi.ComponentRemediation, error) {
 	var componentRemediation hubapi.ComponentRemediation
 
-	err := c.HttpGetJSON(componentVersionHref+remediatingApi, &componentRemediation, []int{200})
+	err := c.HttpGetJSON(componentVersionHref+remediatingApi, &componentRemediation, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve component remediation advice")

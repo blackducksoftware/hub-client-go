@@ -71,7 +71,7 @@ func (c *Client) GetCurrentUser() (response *hubapi.CurrentUserResponse, err err
 
 	response = &hubapi.CurrentUserResponse{}
 
-	err = c.HttpGetJSON(currentUserUrl, response, []int{200})
+	err = c.HttpGetJSON(currentUserUrl, response, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to get current user")

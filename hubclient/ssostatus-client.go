@@ -21,7 +21,7 @@ func (c *Client) SsoStatus() (*hubapi.SsoStatus, error) {
 	ssoStausURL := c.baseURL + "/api/sso/status"
 
 	var ssoStatus hubapi.SsoStatus
-	err := c.HttpGetJSON(ssoStausURL, &ssoStatus, []int{200})
+	err := c.HttpGetJSON(ssoStausURL, &ssoStatus, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to get SSO status")

@@ -22,7 +22,7 @@ func (c *Client) CurrentVersion() (*hubapi.CurrentVersion, error) {
 	currentVersionURL := c.baseURL + "/api/current-version"
 
 	var currentVersion hubapi.CurrentVersion
-	err := c.HttpGetJSON(currentVersionURL, &currentVersion, []int{200})
+	err := c.HttpGetJSON(currentVersionURL, &currentVersion, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to get current version")

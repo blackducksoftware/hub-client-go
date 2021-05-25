@@ -186,8 +186,8 @@ func (c *Client) HttpGetString(url string, result *string, expectedStatusCode []
 	return err, response.StatusCode
 }
 
-func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode []int, mimetypes ...string) error {
-	err, _ := c.httpGet(url, result, expectedStatusCode, mimetypes...)
+func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode int, mimetypes ...string) error {
+	err, _ := c.httpGet(url, result, []int{expectedStatusCode}, mimetypes...)
 	return err
 }
 
@@ -448,7 +448,7 @@ func (c *Client) setAuthHeaders(request *http.Request) {
 
 func (c *Client) Count(link string) (int, error) {
 	var list hubapi.ItemsListBase
-	err := c.HttpGetJSON(link+"?offset=0&limit=1", &list, []int{200})
+	err := c.HttpGetJSON(link+"?offset=0&limit=1", &list, 200)
 
 	if err != nil {
 		return 0, AnnotateHubClientError(err, "Error trying to retrieve count")
@@ -498,7 +498,7 @@ func resetList(v interface{}) {
 func (c *Client) GetPage(link string, options *hubapi.GetListOptions, list interface{}) error {
 	listUrl := link + hubapi.ParameterString(options)
 
-	err := c.HttpGetJSON(listUrl, list, []int{200})
+	err := c.HttpGetJSON(listUrl, list, 200)
 
 	if err != nil {
 		return AnnotateHubClientError(err, fmt.Sprintf("Error trying to retrieve list %T", list))

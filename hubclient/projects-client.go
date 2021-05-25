@@ -43,7 +43,7 @@ func (c *Client) ListProjects(options *hubapi.GetListOptions) (*hubapi.ProjectLi
 func (c *Client) GetProject(link hubapi.ResourceLink) (*hubapi.Project, error) {
 
 	var project hubapi.Project
-	err := c.HttpGetJSON(link.Href, &project, []int{200})
+	err := c.HttpGetJSON(link.Href, &project, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a project")
@@ -93,7 +93,7 @@ func (c *Client) ListProjectVersions(link hubapi.ResourceLink, options *hubapi.G
 func (c *Client) GetProjectVersion(link hubapi.ResourceLink) (*hubapi.ProjectVersion, error) {
 
 	var projectVersion hubapi.ProjectVersion
-	err := c.HttpGetJSON(link.Href, &projectVersion, []int{200})
+	err := c.HttpGetJSON(link.Href, &projectVersion, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a project version")
@@ -120,7 +120,7 @@ func (c *Client) CreateProjectVersion(link hubapi.ResourceLink, projectVersionRe
 func (c *Client) GetProjectVersionRiskProfile(link hubapi.ResourceLink) (*hubapi.ProjectVersionRiskProfile, error) {
 
 	var riskProfile hubapi.ProjectVersionRiskProfile
-	err := c.HttpGetJSON(link.Href, &riskProfile, []int{200})
+	err := c.HttpGetJSON(link.Href, &riskProfile, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a project version risk profile")
@@ -132,7 +132,7 @@ func (c *Client) GetProjectVersionRiskProfile(link hubapi.ResourceLink) (*hubapi
 func (c *Client) GetProjectVersionPolicyStatus(link hubapi.ResourceLink) (*hubapi.ProjectVersionPolicyStatus, error) {
 
 	var policyStatus hubapi.ProjectVersionPolicyStatus
-	err := c.HttpGetJSON(link.Href, &policyStatus, []int{200})
+	err := c.HttpGetJSON(link.Href, &policyStatus, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a project version policy status")

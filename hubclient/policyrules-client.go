@@ -49,7 +49,7 @@ func (c *Client) ListPolicyRules(options *hubapi.GetListOptions) (*hubapi.Policy
 
 func (c *Client) GetPolicyRule(link hubapi.ResourceLink) (*hubapi.PolicyRule, error) {
 	var policyRule hubapi.PolicyRule
-	err := c.HttpGetJSON(link.Href, &policyRule, []int{200})
+	err := c.HttpGetJSON(link.Href, &policyRule, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a policy rule")

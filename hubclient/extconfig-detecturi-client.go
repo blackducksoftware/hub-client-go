@@ -21,7 +21,7 @@ func (c *Client) DetectURI() (*hubapi.DetectURI, error) {
 	detectURIURL := c.baseURL + "/api/external-config/detect-uri"
 
 	var detectURI hubapi.DetectURI
-	err := c.HttpGetJSON(detectURIURL, &detectURI, []int{200})
+	err := c.HttpGetJSON(detectURIURL, &detectURI, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to get Detect URI")

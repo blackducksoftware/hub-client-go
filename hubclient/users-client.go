@@ -54,7 +54,7 @@ func (c *Client) ListUsers(options *hubapi.GetListOptions) (*hubapi.UserList, er
 
 func (c *Client) GetUser(link hubapi.ResourceLink) (*hubapi.User, error) {
 	var user hubapi.User
-	err := c.HttpGetJSON(link.Href, &user, []int{200})
+	err := c.HttpGetJSON(link.Href, &user, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve a user")
