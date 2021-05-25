@@ -71,37 +71,81 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	return nil
 }
 
-func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeout time.Duration) (error, *hubapi.RapidScanResult) {
-	url := rapidScanEndpoint + apiFullResults
+func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeout time.Duration, pageLimit int) (error, *hubapi.RapidScanResult) {
+	offset := 0
 	ticker := time.NewTicker(interval)
 	timeoutTimer := time.NewTimer(timeout)
-
-	var result *hubapi.RapidScanResult
 	var body string
 
 	for {
 		select {
 		case <-timeoutTimer.C:
 			ticker.Stop()
-			return errors.New(fmt.Sprintf("The polling for rapid scan result timed out: %s", rapidScanEndpoint)), result
+			return errors.New(fmt.Sprintf("The polling for rapid scan result timed out: %s", rapidScanEndpoint)), nil
 		case <-ticker.C:
-			err := c.HttpGetString(url, &body, http.StatusOK, hubapi.ContentTypeRapidScanResults)
-			if err != nil || body != "" {
+			err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
+
+			if err != nil {
 				ticker.Stop()
 				timeoutTimer.Stop()
+				log.Errorf("Error fetching rapid scan result", err)
+				return err, nil
+			}
+
+			if statusCode == http.StatusOK {
+				ticker.Stop()
+				timeoutTimer.Stop()
+
+				err, result := parseBody(body)
+
 				if err != nil {
-					log.Errorf("Error reading rapid scan result", err)
-					return err, nil
+					return err, result
 				}
 
-				err = json.Unmarshal([]byte(body), &result)
+				//read all pages of the result
+				for result.Count > len(result.Components) {
+					//increase offset to fetch the next page of results
+					offset += pageLimit
+					err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
 
-				if err != nil {
-					log.Errorf("Error parsing rapid scan result", err)
+					if err != nil {
+						log.Errorf("Error fetching rapid scan result", err)
+						return err, result
+					}
+
+					if statusCode != http.StatusOK {
+						log.Errorf("Error fetching subsequent pages of a rapid scan result. Code: %d", statusCode)
+						return err, result
+					}
+
+					err, pagedResult := parseBody(body)
+					if err != nil {
+						return err, result
+					}
+
+					result.Components = append(result.Components, pagedResult.Components...)
 				}
 
-				return err, result
+				return nil, result
 			}
 		}
 	}
+}
+
+func parseBody(body string) (error, *hubapi.RapidScanResult) {
+	var pagedResult *hubapi.RapidScanResult
+	err := json.Unmarshal([]byte(body), &pagedResult)
+
+	if err != nil {
+		log.Errorf("Error parsing rapid scan result", err)
+		return err, nil
+	}
+
+	return nil, pagedResult
+}
+
+func (c *Client) fetchResults(rapidScanEndpoint string, offset int, limit int, body *string) (error, int) {
+	url := rapidScanEndpoint + apiFullResults + "?offset=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
+	err, statusCode := c.HttpGetString(url, body, []int{http.StatusOK, http.StatusNotFound}, hubapi.ContentTypeRapidScanResults)
+	return err, statusCode
 }

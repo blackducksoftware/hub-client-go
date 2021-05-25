@@ -131,23 +131,32 @@ func readBytes(readCloser io.ReadCloser, expected int64) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func validateHTTPResponse(resp *http.Response, expectedStatusCode int, debugFlags HubClientDebug) error {
+func validateHTTPResponse(resp *http.Response, debugFlags HubClientDebug, expectedStatusCodes ...int) error {
 	statusCode := 0
 	if resp != nil {
 		statusCode = resp.StatusCode
 	}
 
-	if statusCode != expectedStatusCode { // Should this be a list at some point?
+	statusCodeExpected := false
+
+	for _, expectedCode := range expectedStatusCodes {
+		if statusCode == expectedCode {
+			statusCodeExpected = true
+			break
+		}
+	}
+
+	if !statusCodeExpected {
 		body := readResponseBody(resp, debugFlags)
-		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of a %d", statusCode, expectedStatusCode), nil)
+		return newHubClientError(body, resp, fmt.Sprintf("got a %d response instead of %d", statusCode, expectedStatusCodes), nil)
 	}
 
 	return nil
 }
 
-func (c *Client) processResponse(resp *http.Response, result interface{}, expectedStatusCode int) error {
+func (c *Client) processResponse(resp *http.Response, result interface{}, expectedStatusCodes ...int) error {
 
-	if err := validateHTTPResponse(resp, expectedStatusCode, c.debugFlags); err != nil {
+	if err := validateHTTPResponse(resp, c.debugFlags, expectedStatusCodes...); err != nil {
 		return AnnotateHubClientError(err, "error validating HTTP Response")
 	}
 
@@ -170,19 +179,19 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 	return nil
 }
 
-func (c *Client) HttpGetString(url string, result *string, expectedStatusCode int, mimetypes ...string) error {
+func (c *Client) HttpGetString(url string, result *string, expectedStatusCode []int, mimetypes ...string) (error, int) {
 	err, response := c.httpGet(url, nil, expectedStatusCode, mimetypes...)
 	body := readResponseBody(response, c.debugFlags)
 	*result = string(body)
-	return err
+	return err, response.StatusCode
 }
 
 func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode int, mimetypes ...string) error {
-	err, _ := c.httpGet(url, result, expectedStatusCode, mimetypes...)
+	err, _ := c.httpGet(url, result, []int{expectedStatusCode}, mimetypes...)
 	return err
 }
 
-func (c *Client) httpGet(url string, result interface{}, expectedStatusCode int, mimetypes ...string) (error, *http.Response) {
+func (c *Client) httpGet(url string, result interface{}, expectedStatusCodes []int, mimetypes ...string) (error, *http.Response) {
 
 	var resp *http.Response
 
@@ -220,7 +229,7 @@ func (c *Client) httpGet(url string, result interface{}, expectedStatusCode int,
 		log.Debugf("DEBUG HTTP GET ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
 	}
 
-	err = c.processResponse(resp, result, expectedStatusCode)
+	err = c.processResponse(resp, result, expectedStatusCodes...)
 	return AnnotateHubClientErrorf(err, "unable to process response from GET to %s", url), resp
 }
 
