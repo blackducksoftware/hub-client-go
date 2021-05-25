@@ -131,7 +131,7 @@ func readBytes(readCloser io.ReadCloser, expected int64) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func validateHTTPResponse(resp *http.Response, debugFlags HubClientDebug, expectedStatusCodes []int) error {
+func validateHTTPResponse(resp *http.Response, debugFlags HubClientDebug, expectedStatusCodes ...int) error {
 	statusCode := 0
 	if resp != nil {
 		statusCode = resp.StatusCode
@@ -156,7 +156,7 @@ func validateHTTPResponse(resp *http.Response, debugFlags HubClientDebug, expect
 
 func (c *Client) processResponse(resp *http.Response, result interface{}, expectedStatusCodes ...int) error {
 
-	if err := validateHTTPResponse(resp, c.debugFlags, expectedStatusCodes); err != nil {
+	if err := validateHTTPResponse(resp, c.debugFlags, expectedStatusCodes...); err != nil {
 		return AnnotateHubClientError(err, "error validating HTTP Response")
 	}
 
