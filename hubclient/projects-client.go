@@ -19,16 +19,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const apiProjects = "/api/projects"
-
 // What about continuation for these?
 // Should we have something where user can pass in an optional continuation/next placeholder?
 // Or maybe that is something more for RX?
 // Or maybe a special return type that can keep querying for all of them when it runs out?
 // Is there any iterator type in GoLang?
 func (c *Client) ListProjects(options *hubapi.GetListOptions) (*hubapi.ProjectList, error) {
-
-	projectsURL := c.baseURL + apiProjects
+	projectsURL := hubapi.BuildUrl(c.baseURL, hubapi.ProjectsApi)
 
 	var projectList hubapi.ProjectList
 	err := c.GetPage(projectsURL, options, &projectList)
@@ -53,8 +50,7 @@ func (c *Client) GetProject(link hubapi.ResourceLink) (*hubapi.Project, error) {
 }
 
 func (c *Client) CreateProject(projectRequest *hubapi.ProjectRequest) (string, error) {
-
-	projectsURL := c.baseURL + apiProjects
+	projectsURL := hubapi.BuildUrl(c.baseURL, hubapi.ProjectsApi)
 	location, err := c.HttpPostJSON(projectsURL, projectRequest, "application/json", 201)
 
 	if err != nil {

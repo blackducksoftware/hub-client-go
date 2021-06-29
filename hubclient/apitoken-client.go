@@ -17,6 +17,7 @@ package hubclient
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/blackducksoftware/hub-client-go/hubapi"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -39,7 +40,7 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 		client = createHttpClient(time.Minute)
 	}
 
-	url := baseURL + "/api/tokens/authenticate"
+	url := hubapi.BuildUrl(baseURL, hubapi.AuthenticateApi)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {

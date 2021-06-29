@@ -18,7 +18,7 @@ import "github.com/blackducksoftware/hub-client-go/hubapi"
 
 func (c *Client) SsoStatus() (*hubapi.SsoStatus, error) {
 
-	ssoStausURL := c.baseURL + "/api/sso/status"
+	ssoStausURL := hubapi.BuildUrl(c.baseURL, hubapi.SsoStatusApi)
 
 	var ssoStatus hubapi.SsoStatus
 	err := c.HttpGetJSON(ssoStausURL, &ssoStatus, 200)

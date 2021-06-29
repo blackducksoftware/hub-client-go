@@ -19,10 +19,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const apiPolicyRules = "/api/policy-rules"
-
 func (c *Client) ListPolicyRules(options *hubapi.GetListOptions) (*hubapi.PolicyRuleList, error) {
-	policyRuleURL := c.baseURL + apiPolicyRules
+	policyRuleURL := hubapi.BuildUrl(c.baseURL, hubapi.PolicyRulesApi)
 
 	var policyRuleList hubapi.PolicyRuleList
 	err := c.GetPage(policyRuleURL, options, &policyRuleList)
@@ -59,7 +57,8 @@ func (c *Client) GetPolicyRule(link hubapi.ResourceLink) (*hubapi.PolicyRule, er
 }
 
 func (c *Client) CreatePolicyRule(policyRuleRequest *hubapi.PolicyRuleRequest) (string, error) {
-	policyRuleURL := c.baseURL + apiPolicyRules
+	policyRuleURL := hubapi.BuildUrl(c.baseURL, hubapi.PolicyRulesApi)
+
 	location, err := c.HttpPostJSON(policyRuleURL, policyRuleRequest, "application/json", 201)
 
 	if err != nil {

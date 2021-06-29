@@ -19,11 +19,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const apiCurrentUser = "/api/current-user"
-
 func (c *Client) CreateApiToken(name, description string, readOnly bool) (location string, token string, err error) {
-
-	tokensUrl := c.baseURL + apiCurrentUser + "/tokens"
+	tokensUrl := hubapi.BuildUrl(c.baseURL, hubapi.CurrentUserTokensApi)
 
 	tokenRequest := &hubapi.ApiToken{
 		Name:        name,
@@ -54,7 +51,8 @@ func (c *Client) DeleteApiToken(tokenUrl string) error {
 }
 
 func (c *Client) ListApiTokens(options *hubapi.GetListOptions) (*hubapi.ApiTokenList, error) {
-	tokensUrl := c.baseURL + apiCurrentUser + "/tokens"
+	tokensUrl := hubapi.BuildUrl(c.baseURL, hubapi.CurrentUserTokensApi)
+
 	var apiTokenList hubapi.ApiTokenList
 
 	err := c.GetPage(tokensUrl, options, &apiTokenList)
@@ -67,7 +65,7 @@ func (c *Client) ListApiTokens(options *hubapi.GetListOptions) (*hubapi.ApiToken
 }
 
 func (c *Client) GetCurrentUser() (response *hubapi.CurrentUserResponse, err error) {
-	currentUserUrl := c.baseURL + apiCurrentUser
+	currentUserUrl := hubapi.BuildUrl(c.baseURL, hubapi.CurrentUserApi)
 
 	response = &hubapi.CurrentUserResponse{}
 
