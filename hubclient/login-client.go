@@ -15,14 +15,14 @@
 package hubclient
 
 import (
-	"net/url"
-
+	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
+	"net/url"
 )
 
 func (c *Client) Login(username string, password string) error {
+	loginURL := hubapi.BuildUrl(c.baseURL, hubapi.SecurityApi)
 
-	loginURL := c.baseURL + "/j_spring_security_check"
 	formValues := url.Values{
 		"j_username": {username},
 		"j_password": {password},

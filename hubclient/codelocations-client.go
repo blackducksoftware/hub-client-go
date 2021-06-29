@@ -19,7 +19,7 @@ import (
 )
 
 func (c *Client) ListAllCodeLocations(options *hubapi.GetListOptions) (*hubapi.CodeLocationList, error) {
-	codeLocationsURL := c.baseURL + "/api/codelocations"
+	codeLocationsURL := hubapi.BuildUrl(c.baseURL, hubapi.CodeLocationsApi)
 
 	var codeLocationsList hubapi.CodeLocationList
 	err := c.GetPage(codeLocationsURL, options, &codeLocationsList)

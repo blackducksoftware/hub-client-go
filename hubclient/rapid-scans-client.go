@@ -26,8 +26,6 @@ import (
 )
 
 const (
-	apiDeveloperScans     = "/api/developer-scans"
-	apiFullResults        = "/full-result"
 	headerBdMode          = "X-BD-MODE"
 	headerBdDocumentCount = "X-BD-DOCUMENT-COUNT"
 	bdModeAppend          = "append"
@@ -35,7 +33,7 @@ const (
 )
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
-	rapidScansURL := c.baseURL + apiDeveloperScans
+	rapidScansURL := hubapi.BuildUrl(c.baseURL, hubapi.DeveloperScansApi)
 	bdioUploadEndpoint, err := c.HttpPostString(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScanRequest, http.StatusCreated)
 
 	if err != nil {
@@ -145,7 +143,11 @@ func parseBody(body string) (error, *hubapi.RapidScanResult) {
 }
 
 func (c *Client) fetchResults(rapidScanEndpoint string, offset int, limit int, body *string) (error, int) {
-	url := rapidScanEndpoint + apiFullResults + "?offset=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
+	url := hubapi.BuildUrl(rapidScanEndpoint, hubapi.FullResultsApi)
+	params := make(map[string]string)
+	params["offset"] = strconv.Itoa(offset)
+	params["limit"] = strconv.Itoa(limit)
+	url = hubapi.AddParameters(url, params)
 	err, statusCode := c.HttpGetString(url, body, []int{http.StatusOK, http.StatusNotFound}, hubapi.ContentTypeRapidScanResults)
 	return err, statusCode
 }

@@ -17,8 +17,7 @@ package hubclient
 import "github.com/blackducksoftware/hub-client-go/hubapi"
 
 func (c *Client) DetectURI() (*hubapi.DetectURI, error) {
-
-	detectURIURL := c.baseURL + "/api/external-config/detect-uri"
+	detectURIURL := hubapi.BuildUrl(c.baseURL, hubapi.DetectUriApi)
 
 	var detectURI hubapi.DetectURI
 	err := c.HttpGetJSON(detectURIURL, &detectURI, 200)

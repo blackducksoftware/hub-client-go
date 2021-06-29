@@ -19,13 +19,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const (
-	apiComponents  = "/api/components"
-	remediatingApi = "/remediating"
-)
-
 func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
-	componentURL := c.baseURL + apiComponents
+	componentURL := hubapi.BuildUrl(c.baseURL, hubapi.ComponentsApi)
 
 	var componentList hubapi.ComponentList
 	err := c.GetPage(componentURL, options, &componentList)
@@ -39,7 +34,7 @@ func (c *Client) ListComponents(options *hubapi.GetListOptions) (*hubapi.Compone
 }
 
 func (c *Client) ListAllComponents(options *hubapi.GetListOptions) (*hubapi.ComponentList, error) {
-	componentURL := c.baseURL + apiComponents
+	componentURL := hubapi.BuildUrl(c.baseURL, hubapi.ComponentsApi)
 
 	accum := &hubapi.ComponentList{}
 	componentList := hubapi.ComponentList{}
@@ -70,7 +65,7 @@ func (c *Client) GetComponent(link hubapi.ResourceLink) (*hubapi.Component, erro
 }
 
 func (c *Client) CreateComponent(componentRequest *hubapi.ComponentRequest) (string, error) {
-	componentURL := c.baseURL + apiComponents
+	componentURL := hubapi.BuildUrl(c.baseURL, hubapi.ComponentsApi)
 	location, err := c.HttpPostJSON(componentURL, componentRequest, "application/json", 201)
 
 	if err != nil {
@@ -103,7 +98,8 @@ func (c *Client) GetComponentVersion(link hubapi.ResourceLink) (*hubapi.Componen
 func (c *Client) GetComponentVersionRemediation(componentVersionHref string) (*hubapi.ComponentRemediation, error) {
 	var componentRemediation hubapi.ComponentRemediation
 
-	err := c.HttpGetJSON(componentVersionHref+remediatingApi, &componentRemediation, 200)
+	apiUrl := hubapi.BuildUrl(componentVersionHref, hubapi.RemediatingApi)
+	err := c.HttpGetJSON(apiUrl, &componentRemediation, 200)
 
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "Error trying to retrieve component remediation advice")

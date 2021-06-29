@@ -19,7 +19,7 @@ import (
 )
 
 func (c *Client) CurrentVersion() (*hubapi.CurrentVersion, error) {
-	currentVersionURL := c.baseURL + "/api/current-version"
+	currentVersionURL := hubapi.BuildUrl(c.baseURL, hubapi.CurrentVersionApi)
 
 	var currentVersion hubapi.CurrentVersion
 	err := c.HttpGetJSON(currentVersionURL, &currentVersion, 200)

@@ -18,11 +18,9 @@ import (
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 )
 
-const apiUsers = "/api/users"
-
 // TODO: This API should also be returning a location
 func (c *Client) CreateUser(userRequest *hubapi.UserRequest) (*hubapi.User, error) {
-	usersURL := c.baseURL + apiUsers
+	usersURL := hubapi.BuildUrl(c.baseURL, hubapi.UsersApi)
 
 	var result hubapi.User
 	_, err := c.HttpPostJSONExpectResult(usersURL, userRequest, &result, "application/json", 201)
@@ -40,7 +38,7 @@ func (c *Client) CreateUser(userRequest *hubapi.UserRequest) (*hubapi.User, erro
 }
 
 func (c *Client) ListUsers(options *hubapi.GetListOptions) (*hubapi.UserList, error) {
-	usersURL := c.baseURL + "/api/users"
+	usersURL := hubapi.BuildUrl(c.baseURL, hubapi.UsersApi)
 
 	var userList hubapi.UserList
 	err := c.GetPage(usersURL, options, &userList)
