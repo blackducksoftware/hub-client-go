@@ -25,10 +25,10 @@ type Meta struct {
 }
 
 type ResourceLink struct {
-	Rel   string `json:"rel"`
-	Href  string `json:"href"`
-	Label string `json:"label"`
-	Name  string `json:"name"`
+	Rel   string `json:"rel,omitempty"`
+	Href  string `json:"href,omitempty"`
+	Label string `json:"label,omitempty"`
+	Name  string `json:"name,omitempty"`
 }
 
 // Returns the first link with the corresponding relation value.  However, there may be additional matches not returned

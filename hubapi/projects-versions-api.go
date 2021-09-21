@@ -21,9 +21,9 @@ type ProjectVersionList struct {
 type ProjectVersion struct {
 	bdJsonProjectDetailV5
 	VersionName          string          `json:"versionName"`
-	Nickname             string          `json:"nickname"`
-	ReleaseComments      string          `json:"releaseComments"`
-	ReleasedOn           *time.Time      `json:"releasedOn"`
+	Nickname             string          `json:"nickname,omitempty"`
+	ReleaseComments      string          `json:"releaseComments,omitempty"`
+	ReleasedOn           *time.Time      `json:"releasedOn,omitempty"`
 	Phase                string          `json:"phase"`
 	Distribution         string          `json:"distribution"`
 	License              *ComplexLicense `json:"license,omitempty"`
