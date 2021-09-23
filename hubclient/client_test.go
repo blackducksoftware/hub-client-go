@@ -54,7 +54,7 @@ func TestCreateAndDeleteProject(t *testing.T) {
 	q := fmt.Sprintf("name:%s", projectName)
 	projectList, err := client.ListProjects(&hubapi.GetListOptions{Q: &q})
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	projects := []hubapi.Project{}
 	for _, project := range projectList.Items {

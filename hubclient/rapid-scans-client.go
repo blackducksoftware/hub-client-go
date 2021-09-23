@@ -37,7 +37,7 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 	bdioUploadEndpoint, err := c.HttpPostString(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScanRequest, http.StatusCreated)
 
 	if err != nil {
-		log.Errorf("Error kicking off a rapid scan.", err)
+		log.Error("Error kicking off a rapid scan.", err)
 		return err, ""
 	}
 
@@ -51,7 +51,7 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	for _, bdioContent := range bdioContents {
 		err := c.HttpPutString(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
 		if err != nil {
-			log.Errorf("Error uploading bdio files.", err)
+			log.Error("Error uploading bdio files.", err)
 			return err
 		}
 	}
@@ -59,7 +59,7 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	c.SetHeaderValue(headerBdMode, bdModeFinish)
 	err := c.HttpPutString(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
 	if err != nil {
-		log.Errorf("Error uploading bdio files.", err)
+		log.Error("Error uploading bdio files.", err)
 		return err
 	}
 
@@ -86,7 +86,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 			if err != nil {
 				ticker.Stop()
 				timeoutTimer.Stop()
-				log.Errorf("Error fetching rapid scan result", err)
+				log.Error("Error fetching rapid scan result", err)
 				return err, nil
 			}
 
@@ -107,7 +107,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 					err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
 
 					if err != nil {
-						log.Errorf("Error fetching rapid scan result", err)
+						log.Error("Error fetching rapid scan result", err)
 						return err, result
 					}
 
@@ -135,7 +135,7 @@ func parseBody(body string) (error, *hubapi.RapidScanResult) {
 	err := json.Unmarshal([]byte(body), &pagedResult)
 
 	if err != nil {
-		log.Errorf("Error parsing rapid scan result", err)
+		log.Error("Error parsing rapid scan result", err)
 		return err, nil
 	}
 

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func createTestClient(t *testing.T) *Client {
@@ -75,7 +76,7 @@ func TestClient_CurrentUser(t *testing.T) {
 
 	assert.NoError(t, err, "unable to get current user")
 
-	assert.NotNil(t, currentUser, "current user was nil")
+	require.NotNil(t, currentUser, "current user was nil")
 	assert.NotEmpty(t, currentUser.UserName, "username was empty")
 	assert.NotEmpty(t, currentUser.FirstName, "firstname was empty")
 	assert.NotEmpty(t, currentUser.LastName, "lastname was empty")
