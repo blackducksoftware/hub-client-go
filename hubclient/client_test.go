@@ -78,6 +78,7 @@ func TestCreateAndDeleteProject(t *testing.T) {
 }
 
 func TestAddClearHeaders(t *testing.T) {
+	apiCurrentUser := "/api/current-user"
 	client, err := NewWithSession("https://localhost", HubClientDebugTimings, 5*time.Second)
 	if err != nil {
 		t.Error(err)
