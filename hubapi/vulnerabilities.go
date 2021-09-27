@@ -36,24 +36,33 @@ type VulnerabilitiesList struct {
 // /api/vulnerabilities/$vulnerability
 type Vulnerability struct {
 	bdJsonVulnerabilityV4
-	Source               string     `json:"source"`
-	Name                 string     `json:"name"`
-	Title                string     `json:"title"`
-	Description          string     `json:"description"`
-	TechnicalDescription string     `json:"technicalDescription"`
-	PublishedDate        *time.Time `json:"publishedDate"`
-	UpdatedDate          *time.Time `json:"updatedDate"`
-	DisclosureDate       *time.Time `json:"disclosureDate"`
-	ExploitPublishDate   *time.Time `json:"exploitPublishDate"`
-	SolutionDate         *time.Time `json:"solutionDate"`
-	Solution             string     `json:"solution"`
-	Severity             string     `json:"severity"` //  [LOW, MEDIUM, HIGH, CRITICAL]
-	CVSS2                *CVSS      `json:"cvss2,omitempty"`
-	CVSS3                *CVSS      `json:"cvss3,omitempty"`
-	UseCVSS3             bool       `json:"useCvss3"`
-	OverallScore         float32    `json:"overallScore"`
-	Classifications      []string   `json:"classifications"`
-	Meta                 Meta       `json:"_meta"`
+	Source               		string     `json:"source"`
+	Name                 		string     `json:"name"`
+	Title                		string     `json:"title"`
+	Description          		string     `json:"description"`
+	TechnicalDescription 		string     `json:"technicalDescription"`
+	PublishedDate        		*time.Time `json:"publishedDate"`
+	UpdatedDate          		*time.Time `json:"updatedDate"`
+	DisclosureDate       		*time.Time `json:"disclosureDate"`
+	ExploitPublishDate   		*time.Time `json:"exploitPublishDate"`
+	SolutionDate         		*time.Time `json:"solutionDate"`
+	Solution             		string     `json:"solution"`
+	Severity             		string     `json:"severity"` //  [LOW, MEDIUM, HIGH, CRITICAL]
+	CVSS2                		*CVSS      `json:"cvss2,omitempty"`
+	CVSS3                		*CVSS      `json:"cvss3,omitempty"`
+	UseCVSS3             		bool       `json:"useCvss3"`
+	OverallScore         		float32    `json:"overallScore"`
+	Classifications      		[]string   `json:"classifications"`
+	Workaround           		string     `json:"workaround,omitempty"`
+	VendorFixDate        		*time.Time `json:"vendorFixDate,omitempty"`
+	Credit               		string     `json:"credit,omitempty"`
+	DiscoveryDate        		*time.Time `json:"discoveryDate,omitempty"`
+	VendorNotificationDate 		*time.Time `json:"vendorNotificationDate,omitempty"`
+	ZeroDay              		bool       `json:"zeroDay,omitempty"`
+	UnderReview          		bool       `json:"underReview,omitempty"`
+	ParentAdvisory       		bool       `json:"parentAdvisory,omitempty"`
+	BDSATags             		[]string   `json:"bdsaTags,omitempty"`
+	Meta                 		Meta       `json:"_meta"`
 }
 
 type CVSS struct {
