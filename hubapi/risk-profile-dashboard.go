@@ -38,11 +38,11 @@ type PolicyViolationSeverityProfile struct {
 }
 
 type Severity struct {
-	MAJOR       string `json:"MAJOR"`
-	UNSPECIFIED string `json:"UNSPECIFIED"`
-	TRIVIAL     string `json:"TRIVIAL"`
-	MINOR       string `json:"MINOR"`
-	CRITICAL    string `json:"CRITICAL"`
-	OK          string `json:"OK"`
-	BLOCKER     string `json:"BLOCKER"`
+	MAJOR       int `json:"MAJOR"`
+	UNSPECIFIED int `json:"UNSPECIFIED"`
+	TRIVIAL     int `json:"TRIVIAL"`
+	MINOR       int `json:"MINOR"`
+	CRITICAL    int `json:"CRITICAL"`
+	OK          int `json:"OK"`
+	BLOCKER     int `json:"BLOCKER"`
 }
