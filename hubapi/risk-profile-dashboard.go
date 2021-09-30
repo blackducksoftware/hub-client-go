@@ -36,7 +36,7 @@ type PolicyViolationSeverityProfile struct {
 	Severities Severity `json:"severities"`
 	Counts     []int    `json:"counts"`
 }
-
+//severity
 type Severity struct {
 	MAJOR       int `json:"MAJOR"`
 	UNSPECIFIED int `json:"UNSPECIFIED"`
