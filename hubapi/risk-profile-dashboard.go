@@ -16,7 +16,7 @@ package hubapi
 
 type RiskProfileDashboard struct {
 	OverallRiskAggregate           OverallRiskAggregate           `json:"overallRiskAggregate"`
-	ProjectRiskProfilePageView     ProjectList                    `json:"projectRiskProfilePageView"`
+	ProjectRiskProfilePageView     RiskProfileProjectList         `json:"projectRiskProfilePageView"`
 	PolicyViolationSeverityProfile PolicyViolationSeverityProfile `json:"policyViolationSeverityProfile"`
 }
 
@@ -36,6 +36,7 @@ type PolicyViolationSeverityProfile struct {
 	Severities Severity `json:"severities"`
 	Counts     []int    `json:"counts"`
 }
+
 //severity
 type Severity struct {
 	MAJOR       int `json:"MAJOR"`
@@ -45,4 +46,15 @@ type Severity struct {
 	CRITICAL    int `json:"CRITICAL"`
 	OK          int `json:"OK"`
 	BLOCKER     int `json:"BLOCKER"`
+}
+
+type RiskProfileProjectList struct {
+	TotalCount int                  `json:"totalCount"`
+	Items      []RiskProfileProject `json:"items"`
+}
+
+type RiskProfileProject struct {
+	Id          string     `json:"id"`
+	Name        string     `json:"name"`
+	RiskProfile Categories `json:"categories"`
 }
