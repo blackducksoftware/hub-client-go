@@ -25,20 +25,19 @@ type OverallRiskAggregate struct {
 }
 
 type Categories struct {
-	Version       Severity `json:"VERSION"`
-	License       Severity `json:"LICENSE"`
-	Vulnerability Severity `json:"VULNERABILITY"`
-	Operational   Severity `json:"OPERATIONAL"`
-	Activity      Severity `json:"ACTIVITY"`
+	Version       CategotySeverity `json:"VERSION"`
+	License       CategotySeverity `json:"LICENSE"`
+	Vulnerability CategotySeverity `json:"VULNERABILITY"`
+	Operational   CategotySeverity `json:"OPERATIONAL"`
+	Activity      CategotySeverity `json:"ACTIVITY"`
 }
 
 type PolicyViolationSeverityProfile struct {
-	Severities Severity `json:"severities"`
-	Counts     []int    `json:"counts"`
+	Severities PolicySeverity `json:"severities"`
+	Counts     []int          `json:"counts"`
 }
 
-//severity
-type Severity struct {
+type PolicySeverity struct {
 	MAJOR       int `json:"MAJOR"`
 	UNSPECIFIED int `json:"UNSPECIFIED"`
 	TRIVIAL     int `json:"TRIVIAL"`
@@ -48,13 +47,26 @@ type Severity struct {
 	BLOCKER     int `json:"BLOCKER"`
 }
 
+type CategotySeverity struct {
+	CRITICAL int `json:"CRITICAL"`
+	HIGH     int `json:"HIGH"`
+	MEDIUM   int `json:"MEDIUM"`
+	LOW      int `json:"LOW"`
+	UNKNOWN  int `json:"UNKNOWN"`
+	OK       int `json:"OK"`
+}
+
 type RiskProfileProjectList struct {
 	TotalCount int                  `json:"totalCount"`
 	Items      []RiskProfileProject `json:"items"`
 }
 
 type RiskProfileProject struct {
-	Id          string     `json:"id"`
-	Name        string     `json:"name"`
-	RiskProfile Categories `json:"categories"`
+	Id          string      `json:"id"`
+	Name        string      `json:"name"`
+	RiskProfile RiskProfile `json:"riskProfile"`
+}
+
+type RiskProfile struct {
+	Categories Categories `json:"categories"`
 }
