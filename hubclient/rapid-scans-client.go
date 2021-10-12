@@ -130,15 +130,14 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 	}
 }
 
-// IsRapidScanResultAvailable returns true if rapid scan results are available for the given end-point, false otherwise.
-// This func is non-blocking
-func (c *Client) IsRapidScanResultAvailable(rapidScanEndpoint string) (error, bool) {
+func (c *Client) FetchResults(rapidScanEndpoint string, offset int, pageLimit int) (err error, httpStatus int, result *hubapi.RapidScanResult) {
 	var body string
 	err, statusCode := c.fetchResults(rapidScanEndpoint, 0, 1, &body)
-	if err != nil || statusCode != http.StatusOK {
-		return err, false
+	if err != nil  || statusCode != http.StatusOK{
+		return err, statusCode, nil
 	}
-	return nil, true
+	err, result = parseBody(body)
+	return err, statusCode, result
 }
 
 func parseBody(body string) (error, *hubapi.RapidScanResult) {
