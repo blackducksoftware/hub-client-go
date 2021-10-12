@@ -19,6 +19,7 @@ const (
 	SsoStatusApi         = "/api/sso/status"
 	UsersApi             = "/api/users"
 	VulnerabilitiesApi   = "/api/vulnerabilities"
+	ReadinessApi 		 = "/api/health-checks/readiness"
 
 	FullResultsApi = "/full-result"
 	SecurityApi    = "/j_spring_security_check"
