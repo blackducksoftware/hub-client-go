@@ -23,8 +23,17 @@ import (
 
 func (c *Client) CheckHubReadiness(hubUrl string) (error, *hubapi.HealthCheckStatus) {
 	readinessUrl := hubapi.BuildUrl(hubUrl, hubapi.ReadinessApi)
+	return checkHealthStatus(c, readinessUrl)
+}
+
+func (c *Client) CheckHubLiveness(hubUrl string) (error, *hubapi.HealthCheckStatus) {
+	livenessUrl := hubapi.BuildUrl(hubUrl, hubapi.LivenessApi)
+	return checkHealthStatus(c, livenessUrl)
+}
+
+func checkHealthStatus(c *Client, url string) (error, *hubapi.HealthCheckStatus) {
 	var status hubapi.HealthCheckStatus
-	resp, err := c.httpClient.Get(readinessUrl)
+	resp, err := c.httpClient.Get(url)
 	if err != nil {
 		log.Error("Error fetching hub health status", err)
 		return err, nil
