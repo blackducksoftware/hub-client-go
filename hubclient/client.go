@@ -181,9 +181,12 @@ func (c *Client) processResponse(resp *http.Response, result interface{}, expect
 
 func (c *Client) HttpGetString(url string, result *string, expectedStatusCode []int, mimetypes ...string) (error, int) {
 	err, response := c.httpGet(url, nil, expectedStatusCode, mimetypes...)
+
+	statusCode := getResponseStatus(response)
 	body := readResponseBody(response, c.debugFlags)
 	*result = string(body)
-	return err, response.StatusCode
+
+	return err, statusCode
 }
 
 func (c *Client) HttpGetJSON(url string, result interface{}, expectedStatusCode int, mimetypes ...string) error {
@@ -505,6 +508,15 @@ func (c *Client) GetPage(link string, options *hubapi.GetListOptions, list inter
 	}
 
 	return nil
+}
+
+func getResponseStatus(resp *http.Response) int {
+	statusCode := 0
+	if resp != nil {
+		statusCode = resp.StatusCode
+	}
+
+	return statusCode
 }
 
 func readResponseBody(resp *http.Response, debugFlags HubClientDebug) (bodyBytes []byte) {
