@@ -18,11 +18,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/blackducksoftware/hub-client-go/hubapi"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/blackducksoftware/hub-client-go/hubapi"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -133,7 +134,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 func (c *Client) FetchResults(rapidScanEndpoint string, offset int, pageLimit int) (err error, httpStatus int, result *hubapi.RapidScanResult) {
 	var body string
 	err, statusCode := c.fetchResults(rapidScanEndpoint, 0, 1, &body)
-	if err != nil  || statusCode != http.StatusOK{
+	if err != nil || statusCode != http.StatusOK {
 		return err, statusCode, nil
 	}
 	err, result = parseBody(body)

@@ -24,6 +24,7 @@ const (
 	FullResultsApi       = "/full-result"
 	SecurityApi          = "/j_spring_security_check"
 	RemediatingApi       = "/remediating"
+	UpgradeGuidanceApi   = "/upgrade-guidance"
 )
 
 func BuildUrl(urlBase string, api string) string {
