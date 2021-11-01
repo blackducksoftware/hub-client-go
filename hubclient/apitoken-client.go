@@ -51,6 +51,8 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 
 	req.Header.Add(HeaderNameAuthorization, tokenValue)
 
+	currentTime := time.Now()
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, AnnotateHubClientError(err, "error logging in via API Token")
@@ -83,16 +85,20 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 		return nil, newHubClientError(body, resp, "bearer token not found", nil)
 	}
 
+	bearerTokenExpiryInSecs := bearerTokenResponse.ExpiresInMilliseconds / 1000
+	bearerTokenExpiryTime := currentTime.Add(time.Duration(bearerTokenExpiryInSecs) * time.Second)
+
 	log.Debug("Logged in with auth token successfully")
 
 	return &Client{
-		httpClient:      client,
-		baseURL:         baseURL,
-		authToken:       bearerTokenResponse.BearerToken,
-		useAuthToken:    true,
-		csrfToken:       csrf,
-		haveCsrfToken:   true,
-		debugFlags:      debugFlags,
-		headerOverrides: http.Header{},
+		httpClient:               client,
+		baseURL:                  baseURL,
+		authToken:                bearerTokenResponse.BearerToken,
+		useAuthToken:             true,
+		csrfToken:                csrf,
+		haveCsrfToken:            true,
+		debugFlags:               debugFlags,
+		headerOverrides:          http.Header{},
+		authTokenExpiryInUnixSec: bearerTokenExpiryTime.Unix(),
 	}, nil
 }

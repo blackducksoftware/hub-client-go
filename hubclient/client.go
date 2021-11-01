@@ -41,6 +41,8 @@ type Client struct {
 	csrfToken       string
 	debugFlags      HubClientDebug
 	headerOverrides http.Header
+	// Unix time in seconds at which the authToken expires
+	authTokenExpiryInUnixSec int64
 }
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
@@ -564,4 +566,13 @@ func newHubClientError(respBody []byte, resp *http.Response, message string, und
 	}
 
 	return hce
+}
+
+// GetAuthTokenExpiryTime returns the unix time in seconds at which the cached auth token is set to expire
+// This func returns -1 if the Client is not configured to use auth token
+func (c *Client) GetAuthTokenExpiryTime() int64 {
+	if c == nil || !c.useAuthToken || c.authToken == "" {
+		return -1
+	}
+	return c.authTokenExpiryInUnixSec
 }

@@ -21,13 +21,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (c *Client) CheckHubReadiness(hubUrl string) (error, *hubapi.HealthCheckStatus) {
-	readinessUrl := hubapi.BuildUrl(hubUrl, hubapi.ReadinessApi)
+func (c *Client) CheckHubReadiness() (error, *hubapi.HealthCheckStatus) {
+	readinessUrl := hubapi.BuildUrl(c.BaseURL(), hubapi.ReadinessApi)
 	return checkHealthStatus(c, readinessUrl)
 }
 
-func (c *Client) CheckHubLiveness(hubUrl string) (error, *hubapi.HealthCheckStatus) {
-	livenessUrl := hubapi.BuildUrl(hubUrl, hubapi.LivenessApi)
+func (c *Client) CheckHubLiveness() (error, *hubapi.HealthCheckStatus) {
+	livenessUrl := hubapi.BuildUrl(c.BaseURL(), hubapi.LivenessApi)
 	return checkHealthStatus(c, livenessUrl)
 }
 
