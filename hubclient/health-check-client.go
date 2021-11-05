@@ -16,6 +16,8 @@ package hubclient
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
@@ -37,6 +39,10 @@ func checkHealthStatus(c *Client, url string) (error, *hubapi.HealthCheckStatus)
 	if err != nil {
 		log.Error("Error fetching hub health status", err)
 		return err, nil
+	}
+
+	if resp != nil && resp.StatusCode != http.StatusOK {
+		return HubClientStatusCodeErrorf(resp.StatusCode, "got a %d response instead of a %d", resp.StatusCode, http.StatusOK), nil
 	}
 
 	if resp != nil {
