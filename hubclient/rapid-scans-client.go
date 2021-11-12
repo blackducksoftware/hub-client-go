@@ -46,26 +46,24 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 }
 
 func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []string) error {
-	c.AddHeaderValue(headerBdMode, bdModeAppend)
-	c.AddHeaderValue(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
+	header := http.Header{}
+	header.Add(headerBdMode, bdModeAppend)
+	header.Add(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
 
 	for _, bdioContent := range bdioContents {
-		err := c.HttpPutString(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
+		err := c.HttpPutStringWithHeader(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
 		if err != nil {
 			log.Error("Error uploading bdio files.", err)
 			return err
 		}
 	}
 
-	c.SetHeaderValue(headerBdMode, bdModeFinish)
-	err := c.HttpPutString(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
+	header.Set(headerBdMode, bdModeFinish)
+	err := c.HttpPutStringWithHeader(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
 	if err != nil {
 		log.Error("Error uploading bdio files.", err)
 		return err
 	}
-
-	c.DeleteHeaderValue(headerBdMode)
-	c.DeleteHeaderValue(headerBdDocumentCount)
 
 	return nil
 }
