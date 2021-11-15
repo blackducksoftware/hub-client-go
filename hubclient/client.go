@@ -445,7 +445,7 @@ func (c *Client) applyHeaderValues(request *http.Request, header http.Header) {
 	}
 
 	if c.userAgent != "" {
-		request.Header.Add("User-Agent", c.userAgent)
+		request.Header.Add(HeaderNameUserAgent, c.userAgent)
 	}
 
 	c.setAuthHeaders(request)
