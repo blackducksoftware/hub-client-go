@@ -131,7 +131,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 
 func (c *Client) FetchResults(rapidScanEndpoint string, offset int, pageLimit int) (err error, httpStatus int, result *hubapi.RapidScanResult) {
 	var body string
-	err, statusCode := c.fetchResults(rapidScanEndpoint, 0, 1, &body)
+	err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
 	if err != nil || statusCode != http.StatusOK {
 		return err, statusCode, nil
 	}
