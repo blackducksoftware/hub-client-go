@@ -33,16 +33,16 @@ import (
 
 // Client will need to support CSRF tokens for session-based auth for Hub 4.1.x (or was it 4.0?)
 type Client struct {
-	httpClient      *http.Client
-	baseURL         string
-	authToken       string
-	useAuthToken    bool
-	haveCsrfToken   bool
-	csrfToken       string
-	debugFlags      HubClientDebug
-	headerOverrides http.Header
+	httpClient    *http.Client
+	baseURL       string
+	authToken     string
+	useAuthToken  bool
+	haveCsrfToken bool
+	csrfToken     string
+	debugFlags    HubClientDebug
 	// Unix time in seconds at which the authToken expires
 	authTokenExpiryInUnixSec int64
+	userAgent                string
 }
 
 func NewWithSession(baseURL string, debugFlags HubClientDebug, timeout time.Duration) (*Client, error) {
@@ -67,11 +67,10 @@ func NewWithClient(baseURL string, debugFlags HubClientDebug, httpClient *http.C
 	}
 
 	return &Client{
-		httpClient:      httpClient,
-		baseURL:         baseURL,
-		useAuthToken:    false,
-		debugFlags:      debugFlags,
-		headerOverrides: http.Header{},
+		httpClient:   httpClient,
+		baseURL:      baseURL,
+		useAuthToken: false,
+		debugFlags:   debugFlags,
 	}, nil
 }
 
@@ -86,12 +85,11 @@ func NewWithTokenAndClient(baseURL string, authToken string, debugFlags HubClien
 	}
 
 	return &Client{
-		httpClient:      httpClient,
-		baseURL:         baseURL,
-		authToken:       authToken,
-		useAuthToken:    true,
-		debugFlags:      debugFlags,
-		headerOverrides: http.Header{},
+		httpClient:   httpClient,
+		baseURL:      baseURL,
+		authToken:    authToken,
+		useAuthToken: true,
+		debugFlags:   debugFlags,
 	}, nil
 }
 
@@ -209,7 +207,7 @@ func (c *Client) httpGet(url string, result interface{}, expectedStatusCodes []i
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http get request for %s: %+v", url, err), err), resp
 	}
 
-	c.applyHeaderValues(req)
+	c.applyHeaderValues(req, nil)
 
 	if len(mimetypes) > 0 {
 		for _, mimetype := range mimetypes {
@@ -239,12 +237,16 @@ func (c *Client) httpGet(url string, result interface{}, expectedStatusCodes []i
 }
 
 func (c *Client) HttpPutString(url string, data string, contentType string, expectedStatusCode int) error {
+	return c.HttpPutStringWithHeader(url, data, contentType, expectedStatusCode, nil)
+}
+
+func (c *Client) HttpPutStringWithHeader(url string, data string, contentType string, expectedStatusCode int, header http.Header) error {
 	if c.debugFlags&HubClientDebugTimings != 0 {
 		log.Debugf("DEBUG HTTP STARTING %s STRING REQUEST: %s", http.MethodPut, url)
 	}
 
 	reader := strings.NewReader(data)
-	return c.putRequest(url, reader, contentType, expectedStatusCode)
+	return c.putRequestWithHeader(url, reader, contentType, expectedStatusCode, header)
 }
 
 func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, expectedStatusCode int) error {
@@ -264,6 +266,10 @@ func (c *Client) HttpPutJSON(url string, data interface{}, contentType string, e
 }
 
 func (c *Client) putRequest(url string, reader io.Reader, contentType string, expectedStatusCode int) error {
+	return c.putRequestWithHeader(url, reader, contentType, expectedStatusCode, nil)
+}
+
+func (c *Client) putRequestWithHeader(url string, reader io.Reader, contentType string, expectedStatusCode int, header http.Header) error {
 	req, err := http.NewRequest(http.MethodPut, url, reader)
 	if err != nil {
 		return newHubClientError(nil, nil, fmt.Sprintf("error creating http put request for %s: %+v", url, err), err)
@@ -271,7 +277,7 @@ func (c *Client) putRequest(url string, reader io.Reader, contentType string, ex
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.applyHeaderValues(req)
+	c.applyHeaderValues(req, header)
 	log.Debugf("PUT Request: %+v.", req)
 
 	httpStart := time.Now()
@@ -322,7 +328,7 @@ func (c *Client) postRequest(url string, reader io.Reader, contentType string, e
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.applyHeaderValues(req)
+	c.applyHeaderValues(req, nil)
 
 	log.Debugf("POST Request: %+v.", req)
 
@@ -369,7 +375,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.applyHeaderValues(req)
+	c.applyHeaderValues(req, nil)
 
 	log.Debugf("POST Request: %+v.", req)
 
@@ -407,7 +413,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	req.Header.Set(HeaderNameContentType, contentType)
 
-	c.applyHeaderValues(req)
+	c.applyHeaderValues(req, nil)
 
 	log.Debugf("DELETE Request: %+v.", req)
 
@@ -427,8 +433,8 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 }
 
 // Applies authentication headers (see setAuthHeaders) and also applies any custom header values to the provided request
-func (c *Client) applyHeaderValues(request *http.Request) {
-	for key, values := range c.headerOverrides {
+func (c *Client) applyHeaderValues(request *http.Request, header http.Header) {
+	for key, values := range header {
 		// remove any old values in the provided request header
 		request.Header.Del(key)
 		for _, value := range values {
@@ -437,6 +443,11 @@ func (c *Client) applyHeaderValues(request *http.Request) {
 		}
 
 	}
+
+	if c.userAgent != "" {
+		request.Header.Add(HeaderNameUserAgent, c.userAgent)
+	}
+
 	c.setAuthHeaders(request)
 }
 
@@ -478,21 +489,6 @@ func (c *Client) ForEachPage(link string, listOptions *hubapi.GetListOptions, li
 	}
 
 	return err
-}
-
-// Sets header override values for the provided key for any subsequent requests by this client
-func (c *Client) SetHeaderValue(key string, value string) {
-	c.headerOverrides.Set(key, value)
-}
-
-// Clears a previously set header override value for this client
-func (c *Client) DeleteHeaderValue(key string) {
-	c.headerOverrides.Del(key)
-}
-
-// Adds header override values for the provided key for any subsequent requests by this client
-func (c *Client) AddHeaderValue(key string, value string) {
-	c.headerOverrides.Add(key, value)
 }
 
 func resetList(v interface{}) {
@@ -575,4 +571,9 @@ func (c *Client) GetAuthTokenExpiryTime() int64 {
 		return -1
 	}
 	return c.authTokenExpiryInUnixSec
+}
+
+// Sets the User-Agent header value to be used in all http/https requests made by the client
+func (c *Client) SetUserAgent(agent string) {
+	c.userAgent = agent
 }

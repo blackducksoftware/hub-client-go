@@ -19,4 +19,5 @@ const (
 	HeaderNameAccept        = "Accept"
 	HeaderNameAuthorization = "Authorization"
 	HeaderNameCsrfToken     = "X-Csrf-Token"
+	HeaderNameUserAgent     = "User-Agent"
 )

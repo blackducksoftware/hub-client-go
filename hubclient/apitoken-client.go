@@ -17,11 +17,11 @@ package hubclient
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/blackducksoftware/hub-client-go/hubapi"
 	"io/ioutil"
 	"net/http"
 	"time"
 
+	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -98,7 +98,6 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 		csrfToken:                csrf,
 		haveCsrfToken:            true,
 		debugFlags:               debugFlags,
-		headerOverrides:          http.Header{},
 		authTokenExpiryInUnixSec: bearerTokenExpiryTime.Unix(),
 	}, nil
 }
