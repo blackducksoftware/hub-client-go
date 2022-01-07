@@ -18,11 +18,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/blackducksoftware/hub-client-go/hubapi"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/blackducksoftware/hub-client-go/hubapi"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -37,7 +38,7 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 	bdioUploadEndpoint, err := c.HttpPostString(rapidScansURL, bdioHeaderContent, hubapi.ContentTypeRapidScanRequest, http.StatusCreated)
 
 	if err != nil {
-		log.Errorf("Error kicking off a rapid scan.", err)
+		log.Error("Error kicking off a rapid scan.", err)
 		return err, ""
 	}
 
@@ -45,26 +46,24 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 }
 
 func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []string) error {
-	c.AddHeaderValue(headerBdMode, bdModeAppend)
-	c.AddHeaderValue(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
+	header := http.Header{}
+	header.Add(headerBdMode, bdModeAppend)
+	header.Add(headerBdDocumentCount, strconv.Itoa(len(bdioContents)))
 
 	for _, bdioContent := range bdioContents {
-		err := c.HttpPutString(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
+		err := c.HttpPutStringWithHeader(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
 		if err != nil {
-			log.Errorf("Error uploading bdio files.", err)
+			log.Error("Error uploading bdio files.", err)
 			return err
 		}
 	}
 
-	c.SetHeaderValue(headerBdMode, bdModeFinish)
-	err := c.HttpPutString(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, http.StatusAccepted)
+	header.Set(headerBdMode, bdModeFinish)
+	err := c.HttpPutStringWithHeader(bdioUploadEndpoint, "", hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
 	if err != nil {
-		log.Errorf("Error uploading bdio files.", err)
+		log.Error("Error uploading bdio files.", err)
 		return err
 	}
-
-	c.DeleteHeaderValue(headerBdMode)
-	c.DeleteHeaderValue(headerBdDocumentCount)
 
 	return nil
 }
@@ -86,7 +85,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 			if err != nil {
 				ticker.Stop()
 				timeoutTimer.Stop()
-				log.Errorf("Error fetching rapid scan result", err)
+				log.Error("Error fetching rapid scan result", err)
 				return err, nil
 			}
 
@@ -107,7 +106,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 					err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
 
 					if err != nil {
-						log.Errorf("Error fetching rapid scan result", err)
+						log.Error("Error fetching rapid scan result", err)
 						return err, result
 					}
 
@@ -130,12 +129,22 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 	}
 }
 
+func (c *Client) FetchResults(rapidScanEndpoint string, offset int, pageLimit int) (err error, httpStatus int, result *hubapi.RapidScanResult) {
+	var body string
+	err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
+	if err != nil || statusCode != http.StatusOK {
+		return err, statusCode, nil
+	}
+	err, result = parseBody(body)
+	return err, statusCode, result
+}
+
 func parseBody(body string) (error, *hubapi.RapidScanResult) {
 	var pagedResult *hubapi.RapidScanResult
 	err := json.Unmarshal([]byte(body), &pagedResult)
 
 	if err != nil {
-		log.Errorf("Error parsing rapid scan result", err)
+		log.Error("Error parsing rapid scan result", err)
 		return err, nil
 	}
 

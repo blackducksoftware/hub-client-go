@@ -19,6 +19,7 @@ import (
 
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_GetComponentVersion(t *testing.T) {
@@ -29,7 +30,8 @@ func TestClient_GetComponentVersion(t *testing.T) {
 	listOptions := &hubapi.GetListOptions{Q: &option}
 
 	componentList, err := client.ListComponents(listOptions)
-	assert.NoError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, componentList)
 	assert.True(t, len(componentList.Items) > 0, "Expected at least one componentlist item")
 
 	item := componentList.Items[0]
@@ -59,7 +61,8 @@ func TestClient_GetComponentVersionFromVariant(t *testing.T) {
 	listOptions := &hubapi.GetListOptions{Q: &option}
 
 	componentList, err := client.ListComponents(listOptions)
-	assert.NoError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, componentList)
 	assert.True(t, len(componentList.Items) > 0, "Expected at least one componentlist item")
 
 	componentVariant := componentList.Items[0]

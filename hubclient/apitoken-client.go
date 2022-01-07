@@ -17,11 +17,11 @@ package hubclient
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/blackducksoftware/hub-client-go/hubapi"
 	"io/ioutil"
 	"net/http"
 	"time"
 
+	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -50,6 +50,8 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 	tokenValue := fmt.Sprintf("token %s", apiToken)
 
 	req.Header.Add(HeaderNameAuthorization, tokenValue)
+
+	currentTime := time.Now()
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -83,16 +85,19 @@ func NewWithApiTokenAndClient(baseURL string, apiToken string, debugFlags HubCli
 		return nil, newHubClientError(body, resp, "bearer token not found", nil)
 	}
 
+	bearerTokenExpiryInSecs := bearerTokenResponse.ExpiresInMilliseconds / 1000
+	bearerTokenExpiryTime := currentTime.Add(time.Duration(bearerTokenExpiryInSecs) * time.Second)
+
 	log.Debug("Logged in with auth token successfully")
 
 	return &Client{
-		httpClient:      client,
-		baseURL:         baseURL,
-		authToken:       bearerTokenResponse.BearerToken,
-		useAuthToken:    true,
-		csrfToken:       csrf,
-		haveCsrfToken:   true,
-		debugFlags:      debugFlags,
-		headerOverrides: http.Header{},
+		httpClient:               client,
+		baseURL:                  baseURL,
+		authToken:                bearerTokenResponse.BearerToken,
+		useAuthToken:             true,
+		csrfToken:                csrf,
+		haveCsrfToken:            true,
+		debugFlags:               debugFlags,
+		authTokenExpiryInUnixSec: bearerTokenExpiryTime.Unix(),
 	}, nil
 }

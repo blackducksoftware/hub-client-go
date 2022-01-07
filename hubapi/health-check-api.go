@@ -1,4 +1,4 @@
-// Copyright 2018 Synopsys, Inc.
+// Copyright 2021 Synopsys, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package hubclient
+package hubapi
 
-const (
-	HeaderNameContentType   = "Content-Type"
-	HeaderNameAccept        = "Accept"
-	HeaderNameAuthorization = "Authorization"
-	HeaderNameCsrfToken     = "X-Csrf-Token"
-	HeaderNameUserAgent     = "User-Agent"
-)
+const ContentTypeHealthStatus = "application/vnd.blackducksoftware.status-4+json"
+
+type HealthCheckStatus struct {
+	Healthy bool `json:"healthy"`
+}

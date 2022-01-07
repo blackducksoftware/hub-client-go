@@ -17,14 +17,14 @@ package hubapi
 import "time"
 
 type ComplexLicense struct {
-	Name                 string           `json:"name"`
-	Ownership            string           `json:"ownership"`
-	LicenseType          string           `json:"type"`
+	Name                 string           `json:"name,omitempty"`
+	Ownership            string           `json:"ownership,omitempty"`
+	LicenseType          string           `json:"type,omitempty"`
 	LicenseDisplay       string           `json:"licenseDisplay"`
 	Licenses             []ComplexLicense `json:"licenses"`
-	License              string           `json:"license"`          // License URL
-	SpdxId               string           `json:"spdxId,omitempty"` // The ID of the license in the SPDX project’s database, if available
-	LicenseFamilySummary ResourceLink     `json:"licenseFamilySummary"`
+	License              string           `json:"license,omitempty"` // License URL
+	SpdxId               string           `json:"spdxId,omitempty"`  // The ID of the license in the SPDX project’s database, if available
+	LicenseFamilySummary *ResourceLink    `json:"licenseFamilySummary,omitempty"`
 }
 
 type LicenseDetails struct {

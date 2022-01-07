@@ -15,6 +15,8 @@
 package hubclient
 
 import (
+	"errors"
+
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
 )
@@ -106,4 +108,29 @@ func (c *Client) GetComponentVersionRemediation(componentVersionHref string) (*h
 	}
 
 	return &componentRemediation, nil
+}
+
+func (c *Client) GetUpgradeGuidanceForComponent(componentVariant hubapi.ComponentVariant) (*hubapi.ComponentUpgradeGuidance, error) {
+	version, err := c.GetComponentVersion(hubapi.ResourceLink{Href: componentVariant.Variant})
+	if err != nil {
+		return nil, AnnotateHubClientError(err, "Error trying to retrieve component version for upgrade guidance")
+	}
+
+	return c.GetUpgradeGuidanceForComponentVersion(version)
+}
+
+func (c *Client) GetUpgradeGuidanceForComponentVersion(componentVersion *hubapi.ComponentVersion) (*hubapi.ComponentUpgradeGuidance, error) {
+	var upgradeGuidance hubapi.ComponentUpgradeGuidance
+
+	if componentVersion == nil {
+		return nil, AnnotateHubClientError(errors.New("nil componentVersion provided"), "Error trying to retreive component upgrade guidance due to nil componentVersion parameter")
+	}
+
+	apiUrl := hubapi.BuildUrl(componentVersion.Meta.Href, hubapi.UpgradeGuidanceApi)
+	err := c.HttpGetJSON(apiUrl, &upgradeGuidance, 200)
+	if err != nil {
+		return nil, AnnotateHubClientError(err, "Error trying to retrieve component upgrade guidance")
+	}
+
+	return &upgradeGuidance, nil
 }

@@ -19,10 +19,12 @@ const (
 	SsoStatusApi         = "/api/sso/status"
 	UsersApi             = "/api/users"
 	VulnerabilitiesApi   = "/api/vulnerabilities"
-
-	FullResultsApi = "/full-result"
-	SecurityApi    = "/j_spring_security_check"
-	RemediatingApi = "/remediating"
+	ReadinessApi         = "/api/health-checks/readiness"
+	LivenessApi          = "/api/health-checks/liveness"
+	FullResultsApi       = "/full-result"
+	SecurityApi          = "/j_spring_security_check"
+	RemediatingApi       = "/remediating"
+	UpgradeGuidanceApi   = "/upgrade-guidance"
 )
 
 func BuildUrl(urlBase string, api string) string {

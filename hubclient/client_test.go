@@ -16,13 +16,11 @@ package hubclient
 
 import (
 	"fmt"
-	"net/http"
 	"testing"
 	"time"
 
 	"github.com/blackducksoftware/hub-client-go/hubapi"
 	log "github.com/sirupsen/logrus"
-	"github.com/stretchr/testify/assert"
 )
 
 // TestFetchPolicyStatus is a very brittle test because it requires:
@@ -54,7 +52,7 @@ func TestCreateAndDeleteProject(t *testing.T) {
 	q := fmt.Sprintf("name:%s", projectName)
 	projectList, err := client.ListProjects(&hubapi.GetListOptions{Q: &q})
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	projects := []hubapi.Project{}
 	for _, project := range projectList.Items {
@@ -75,41 +73,4 @@ func TestCreateAndDeleteProject(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-}
-
-func TestAddClearHeaders(t *testing.T) {
-	client, err := NewWithSession("https://localhost", HubClientDebugTimings, 5*time.Second)
-	if err != nil {
-		t.Error(err)
-	}
-	err = client.Login("sysadmin", "blackduck")
-	if err != nil {
-		t.Error(err)
-	}
-	// set a couple header values
-	client.SetHeaderValue("User-Agent", "go_api_client_test")
-	client.SetHeaderValue("Another-Header-Key", "another value")
-
-	//create a request
-	req, err := http.NewRequest(http.MethodGet, client.baseURL+apiCurrentUser, nil)
-	assert.NoError(t, err)
-
-	// apply the new header values to the request
-	client.applyHeaderValues(req)
-
-	assert.Equal(t, "go_api_client_test", req.Header.Get("User-Agent"))
-	assert.Equal(t, "another value", req.Header.Get("Another-Header-Key"))
-
-	// clear the user agent extra header value
-	client.DeleteHeaderValue("User-Agent")
-
-	// create a new request
-	req, err = http.NewRequest(http.MethodGet, client.baseURL+apiCurrentUser, nil)
-	assert.NoError(t, err)
-
-	// apply the header values
-	client.applyHeaderValues(req)
-
-	assert.Empty(t, req.Header.Get("User-Agent"))
-	assert.Equal(t, "another value", req.Header.Get("Another-Header-Key"))
 }
