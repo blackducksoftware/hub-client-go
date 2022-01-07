@@ -50,8 +50,10 @@ type LicenseDetails struct {
 }
 
 type License struct {
-	Name        string `json:"name"`
-	Ownership   string `json:"ownership"`
-	CodeSharing string `json:"codeSharing"`
-	Meta        Meta   `json:"_meta"`
+	Name          string `json:"name"`
+	Ownership     string `json:"ownership"`
+	CodeSharing   string `json:"codeSharing"`
+	Meta          Meta   `json:"_meta"`
+	LicenseSource string `json:"licenseSource,omitempty"`
+	LicenseStatus string `json:"licenseStatus,omitempty"`
 }
