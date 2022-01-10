@@ -22,6 +22,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"os"
 	"reflect"
 	"strings"
 	"time"
@@ -318,6 +319,19 @@ func (c *Client) HttpPostJSON(url string, data interface{}, contentType string, 
 	reader := &buf
 
 	return c.postRequest(url, reader, contentType, expectedStatusCode)
+}
+
+func (c *Client) HttpPostFile(url string, filePath string, contentType string, expectedStatusCode int) (string, error) {
+	var err error
+
+	file, err := os.Open(filePath)
+
+	if err != nil {
+		log.Errorf("Error opening file: %+v", err)
+		return "", err
+	}
+
+	return c.postRequest(url, file, contentType, expectedStatusCode)
 }
 
 func (c *Client) postRequest(url string, reader io.Reader, contentType string, expectedStatusCode int) (string, error) {
