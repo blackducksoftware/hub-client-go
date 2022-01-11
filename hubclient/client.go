@@ -606,6 +606,11 @@ func newHubClientError(respBody []byte, resp *http.Response, message string, und
 	return hce
 }
 
+func (c *Client) SetBearerToken(token string) {
+	c.authToken = token
+	c.useAuthToken = true
+}
+
 // GetAuthTokenExpiryTime returns the unix time in seconds at which the cached auth token is set to expire
 // This func returns -1 if the Client is not configured to use auth token
 func (c *Client) GetAuthTokenExpiryTime() int64 {
