@@ -341,6 +341,8 @@ func (c *Client) HttpPostFile(url string, filePath string, contentType string) (
 	req, err := http.NewRequest(http.MethodPost, url, file)
 	req.Header.Set(HeaderNameContentType, contentType)
 
+	c.setAuthHeaders(req)
+
 	if err != nil {
 		log.Errorf("Error making http post request: %+v.", err)
 		return "", -1, err
