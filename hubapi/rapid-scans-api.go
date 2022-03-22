@@ -31,12 +31,16 @@ type Policy struct {
 	Severity    string `json:"policySeverity"`
 }
 type ComponentVulnerability struct {
-	Name              string   `json:"name"`
-	Description       string   `json:"description"`
-	Severity          string   `json:"vulnSeverity"`
-	OverallScore      float32  `json:"overallScore"`
-	ViolatingPolicies []Policy `json:"violatingPolicies"`
-	Meta              Meta     `json:"_meta"`
+	Name              string     `json:"name"`
+	Description       string     `json:"description"`
+	Severity          string     `json:"vulnSeverity"`
+	OverallScore      float32    `json:"overallScore"`
+	ViolatingPolicies []Policy   `json:"violatingPolicies"`
+	PublishedDate     *time.Time `json:"publishedDate"`
+	VendorFixDate     *time.Time `json:"vendorFixDate,omitempty"`
+	Solution          string     `json:"solution"`
+	Workaround        string     `json:"workaround,omitempty"`
+	Meta              Meta        `json:"_meta"`
 }
 type ComponentLicense struct {
 	Name       string `json:"name"`
@@ -57,5 +61,8 @@ type RapidScanComponent struct {
 	PolicyViolationLicenses        []ComponentLicense       `json:"policyViolationLicenses"`
 	PartiallyEvaluatedPolicies     []string                 `json:"partiallyEvaluatedPolicies"`
 	NonEvaluatedPolicies           []string                 `json:"nonEvaluatedPolicies"`
+	DependencyTree                 [][]string               'json:"dependencyTree"'
+	ShortTermUpgradeGuidance       string                   'json:"shortTermUpgradeGuidance"'
+	LongTermUpgradeGuidance        string                   'json:"longTermUpgradeGuidance"'
 	Meta                           Meta                     `json:"_meta"`
 }
