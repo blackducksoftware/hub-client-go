@@ -14,6 +14,8 @@
 
 package hubapi
 
+import "time"
+
 const (
 	ContentTypeRapidScanRequest = "application/vnd.blackducksoftware.developer-scan-1-ld-2+json"
 	ContentTypeRapidScanResults = "application/vnd.blackducksoftware.scan-5+json"
@@ -47,6 +49,18 @@ type ComponentLicense struct {
 	FamilyName string `json:"licenseFamilyName"`
 	Meta       Meta   `json:"_meta"`
 }
+type Risk struct {
+	Critical int  `json:"critical"`
+	High     int  `json:"high"`
+	Medimum  int  `json:"medium"`
+	Low      int  `json:"low"`
+	Unscored int  `json:"unscored"`
+}
+type UpgradeSuggestion struct {
+	VersionName           string   `json:"versionName"`
+	ExternalId            string   `json:"externalId"`
+	VulnerabilityRisk     Risk     `json:"vulnerabilityRisk"`
+}
 type RapidScanComponent struct {
 	Name                           string                   `json:"componentName"`
 	Version                        string                   `json:"versionName"`
@@ -61,8 +75,9 @@ type RapidScanComponent struct {
 	PolicyViolationLicenses        []ComponentLicense       `json:"policyViolationLicenses"`
 	PartiallyEvaluatedPolicies     []string                 `json:"partiallyEvaluatedPolicies"`
 	NonEvaluatedPolicies           []string                 `json:"nonEvaluatedPolicies"`
-	DependencyTree                 [][]string               'json:"dependencyTree"'
-	ShortTermUpgradeGuidance       string                   'json:"shortTermUpgradeGuidance"'
-	LongTermUpgradeGuidance        string                   'json:"longTermUpgradeGuidance"'
+	DependencyTree                 [][]string               `json:"dependencyTree"`
+	ShortTermUpgradeGuidance       UpgradeSuggestion        `json:"shortTermUpgradeGuidance"`
+	LongTermUpgradeGuidance        UpgradeSuggestion        `json:"longTermUpgradeGuidance"`
 	Meta                           Meta                     `json:"_meta"`
 }
+
