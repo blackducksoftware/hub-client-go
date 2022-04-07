@@ -78,6 +78,7 @@ type RapidScanComponent struct {
 	DependencyTree                 [][]string               `json:"dependencyTree"`
 	ShortTermUpgradeGuidance       UpgradeSuggestion        `json:"shortTermUpgradeGuidance"`
 	LongTermUpgradeGuidance        UpgradeSuggestion        `json:"longTermUpgradeGuidance"`
+	CWEIds                         []string                 `json:"cweIds"`
 	Meta                           Meta                     `json:"_meta"`
 }
 
