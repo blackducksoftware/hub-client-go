@@ -14,6 +14,8 @@
 
 package hubapi
 
+import "time"
+
 const (
 	ContentTypeRapidScanRequest = "application/vnd.blackducksoftware.developer-scan-1-ld-2+json"
 	ContentTypeRapidScanResults = "application/vnd.blackducksoftware.scan-5+json"
@@ -31,17 +33,33 @@ type Policy struct {
 	Severity    string `json:"policySeverity"`
 }
 type ComponentVulnerability struct {
-	Name              string   `json:"name"`
-	Description       string   `json:"description"`
-	Severity          string   `json:"vulnSeverity"`
-	OverallScore      float32  `json:"overallScore"`
-	ViolatingPolicies []Policy `json:"violatingPolicies"`
-	Meta              Meta     `json:"_meta"`
+	Name              string     `json:"name"`
+	Description       string     `json:"description"`
+	Severity          string     `json:"vulnSeverity"`
+	OverallScore      float32    `json:"overallScore"`
+	ViolatingPolicies []Policy   `json:"violatingPolicies"`
+	PublishedDate     *time.Time `json:"publishedDate"`
+	VendorFixDate     *time.Time `json:"vendorFixDate,omitempty"`
+	Solution          string     `json:"solution"`
+	Workaround        string     `json:"workaround,omitempty"`
+	Meta              Meta       `json:"_meta"`
 }
 type ComponentLicense struct {
 	Name       string `json:"name"`
 	FamilyName string `json:"licenseFamilyName"`
 	Meta       Meta   `json:"_meta"`
+}
+type Risk struct {
+	Critical int  `json:"critical"`
+	High     int  `json:"high"`
+	Medimum  int  `json:"medium"`
+	Low      int  `json:"low"`
+	Unscored int  `json:"unscored"`
+}
+type UpgradeSuggestion struct {
+	VersionName           string   `json:"versionName"`
+	ExternalId            string   `json:"externalId"`
+	VulnerabilityRisk     Risk     `json:"vulnerabilityRisk"`
 }
 type RapidScanComponent struct {
 	Name                           string                   `json:"componentName"`
@@ -57,5 +75,10 @@ type RapidScanComponent struct {
 	PolicyViolationLicenses        []ComponentLicense       `json:"policyViolationLicenses"`
 	PartiallyEvaluatedPolicies     []string                 `json:"partiallyEvaluatedPolicies"`
 	NonEvaluatedPolicies           []string                 `json:"nonEvaluatedPolicies"`
+	DependencyTree                 [][]string               `json:"dependencyTree"`
+	ShortTermUpgradeGuidance       UpgradeSuggestion        `json:"shortTermUpgradeGuidance"`
+	LongTermUpgradeGuidance        UpgradeSuggestion        `json:"longTermUpgradeGuidance"`
+	CWEIds                         []string                 `json:"cweIds"`
 	Meta                           Meta                     `json:"_meta"`
 }
+
