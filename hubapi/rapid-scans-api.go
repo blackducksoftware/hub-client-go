@@ -42,7 +42,7 @@ type ComponentVulnerability struct {
 	VendorFixDate     *time.Time `json:"vendorFixDate,omitempty"`
 	Solution          string     `json:"solution"`
 	Workaround        string     `json:"workaround,omitempty"`
-	Meta              Meta        `json:"_meta"`
+	Meta              Meta       `json:"_meta"`
 }
 type ComponentLicense struct {
 	Name       string `json:"name"`
