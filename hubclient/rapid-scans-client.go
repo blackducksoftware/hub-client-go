@@ -52,10 +52,10 @@ func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
 
 func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []string) error {
 	iterator := NewArrayChunkIterator(bdioContents)
-	return c.UpdateBdioFilesByChunk(bdioUploadEndpoint, len(bdioContents), &iterator)
+	return c.UploadBdioFilesByChunk(bdioUploadEndpoint, len(bdioContents), &iterator)
 }
 
-func (c *Client) UpdateBdioFilesByChunk(bdioUploadEndpoint string, chunkCount int, iterator ChunkIterator) error {
+func (c *Client) UploadBdioFilesByChunk(bdioUploadEndpoint string, chunkCount int, iterator ChunkIterator) error {
 	header := http.Header{}
 	header.Add(headerBdMode, bdModeAppend)
 	header.Add(headerBdDocumentCount, strconv.Itoa(chunkCount))
