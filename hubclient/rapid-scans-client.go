@@ -35,7 +35,7 @@ const (
 
 type ChunkIterator interface {
 	hasNext() bool
-	next() string
+	next() (string, bool)
 }
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
@@ -55,17 +55,22 @@ func (c *Client) UploadBdioFiles(bdioUploadEndpoint string, bdioContents []strin
 	return c.UpdateBdioFilesByChunk(bdioUploadEndpoint, len(bdioContents), &iterator)
 }
 
-func (c *Client) UpdateBdioFilesByChunk(bdioUploadEndpoint string, chunkcount int, iterator ChunkIterator) error {
+func (c *Client) UpdateBdioFilesByChunk(bdioUploadEndpoint string, chunkCount int, iterator ChunkIterator) error {
 	header := http.Header{}
 	header.Add(headerBdMode, bdModeAppend)
-	header.Add(headerBdDocumentCount, strconv.Itoa(chunkcount))
+	header.Add(headerBdDocumentCount, strconv.Itoa(chunkCount))
 
 	for iterator.hasNext() {
-		bdioContent := iterator.next()
-		err := c.HttpPutStringWithHeader(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
-		if err != nil {
-			log.Error("Error uploading bdio files.", err)
-			return err
+		bdioContent, found := iterator.next()
+		if found {
+			err := c.HttpPutStringWithHeader(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
+			if err != nil {
+				log.Error("Error uploading bdio files.", err)
+				return err
+			}
+		} else {
+			log.Error("Unable to retrieve next chunk")
+			return errors.New("unable to retrieve next chunk")
 		}
 	}
 

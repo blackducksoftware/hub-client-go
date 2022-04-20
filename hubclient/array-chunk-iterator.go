@@ -13,14 +13,18 @@ func NewArrayChunkIterator(chunks []string) ArrayChunkIterator {
 }
 
 func (i *ArrayChunkIterator) hasNext() bool {
-	if len(i.chunks) < (i.position + 1) {
+	if len(i.chunks) > (i.position + 1) {
 		return true
 	} else {
 		return false
 	}
 }
 
-func (i *ArrayChunkIterator) next() string {
+// next returns true and the next chunk if there is a next chunk. Returns false otherwise.
+func (i *ArrayChunkIterator) next() (string, bool) {
 	i.position++
-	return i.chunks[i.position]
+	if i.position < len(i.chunks) {
+		return i.chunks[i.position], true
+	}
+	return "", false
 }
