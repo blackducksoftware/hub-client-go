@@ -1,5 +1,7 @@
 package hubclient
 
+import "github.com/pkg/errors"
+
 type ArrayChunkIterator struct {
 	chunks   []string
 	position int
@@ -21,10 +23,10 @@ func (i *ArrayChunkIterator) hasNext() bool {
 }
 
 // next returns true and the next chunk if there is a next chunk. Returns false otherwise.
-func (i *ArrayChunkIterator) next() (string, bool) {
+func (i *ArrayChunkIterator) next() (string, error) {
 	i.position++
 	if i.position < len(i.chunks) {
-		return i.chunks[i.position], true
+		return i.chunks[i.position], nil
 	}
-	return "", false
+	return "", errors.New("A new chunk was requested but no chunks exist.")
 }

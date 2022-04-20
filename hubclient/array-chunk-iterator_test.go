@@ -1,6 +1,7 @@
 package hubclient
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -49,10 +50,10 @@ func TestArrayChunkIterator_next(t *testing.T) {
 		position int
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		want   string
-		want1  bool
+		name    string
+		fields  fields
+		want    string
+		wantErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "Test get existing next",
@@ -60,8 +61,8 @@ func TestArrayChunkIterator_next(t *testing.T) {
 				chunks:   []string{"chunk1", "chunk2"},
 				position: 0,
 			},
-			want:  "chunk2",
-			want1: true,
+			want:    "chunk2",
+			wantErr: assert.NoError,
 		},
 		{
 			name: "Test fail when there is no next",
@@ -69,8 +70,8 @@ func TestArrayChunkIterator_next(t *testing.T) {
 				chunks:   []string{"chunk1", "chunk2"},
 				position: 1,
 			},
-			want:  "",
-			want1: false,
+			want:    "",
+			wantErr: assert.Error,
 		},
 	}
 	for _, tt := range tests {
@@ -79,9 +80,11 @@ func TestArrayChunkIterator_next(t *testing.T) {
 				chunks:   tt.fields.chunks,
 				position: tt.fields.position,
 			}
-			got, got1 := i.next()
+			got, err := i.next()
+			if !tt.wantErr(t, err, fmt.Sprintf("next()")) {
+				return
+			}
 			assert.Equalf(t, tt.want, got, "next()")
-			assert.Equalf(t, tt.want1, got1, "next()")
 		})
 	}
 }
