@@ -34,8 +34,8 @@ const (
 )
 
 type ChunkIterator interface {
-	hasNext() bool
-	next() (string, error)
+	HasNext() bool
+	Next() (string, error)
 }
 
 func (c *Client) StartRapidScan(bdioHeaderContent string) (error, string) {
@@ -60,8 +60,8 @@ func (c *Client) UploadBdioFilesByChunk(bdioUploadEndpoint string, chunkCount in
 	header.Add(headerBdMode, bdModeAppend)
 	header.Add(headerBdDocumentCount, strconv.Itoa(chunkCount))
 
-	for iterator.hasNext() {
-		bdioContent, err := iterator.next()
+	for iterator.HasNext() {
+		bdioContent, err := iterator.Next()
 
 		err = c.HttpPutStringWithHeader(bdioUploadEndpoint, bdioContent, hubapi.ContentTypeRapidScanRequest, http.StatusAccepted, header)
 		if err != nil {
