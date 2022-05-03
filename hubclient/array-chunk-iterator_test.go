@@ -1,3 +1,17 @@
+// Copyright 2022 Synopsys, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package hubclient
 
 import (
@@ -6,7 +20,7 @@ import (
 	"testing"
 )
 
-func TestArrayChunkIterator_hasNext(t *testing.T) {
+func TestArrayChunkIterator_HasNext(t *testing.T) {
 	type fields struct {
 		chunks   []string
 		position int
@@ -39,12 +53,12 @@ func TestArrayChunkIterator_hasNext(t *testing.T) {
 				chunks:   tt.fields.chunks,
 				position: tt.fields.position,
 			}
-			assert.Equalf(t, tt.want, i.hasNext(), "hasNext()")
+			assert.Equalf(t, tt.want, i.HasNext(), "HasNext()")
 		})
 	}
 }
 
-func TestArrayChunkIterator_next(t *testing.T) {
+func TestArrayChunkIterator_Next(t *testing.T) {
 	type fields struct {
 		chunks   []string
 		position int
@@ -80,11 +94,11 @@ func TestArrayChunkIterator_next(t *testing.T) {
 				chunks:   tt.fields.chunks,
 				position: tt.fields.position,
 			}
-			got, err := i.next()
-			if !tt.wantErr(t, err, fmt.Sprintf("next()")) {
+			got, err := i.Next()
+			if !tt.wantErr(t, err, fmt.Sprintf("Next()")) {
 				return
 			}
-			assert.Equalf(t, tt.want, got, "next()")
+			assert.Equalf(t, tt.want, got, "Next()")
 		})
 	}
 }
