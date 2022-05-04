@@ -42,6 +42,7 @@ type ComponentVulnerability struct {
 	VendorFixDate     *time.Time `json:"vendorFixDate,omitempty"`
 	Solution          string     `json:"solution"`
 	Workaround        string     `json:"workaround,omitempty"`
+	CWEIds            []string   `json:"cweIds"`
 	Meta              Meta       `json:"_meta"`
 }
 type ComponentLicense struct {
@@ -78,7 +79,6 @@ type RapidScanComponent struct {
 	DependencyTree                 [][]string               `json:"dependencyTree"`
 	ShortTermUpgradeGuidance       UpgradeSuggestion        `json:"shortTermUpgradeGuidance"`
 	LongTermUpgradeGuidance        UpgradeSuggestion        `json:"longTermUpgradeGuidance"`
-	CWEIds                         []string                 `json:"cweIds"`
 	Meta                           Meta                     `json:"_meta"`
 }
 
