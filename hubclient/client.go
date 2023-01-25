@@ -15,6 +15,7 @@
 package hubclient
 
 import (
+	"bufio"
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
@@ -22,6 +23,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"net/http/httputil"
 	"os"
 	"reflect"
 	"strings"
@@ -279,7 +281,7 @@ func (c *Client) putRequestWithHeader(url string, reader io.Reader, contentType 
 	req.Header.Set(HeaderNameContentType, contentType)
 
 	c.applyHeaderValues(req, header)
-	log.Debugf("PUT Request: %+v.", req)
+	log.Debugf("PUT Request: %+v.", maskAuthHeader(req))
 
 	httpStart := time.Now()
 	var resp *http.Response
@@ -348,7 +350,7 @@ func (c *Client) HttpPostFile(url string, filePath string, contentType string) (
 		return "", -1, err
 	}
 
-	log.Debugf("POST Request: %+v.", req)
+	log.Debugf("POST Request: %+v.", maskAuthHeader(req))
 
 	if resp, err = c.httpClient.Do(req); err != nil {
 		log.Errorf("Error getting HTTP Response: %+v.", err)
@@ -374,7 +376,7 @@ func (c *Client) postRequest(url string, reader io.Reader, contentType string, e
 
 	c.applyHeaderValues(req, nil)
 
-	log.Debugf("POST Request: %+v.", req)
+	log.Debugf("POST Request: %+v.", maskAuthHeader(req))
 
 	httpStart := time.Now()
 
@@ -421,7 +423,7 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 
 	c.applyHeaderValues(req, nil)
 
-	log.Debugf("POST Request: %+v.", req)
+	log.Debugf("POST Request: %+v.", maskAuthHeader(req))
 
 	httpStart := time.Now()
 	if resp, err = c.httpClient.Do(req); err != nil {
@@ -459,7 +461,7 @@ func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode i
 
 	c.applyHeaderValues(req, nil)
 
-	log.Debugf("DELETE Request: %+v.", req)
+	log.Debugf("DELETE Request: %+v.", maskAuthHeader(req))
 
 	httpStart := time.Now()
 
@@ -625,4 +627,22 @@ func (c *Client) GetAuthTokenExpiryTime() int64 {
 // Sets the User-Agent header value to be used in all http/https requests made by the client
 func (c *Client) SetUserAgent(agent string) {
 	c.userAgent = agent
+}
+
+func maskAuthHeader(req *http.Request) *http.Request {
+	// Deep clone the request
+	reqBytes, err := httputil.DumpRequest(req, true)
+	if err != nil {
+		log.Debugf("error cloning request: %v", err)
+		return nil
+	}
+	var reqClone *http.Request
+	if reqClone, err = http.ReadRequest(bufio.NewReader(bytes.NewBuffer(reqBytes))); err != nil {
+		log.Debugf("error cloning request: %v", err)
+		return nil
+	}
+	if val := reqClone.Header.Get(HeaderNameAuthorization); val != "" {
+		reqClone.Header.Set(HeaderNameAuthorization, fmt.Sprintf("Bearer %s", "<NOT_SHOWN>"))
+	}
+	return reqClone
 }
