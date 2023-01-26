@@ -15,15 +15,14 @@
 package hubclient
 
 import (
-	"bufio"
 	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/cookiejar"
-	"net/http/httputil"
 	"os"
 	"reflect"
 	"strings"
@@ -631,16 +630,7 @@ func (c *Client) SetUserAgent(agent string) {
 
 func maskAuthHeader(req *http.Request) *http.Request {
 	// Deep clone the request
-	reqBytes, err := httputil.DumpRequest(req, true)
-	if err != nil {
-		log.Debugf("error cloning request: %v", err)
-		return nil
-	}
-	var reqClone *http.Request
-	if reqClone, err = http.ReadRequest(bufio.NewReader(bytes.NewBuffer(reqBytes))); err != nil {
-		log.Debugf("error cloning request: %v", err)
-		return nil
-	}
+	reqClone := req.Clone(context.TODO())
 	if val := reqClone.Header.Get(HeaderNameAuthorization); val != "" {
 		reqClone.Header.Set(HeaderNameAuthorization, fmt.Sprintf("Bearer %s", "<NOT_SHOWN>"))
 	}
