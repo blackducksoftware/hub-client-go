@@ -33,6 +33,10 @@ const (
 	bdModeFinish          = "finish"
 )
 
+type RapidScanOpts struct {
+	IncludeNonVulnerableComponents bool
+}
+
 type ChunkIterator interface {
 	HasNext() bool
 	Next() (string, error)
@@ -80,7 +84,7 @@ func (c *Client) UploadBdioFilesByChunk(bdioUploadEndpoint string, chunkCount in
 	return nil
 }
 
-func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeout time.Duration, pageLimit int) (error, *hubapi.RapidScanResult) {
+func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeout time.Duration, pageLimit int, option RapidScanOpts) (error, *hubapi.RapidScanResult) {
 	offset := 0
 	ticker := time.NewTicker(interval)
 	timeoutTimer := time.NewTimer(timeout)
@@ -92,7 +96,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 			ticker.Stop()
 			return errors.New(fmt.Sprintf("The polling for rapid scan result timed out: %s", rapidScanEndpoint)), nil
 		case <-ticker.C:
-			err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
+			err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body, option)
 
 			if err != nil {
 				ticker.Stop()
@@ -115,7 +119,7 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 				for result.Count > len(result.Components) {
 					//increase offset to fetch the next page of results
 					offset += pageLimit
-					err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
+					err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body, option)
 
 					if err != nil {
 						log.Error("Error fetching rapid scan result", err)
@@ -141,9 +145,9 @@ func (c *Client) PollRapidScanResults(rapidScanEndpoint string, interval, timeou
 	}
 }
 
-func (c *Client) FetchResults(rapidScanEndpoint string, offset int, pageLimit int) (err error, httpStatus int, result *hubapi.RapidScanResult) {
+func (c *Client) FetchResults(rapidScanEndpoint string, offset int, pageLimit int, option RapidScanOpts) (err error, httpStatus int, result *hubapi.RapidScanResult) {
 	var body string
-	err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body)
+	err, statusCode := c.fetchResults(rapidScanEndpoint, offset, pageLimit, &body, option)
 	if err != nil || statusCode != http.StatusOK {
 		return err, statusCode, nil
 	}
@@ -163,11 +167,12 @@ func parseBody(body string) (error, *hubapi.RapidScanResult) {
 	return nil, pagedResult
 }
 
-func (c *Client) fetchResults(rapidScanEndpoint string, offset int, limit int, body *string) (error, int) {
+func (c *Client) fetchResults(rapidScanEndpoint string, offset int, limit int, body *string, option RapidScanOpts) (error, int) {
 	url := hubapi.BuildUrl(rapidScanEndpoint, hubapi.FullResultsApi)
 	params := make(map[string]string)
 	params["offset"] = strconv.Itoa(offset)
 	params["limit"] = strconv.Itoa(limit)
+	params["nonVulnerableComponents"] = strconv.FormatBool(option.IncludeNonVulnerableComponents)
 	url = hubapi.AddParameters(url, params)
 	err, statusCode := c.HttpGetString(url, body, []int{http.StatusOK, http.StatusNotFound}, hubapi.ContentTypeRapidScanResults)
 	return err, statusCode
