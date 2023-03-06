@@ -111,4 +111,5 @@ type ComponentLicenceV2 struct {
 	SpdxId         *string              `json:"spdxId"`
 	Licenses       []ComponentLicenceV2 `json:"licenses"`
 	Ownership      string               `json:"ownership"`
+	FamilyName     string               `json:"licenseFamilyName"`
 }
