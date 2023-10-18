@@ -136,21 +136,14 @@ type RemediationInfo struct {
 	VulnerabilityCount int        `json:"vulnerabilityCount"`
 }
 
-type VulnerabilityRisk struct {
-	Critical uint `json:"critical"`
-	High     uint `json:"high"`
-	Medium   uint `json:"medium"`
-	Low      uint `json:"low"`
-}
-
 type UpgradeGuidance struct {
-	Version                 string             `json:"version"`
-	VersionName             string             `json:"versionName"`
-	Origin                  string             `json:"origin"`
-	OriginName              string             `json:"originName"`
-	OriginExternalNamespace string             `json:"originExternalNamespace"`
-	OriginExternalId        string             `json:"originExternalId"`
-	VulnerabilityRisk       *VulnerabilityRisk `json:"vulnerabilityRisk,omitempty"`
+	Version                 string `json:"version"`
+	VersionName             string `json:"versionName"`
+	Origin                  string `json:"origin"`
+	OriginName              string `json:"originName"`
+	OriginExternalNamespace string `json:"originExternalNamespace"`
+	OriginExternalId        string `json:"originExternalId"`
+	VulnerabilityRisk       *Risk  `json:"vulnerabilityRisk,omitempty"`
 }
 
 type ComponentUpgradeGuidance struct {
