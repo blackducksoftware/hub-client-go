@@ -141,6 +141,7 @@ type VulnerabilityRisk struct {
 	High     uint `json:"high"`
 	Medium   uint `json:"medium"`
 	Low      uint `json:"low"`
+	Unscored int  `json:"unscored"`
 }
 
 type UpgradeGuidance struct {
