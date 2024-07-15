@@ -14,14 +14,14 @@
 
 package hubapi
 
-type bdJsonAdminDetailV4 struct{}
+type bdJsonAdminDetailV5 struct{}
 
-func (bdJsonAdminDetailV4) GetMimeType() string {
-	return ContentTypeBdAdminV4
+func (bdJsonAdminDetailV5) GetMimeType() string {
+	return ContentTypeBdAdminV5
 }
 
-type SsoStatus struct {
-	bdJsonAdminDetailV4
-	SsoEnabled bool `json:"ssoEnabled"`
+type MfaStatus struct {
+	bdJsonAdminDetailV5
+	MfaEnabled bool `json:"mfaEnabled"`
 	Meta       Meta `json:"_meta"`
 }

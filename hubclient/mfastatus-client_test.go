@@ -1,4 +1,4 @@
-// Copyright 2021 Synopsys, Inc.
+// Copyright 2020 Synopsys, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package hubapi
+package hubclient
 
-type bdJsonAdminDetailV4 struct{}
+import (
+	"testing"
+	"time"
 
-func (bdJsonAdminDetailV4) GetMimeType() string {
-	return ContentTypeBdAdminV4
-}
+	log "github.com/sirupsen/logrus"
+)
 
-type SsoStatus struct {
-	bdJsonAdminDetailV4
-	SsoEnabled bool `json:"ssoEnabled"`
-	Meta       Meta `json:"_meta"`
+func TestFetchMfaStatus(t *testing.T) {
+	client, err := NewWithSession("https://localhost", HubClientDebugTimings, 5*time.Second)
+	if err != nil {
+		t.Errorf("unable to instantiate client: %s", err.Error())
+		return
+	}
+	mfaStatus, err := client.MfaStatus()
+	if err != nil {
+		t.Errorf("unable to get MFA status: %s", err.Error())
+		return
+	}
+
+	log.Infof("successfully fetched MFA status, MFA Enabled? %+v", mfaStatus.MfaEnabled)
 }
