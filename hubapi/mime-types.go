@@ -4,6 +4,11 @@ import (
 	"reflect"
 )
 
+const (
+	ContentTypeBdAdminV4 = "application/vnd.blackducksoftware.admin-4+json"
+	ContentTypeBdAdminV5 = "application/vnd.blackducksoftware.admin-5+json"
+)
+
 type HasMimeType interface {
 	GetMimeType() string
 }
@@ -30,6 +35,7 @@ type HasMimeType interface {
 // 3. use both :)
 // Note: known so far are
 // 	"application/vnd.blackducksoftware.admin-4+json",
+//	"application/vnd.blackducksoftware.admin-5+json",
 //	"application/vnd.blackducksoftware.bill-of-materials-4+json",
 //	"application/vnd.blackducksoftware.bill-of-materials-5+json",
 //	"application/vnd.blackducksoftware.bill-of-materials-6+json",

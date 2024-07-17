@@ -1,4 +1,4 @@
-// Copyright 2021 Synopsys, Inc.
+// Copyright 2024 Synopsys, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package hubapi
+package hubclient
 
-type bdJsonAdminDetailV4 struct{}
+import (
+	"fmt"
+	"github.com/blackducksoftware/hub-client-go/hubapi"
+)
 
-func (bdJsonAdminDetailV4) GetMimeType() string {
-	return ContentTypeBdAdminV4
-}
+func (c *Client) MfaStatus() (*hubapi.MfaStatus, error) {
 
-type SsoStatus struct {
-	bdJsonAdminDetailV4
-	SsoEnabled bool `json:"ssoEnabled"`
-	Meta       Meta `json:"_meta"`
+	mfaStatusURL := hubapi.BuildUrl(c.baseURL, hubapi.MfaStatusApi)
+
+	var mfaStatus hubapi.MfaStatus
+	err := c.HttpGetJSON(mfaStatusURL, &mfaStatus, 200)
+
+	if err != nil {
+		return nil, AnnotateHubClientError(err, fmt.Sprintf("Error trying to get MFA status"))
+	}
+	return &mfaStatus, nil
 }

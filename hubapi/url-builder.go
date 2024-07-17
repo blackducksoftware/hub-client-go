@@ -17,6 +17,7 @@ const (
 	ProjectsApi          = "/api/projects"
 	DeveloperScansApi    = "/api/developer-scans"
 	SsoStatusApi         = "/api/sso/status"
+	MfaStatusApi         = "/api/mfa/status"
 	UsersApi             = "/api/users"
 	VulnerabilitiesApi   = "/api/vulnerabilities"
 	ReadinessApi         = "/api/health-checks/readiness"
