@@ -442,6 +442,43 @@ func (c *Client) HttpPostJSONExpectResult(url string, data interface{}, result i
 	return resp.Header.Get("Location"), nil
 }
 
+// HttpPostRawJSONExpectResult http post request without encoding the data
+func (c *Client) HttpPostRawJSONExpectResult(url string, data io.Reader, result interface{}, contentType string, expectedStatusCode int) (string, error) {
+	var resp *http.Response
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		log.Debugf("DEBUG HTTP STARTING POST REQUEST: %s", url)
+	}
+
+	req, err := http.NewRequest(http.MethodPost, url, data)
+	if err != nil {
+		return "", newHubClientError(nil, nil, fmt.Sprintf("error creating http post request for %s: %+v", url, err), err)
+	}
+
+	req.Header.Set(HeaderNameContentType, contentType)
+
+	c.applyHeaderValues(req, nil)
+
+	log.Debugf("POST Request: %+v.", maskAuthHeader(req))
+
+	httpStart := time.Now()
+	if resp, err = c.httpClient.Do(req); err != nil {
+		body := readResponseBody(resp, c.debugFlags)
+		return "", newHubClientError(body, resp, fmt.Sprintf("error getting HTTP Response from POST to %s: %+v", url, err), err)
+	}
+
+	if c.debugFlags&HubClientDebugTimings != 0 {
+		httpElapsed := time.Since(httpStart)
+		log.Debugf("DEBUG HTTP POST ELAPSED TIME: %d ms.   -- Request: %s", (httpElapsed / 1000 / 1000), url)
+	}
+
+	if err := c.processResponse(resp, result, expectedStatusCode); err != nil {
+		return "", AnnotateHubClientErrorf(err, "unable to process response from POST to %s", url)
+	}
+
+	return resp.Header.Get("Location"), nil
+}
+
 func (c *Client) HttpDelete(url string, contentType string, expectedStatusCode int) error {
 
 	var resp *http.Response
